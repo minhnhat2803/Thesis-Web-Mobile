@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames/bind";
-import styles from "../Style/Header.module.css";
+import styles from "../styles/Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBell,

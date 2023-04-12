@@ -1,6 +1,6 @@
 import React, { useRef, useCallback } from "react";
 import classNames from "classnames/bind";
-import styles from "../Style/Dashboard.module.css";
+import styles from "../styles/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faTableColumns

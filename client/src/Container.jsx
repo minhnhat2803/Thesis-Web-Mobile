@@ -1,9 +1,9 @@
 import React from "react";
-import TabBar from "./Components/TabBar";
-import styles from "./Style/Container.module.css";
+import TabBar from "./components/TabBar";
+import styles from "./styles/Container.module.css";
 import classNames from "classnames/bind";
-import Header from "./Components/Header";
-import Content from "./Components/Dashboard";
+import Header from "./components/Header";
+import Content from "./components/Dashboard";
 
 const cx = classNames.bind(styles);
 

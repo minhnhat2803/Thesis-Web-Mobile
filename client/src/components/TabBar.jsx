@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classNames from "classnames/bind";
-import styles from "../Style/TabBar.module.css";
+import styles from "../styles/TabBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGear,
