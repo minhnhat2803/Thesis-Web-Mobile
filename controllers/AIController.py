@@ -1,4 +1,5 @@
 import easyocr  
+from flask import jsonify
 
 class AIController:
   def ocr():
