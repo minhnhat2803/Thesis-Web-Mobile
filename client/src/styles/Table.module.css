@@ -1,0 +1,96 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+.table-container {
+  overflow-y: scroll;
+  max-height: 195px;
+  border: 2px solid rgba(0, 0, 0, 0.125);
+  border-bottom: none;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.interact-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 16px;
+  margin-top: 12px;
+}
+
+.select-type {
+  width: 25%;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.327);
+  color: #616161;
+}
+
+.export-btn {
+  width: 15%;
+  height: 32px;
+  font-size: 18px;
+  background-color: #517c64;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+}
+
+td,
+th {
+  text-align: center;
+}
+
+.header {
+  width: calc(100% / 7);
+  font-weight: bold;
+}
+
+td {
+  padding-top: 24px;
+  padding-bottom: 12px;
+}
+
+@media screen and (min-width: 740px) and (max-width: 1024px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .table-container {
+    overflow: scroll;
+    width: 80vw;
+    border-bottom: none;
+    margin: auto;
+  }
+}
+
+@media (max-width: 739px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .table-container {
+    overflow: scroll;
+    width: 100vw;
+    border-bottom: none;
+    margin: auto;
+  }
+}
+
+.export-btn {
+  width: 15%;
+  height: 32px;
+  font-size: 14px;
+  background-color: #517c64;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+}

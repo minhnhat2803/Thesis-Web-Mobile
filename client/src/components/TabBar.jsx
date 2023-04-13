@@ -35,6 +35,8 @@ const tabs = [
     title: "Logout",
     icon: faSignOut,
   },
+
+
 ];
 
 function TabBar() {
@@ -49,7 +51,10 @@ function TabBar() {
       </div>
       <div className={cx('tabs')}>
         {tabs.map((tab, index) => (
-          <div onClick={() => setClick(index + 1)} className={cx("tabCell-container")} style={{ height: `calc(100% / ${tabs.length})` }}>
+          <div onClick={() => setClick(index)} className={cx("tabCell-container")}
+            style={click === index ?
+              { color: '#517c64', height: `calc(100% / ${tabs.length})` }
+              : { color: '#82c4a0', height: `calc(100% / ${tabs.length})` }}>
             <FontAwesomeIcon size="2x" icon={tab.icon} />
             <p className={cx("tabCell-title")}>{tab.title}</p>
           </div>

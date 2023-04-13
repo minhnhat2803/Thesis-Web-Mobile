@@ -9,4 +9,21 @@
 body {
   background-color: #cae8d9;
   font-family: "Oxygen", sans-serif;
+  min-width: 1300px;
+}
+
+@media screen and (min-width: 740px) and (max-width: 1024px) {
+  body {
+    background-color: #cae8d9;
+    font-family: "Oxygen", sans-serif;
+    min-width: 740px;
+  }
+}
+
+@media (max-width: 739px) {
+  body {
+    background-color: #cae8d9;
+    font-family: "Oxygen", sans-serif;
+    min-width: 740px;
+  }
 }

@@ -4,6 +4,7 @@ import styles from "./styles/Container.module.css";
 import classNames from "classnames/bind";
 import Header from "./components/Header";
 import Content from "./components/Dashboard";
+import Table from "./components/Table";
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,7 @@ function App() {
         <div className={cx("main-content")}>
           <Header />
           <Content />
+          <Table />
         </div>
       </div>
     </div>

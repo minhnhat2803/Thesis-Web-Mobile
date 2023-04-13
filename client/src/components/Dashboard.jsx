@@ -30,6 +30,8 @@ const cards = [
         data: 2,
         background: '#c52034, #701033'
     },
+
+
 ]
 
 function Dashboard() {
@@ -55,7 +57,9 @@ function Dashboard() {
                 </div>
             </div>
             <div className={cx('dashboard-right')}>
-                <Webcam className={cx('camera')} ref={camRef} />
+                {/* <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}></div> */}
+
+                {/* <Webcam className={cx('camera')} ref={camRef} /> */}
                 <button className={cx('camera-btn')} onClick={capture}></button>
             </div>
         </div>
