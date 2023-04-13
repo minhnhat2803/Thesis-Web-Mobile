@@ -2,9 +2,10 @@
 from flask import Flask
 from config import DEBUG, HOST, PORT, SECRET_KEY
 from routes.Router import Router
+from flask_cors import CORS
 
 app = Flask(__name__)  
-app.secret_key = SECRET_KEY
+CORS(app)
 
 @app.route('/')
 def index():

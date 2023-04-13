@@ -1,13 +1,36 @@
+import base64
 import cv2
 import easyocr  
 import numpy as np
-from flask import jsonify
+from flask import jsonify, request
 
 class AIController:
   def ocr():
-    image_path = './data/test.jpg'
-    input_image = cv2.imread(image_path)
-    gray_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
+    data = request.json
+    image = data['imageSrc']
+    
+    #convert string to base64
+    image = image.split(',')[1]
+    image = image.encode('utf-8')
+    image = base64.b64decode(image)
+    
+    #convert base64 to image
+    image = np.fromstring(image, np.uint8)
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # reader = easyocr.Reader(['en'], )
+    # results = reader.readtext(gray_image, detail=0, threshold=0.5)
+    # text = ''
+    # for result in results:
+    #   text += result
+    # print("License Plate:", text.replace(" ",""))
+    # return jsonify(text.replace(" ",""))
+
+
+    # image_path = './data/test.jpg'
+    # input_image = cv2.imread(image_path)
+    # gray_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
     reader = easyocr.Reader(['en'], )
     results = reader.readtext(gray_image, detail=0, threshold=0.5)
     text = ''
