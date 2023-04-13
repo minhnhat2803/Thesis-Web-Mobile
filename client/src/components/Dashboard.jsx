@@ -6,6 +6,7 @@ import {
     faTableColumns
 } from "@fortawesome/free-solid-svg-icons";
 import Webcam from "react-webcam";
+import { scanImage } from "../actions";
 
 const cx = classNames.bind(styles);
 
@@ -34,9 +35,15 @@ const cards = [
 
 function Dashboard() {
     const camRef = useRef(null)
-    const capture = useCallback(() => {
+    const capture = useCallback(async () => {
         const imageSrc = camRef.current.getScreenshot();
-        console.log(imageSrc);
+        scanImage(imageSrc)
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }, [camRef]);
     return (
         <div className={cx('dashboard-container')}>
