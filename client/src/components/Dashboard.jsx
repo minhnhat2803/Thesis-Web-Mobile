@@ -61,7 +61,7 @@ function Dashboard() {
             <div className={cx('dashboard-right')}>
                 {/* <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}></div> */}
 
-                {/* <Webcam className={cx('camera')} ref={camRef} /> */}
+                <Webcam className={cx('camera')} ref={camRef} />
                 <button className={cx('camera-btn')} onClick={capture}></button>
             </div>
         </div>
