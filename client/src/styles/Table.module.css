@@ -45,6 +45,13 @@ table {
   color: white;
 }
 
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: whitesmoke;
+}
+
 td,
 th {
   text-align: center;

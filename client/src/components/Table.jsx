@@ -47,8 +47,6 @@ function Table() {
                                 </div>
                             </th>
                         </tr>
-                    </thead>
-                    <tbody>
                         <tr className={cx('header')}>
                             <td>S.no</td>
                             <td>Customer</td>
@@ -57,6 +55,8 @@ function Table() {
                             <td>Date</td>
                             <td>Timestamp</td>
                         </tr>
+                    </thead>
+                    <tbody>
                         {data.map(data => (
                             <tr key={data.index}>
                                 <td>{data.index}</td>
