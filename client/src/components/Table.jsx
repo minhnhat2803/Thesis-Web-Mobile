@@ -7,7 +7,6 @@ const cx = classNames.bind(styles);
 
 function Table() {
     const [data, setData] = useState([]);
-    console.log(data)
     useEffect(() => {
         getAllCustomer().then(res => {
             if (res.status === 200) {
@@ -57,7 +56,6 @@ function Table() {
                             <td>Site</td>
                             <td>Date</td>
                             <td>Timestamp</td>
-                            <td>Image</td>
                         </tr>
                         {data.map(data => (
                             <tr key={data.index}>
@@ -67,7 +65,6 @@ function Table() {
                                 <td>{data.site}</td>
                                 <td>{data.createdAt}</td>
                                 <td>{data.timeStamp}</td>
-                                <td>No img</td>
                             </tr>
                         ))}
                     </tbody>

@@ -1,13 +1,13 @@
 .dashboard-container {
   width: 100%;
-  height: 420px;
+  height: 50vh;
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
 }
 
 .dashboard-left {
-  width: 480px;
+  width: 40%;
   height: 100%;
   /* overflow: hidden; */
 }
@@ -32,7 +32,7 @@
 }
 
 .card-container {
-  width: 220px;
+  width: 45%;
   height: calc((100% / 2) - 32px);
   border-radius: 12px;
   padding: 24px;
@@ -50,7 +50,7 @@
 }
 
 .dashboard-right {
-  width: 680px;
+  width: 50%;
   height: calc(100%);
   background-color: #517c64;
   border-radius: 12px;
