@@ -12,31 +12,35 @@ const cx = classNames.bind(styles);
 
 const tabs = [
   {
+    index: 0,
     title: "Dashboard",
     icon: faTableList,
   },
   {
+    index: 1,
     title: "Setting",
     icon: faGear,
   },
   {
+    index: 2,
     title: "Logout",
     icon: faSignOut,
   },
   {
+    index: 3,
     title: "Dashboard",
     icon: faTableList,
   },
   {
+    index: 4,
     title: "Setting",
     icon: faGear,
   },
   {
+    index: 5,
     title: "Logout",
     icon: faSignOut,
   },
-
-
 ];
 
 function TabBar() {
@@ -51,7 +55,7 @@ function TabBar() {
       </div>
       <div className={cx('tabs')}>
         {tabs.map((tab, index) => (
-          <div onClick={() => setClick(index)} className={cx("tabCell-container")}
+          <div key={index} onClick={() => setClick(index)} className={cx("tabCell-container")}
             style={click === index ?
               { color: '#517c64', height: `calc(100% / ${tabs.length})` }
               : { color: '#82c4a0', height: `calc(100% / ${tabs.length})` }}>
