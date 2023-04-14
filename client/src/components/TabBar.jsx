@@ -6,6 +6,9 @@ import {
   faGear,
   faTableList,
   faSignOut,
+  faUser,
+  faMoneyBills,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
@@ -23,18 +26,18 @@ const tabs = [
   },
   {
     index: 2,
-    title: "Logout",
-    icon: faSignOut,
+    title: "Camera",
+    icon: faCamera,
   },
   {
     index: 3,
-    title: "Dashboard",
-    icon: faTableList,
+    title: "Cash",
+    icon: faMoneyBills
   },
   {
     index: 4,
-    title: "Setting",
-    icon: faGear,
+    title: "Profile",
+    icon: faUser
   },
   {
     index: 5,
