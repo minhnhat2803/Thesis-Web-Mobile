@@ -12,21 +12,25 @@ const cx = classNames.bind(styles);
 
 const cards = [
     {
+        index: 0,
         title: 'Number of cameras',
         data: 23,
         background: '#517c64, #5bbd77'
     },
     {
+        index: 1,
         title: 'Total plates today',
         data: 56,
         background: '#f17335, #fcbc30'
     },
     {
+        index: 2,
         title: 'Total plates this week',
         data: 500,
         background: '#6382c1, #4ec5d1'
     },
     {
+        index: 3,
         title: 'Sites',
         data: 2,
         background: '#c52034, #701033'
@@ -54,7 +58,7 @@ function Dashboard() {
                 </div>
                 <div className={cx('function-cards-container')}>
                     {cards.map((card, index) => (
-                        <div style={{ background: `linear-gradient(to bottom right, ${card.background})` }} className={cx('card-container')}>
+                        <div key={index} style={{ background: `linear-gradient(to bottom right, ${card.background})` }} className={cx('card-container')}>
                             <p className={cx('title')}>{card.title}</p>
                             <p className={cx('data')}>{card.data}</p>
                         </div>
@@ -62,6 +66,8 @@ function Dashboard() {
                 </div>
             </div>
             <div className={cx('dashboard-right')}>
+                {/* <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}></div> */}
+
                 <Webcam className={cx('camera')} ref={camRef} />
                 <button className={cx('camera-btn')} onClick={capture}></button>
             </div>
