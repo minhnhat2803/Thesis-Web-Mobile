@@ -94,6 +94,10 @@ class AIController:
 
     localNumber = text[:2]
     found_province = None
+
+    if text == '':
+      return jsonify({"message": "No license plate found"})
+    
     for province, plate_number in provinces.items():
       if localNumber in plate_number:
         found_province = province
@@ -124,6 +128,7 @@ class AIController:
     print("Plate Number:", plateNumber)
 
     data = {
+      "message": "License plate found",
       "province": found_province,
       "licensePlate": text,
       "plateNumber": str(plateNumber),
