@@ -9,7 +9,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return 'Rest API with Python Flask'
+    return '<h1>Rest API with Python Flask</h1>'
 
 Router.run(app)
 

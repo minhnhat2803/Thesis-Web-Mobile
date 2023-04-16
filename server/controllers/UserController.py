@@ -43,16 +43,13 @@ class UserController:
     data = request.json
     data['updatedAt'] = datetime.datetime.utcnow()
 
-    if (len(data['password']) < 6):
-      return jsonify('Password must be at least 6 characters long')
+    checkUser = DBConnection('users').document(userID).get()
+    if (checkUser.exists):
+      # data['password'] = Bcrypt().generate_password_hash(data['password']).decode('utf-8')
+      DBConnection('users').document(userID).update(data)
+      return jsonify('User updated successfully')
     else:
-      checkUser = DBConnection('users').document(userID).get()
-      if (checkUser.exists):
-        data['password'] = Bcrypt().generate_password_hash(data['password']).decode('utf-8')
-        checkUser = DBConnection('users').document(userID).update(data)
-        return jsonify('User updated successfully')
-      else:
-        return not_found(userID)
+      return not_found(userID)
 
   def deleteUserByID(userID):
     checkUser = DBConnection('users').document(userID).get()
