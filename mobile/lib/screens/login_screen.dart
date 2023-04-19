@@ -33,11 +33,12 @@ class _LogInScreenState extends State<LogInScreen> {
 
       var jsonResp = jsonDecode(response.body);
       if (jsonResp['statusCode'] == '200') {
+        var userData = jsonResp['data'];
         await EasyLoading.show(
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)
             .then((value) => EasyLoading.dismiss());
         await Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()));
+            MaterialPageRoute(builder: (context) => HomeScreen(userData: userData, condition: 'login')));
       } else {
         await EasyLoading.showError(jsonResp['message']);
       }

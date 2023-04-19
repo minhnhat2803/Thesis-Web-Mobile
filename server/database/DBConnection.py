@@ -1,5 +1,5 @@
 import firebase_admin
-from firebase_admin import credentials, firestore, storage
+from firebase_admin import credentials, firestore
 from firebase_admin import credentials
 
 cred = credentials.Certificate('./database/serviceAccountKey.json')

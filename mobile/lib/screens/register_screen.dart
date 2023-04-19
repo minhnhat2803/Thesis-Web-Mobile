@@ -6,7 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
-import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -62,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)
             .then((value) => EasyLoading.dismiss());
         await Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()));
+            MaterialPageRoute(builder: (context) => const LogInScreen()));
       } else {
         await EasyLoading.showError(jsonResp['message']);
       }
