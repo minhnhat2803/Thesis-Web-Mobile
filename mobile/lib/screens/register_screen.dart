@@ -37,9 +37,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void register(
-      String email, String pass, String userLicensePLate, context) async {
+      String email, String pass, String userLicensePlate, context) async {
     try {
-      if (email.isEmpty || pass.isEmpty || userLicensePLate.isEmpty || imageString.isEmpty) {
+      if (email.isEmpty || pass.isEmpty || userLicensePlate.isEmpty || imageString.isEmpty) {
         await EasyLoading.showError('Please fill all the fields');
         return;
       }
@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
-        'userLicensePLate': userLicensePLate,
+        'userLicensePlate': userLicensePlate,
         'userAvatar': imageString
       });
 

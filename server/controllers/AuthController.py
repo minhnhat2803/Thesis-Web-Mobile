@@ -13,71 +13,77 @@ class AuthController:
     email = request.form['email']
     password = request.form['password']
     userAvatar = request.form['userAvatar']
-    userLicensePLate = request.form['userLicensePLate']
+    userLicensePlate = request.form['userLicensePlate']
     userID = str(uuid.uuid4())
     createdAt = datetime.datetime.utcnow()
     updatedAt = datetime.datetime.utcnow()
 
-    if (email == '' or password == '' or userLicensePLate == '' or userAvatar == ''):
+    if (email == '' or password == '' or userLicensePlate == '' or userAvatar == ''):
       return jsonify({
         'statusCode': '401',
         'message': 'Please fill in all fields',
       })
     
+    checkEmailExist = DBConnection('users').where('email', '==', email).get()
+    if (len(checkEmailExist) > 0):
+      return jsonify({
+        'statusCode': '401',
+        'message': 'Email already exist'
+      })
     if (len(password) < 6):
       return jsonify({
         'statusCode': '401',
         'message': 'Password must be at least 6 characters long'
       })
+    checkLicensePlateExist = DBConnection('users').where('userLicensePLate', '==', userLicensePlate.upper()).get()
+    if (len(checkLicensePlateExist) > 0):
+      return jsonify({
+        'statusCode': '401',
+        'message': 'License plate already exist'
+      })
     else:
-      password = Bcrypt().generate_password_hash(password).decode('utf-8')
-      checkEmailExist = DBConnection('users').where('email', '==', email).get()
-      if (len(checkEmailExist) > 0):
+      try: 
+        password = Bcrypt().generate_password_hash(password).decode('utf-8')
+
+        #decode base64 string to image file
+        def decode_image(base64_string):
+          image_bytes = io.BytesIO(base64.b64decode(base64_string + '==')) # Add padding to the base64 string
+          return image_bytes
+
+        image_file = decode_image(userAvatar)
+        print(image_file)
+
+        bucket = storage.bucket()
+        print(bucket)
+        blob = bucket.blob("images/" + userID)
+        print(blob)
+        blob.upload_from_file(image_file, content_type = 'image/jpg') # Upload the image file object
+
+        print("---------Image uploaded successfully-----!")
+        url = blob.public_url
+        print('testttttt', url)
+  
+        #save user to firebase firestore
+        data = {
+          'userID': userID,
+          'email': email,
+          'password': password,
+          'userAvatar': url,
+          'userLicensePLate': userLicensePlate.upper(),
+          'createdAt': createdAt,
+          'updatedAt': updatedAt
+        }
+        DBConnection('users').document(userID).set(data)
         return jsonify({
-          'statusCode': '401',
-          'message': 'Email already exist'
+          'statusCode': '200',
+          'data': data,
         })
-      else:
-        try: 
-          #decode base64 string to image file
-          def decode_image(base64_string):
-            image_bytes = io.BytesIO(base64.b64decode(base64_string + '==')) # Add padding to the base64 string
-            return image_bytes
-
-          image_file = decode_image(userAvatar)
-          print(image_file)
-
-          bucket = storage.bucket()
-          print(bucket)
-          blob = bucket.blob("images/" + userID)
-          print(blob)
-          blob.upload_from_file(image_file, content_type = 'image/jpg') # Upload the image file object
-
-          print("---------Image uploaded successfully-----!")
-          url = blob.public_url
-          print('testttttt', url)
-    
-          #save user to firebase firestore
-          data = {
-            'userID': userID,
-            'email': email,
-            'password': password,
-            'userAvatar': url,
-            'userLicensePLate': userLicensePLate.upper(),
-            'createdAt': createdAt,
-            'updatedAt': updatedAt
-          }
-          DBConnection('users').document(userID).set(data)
-          return jsonify({
-            'statusCode': '200',
-            'data': data,
-          })
-        except Exception as e:
-          print(e)
-          return jsonify({
-            'statusCode': '500',
-            'message': 'Something went wrong'
-          })
+      except Exception as e:
+        print(e)
+        return jsonify({
+          'statusCode': '500',
+          'message': 'Something went wrong'
+        })
 
   def login():
     try:
