@@ -64,3 +64,50 @@ Container submitButton(BuildContext context, String title, Function onTap) {
     ),
   );
 }
+
+Container cameraButton(BuildContext context, String title, Function onTap) {
+  return Container(
+    width: MediaQuery.of(context).size.width / 2.5,
+    height: 50,
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+    child: ElevatedButton(
+      onPressed: () {
+        onTap();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith(
+          (states) => states.contains(MaterialState.pressed)
+              ? Colors.black26
+              : Colors.white,
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            title == 'Gallery'
+                ? Icons.image
+                : Icons
+                    .camera_alt, // Use ternary operator to set Icon based on title
+            color: Colors.black87,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

@@ -18,6 +18,34 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
+  void login(String email, String pass, context) async {
+    try {
+      if (email.isEmpty || pass.isEmpty) {
+        await EasyLoading.showError('Please fill all the fields');
+        return;
+      }
+
+      String url = 'http://192.168.1.16:8080/auth/login';
+      Response response = await post(Uri.parse(url), body: {
+        'email': email,
+        'password': pass,
+      });
+
+      var jsonResp = jsonDecode(response.body);
+      if (jsonResp['statusCode'] == '200') {
+        await EasyLoading.show(
+                status: 'Logging in...', maskType: EasyLoadingMaskType.black)
+            .then((value) => EasyLoading.dismiss());
+        await Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } else {
+        await EasyLoading.showError(jsonResp['message']);
+      }
+    } catch (e) {
+      print('Error: ${e.toString()}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,28 +110,5 @@ class _LogInScreenState extends State<LogInScreen> {
         )
       ],
     );
-  }
-}
-
-void login(String email, String pass, context) async {
-  try {
-    String url = 'http://192.168.1.16:8080/auth/login';
-    Response response = await post(Uri.parse(url), body: {
-      'email': email,
-      'password': pass,
-    });
-
-    var jsonResp = jsonDecode(response.body);
-    if (jsonResp['statusCode'] == '200') {
-      await EasyLoading.show(
-          status: 'Logging in...', maskType: EasyLoadingMaskType.black)
-          .then((value) => EasyLoading.dismiss());
-      await Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-    } else {
-      await EasyLoading.showError(jsonResp['message']);
-    }
-  } catch (e) {
-    print('Error: ${e.toString()}');
   }
 }
