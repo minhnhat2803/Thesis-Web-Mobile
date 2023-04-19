@@ -107,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                reusableTextField("Enter your license plate",
+                reusableTextField("50F2-567.89",
                     Icons.directions_car, false, licensePlateController),
                 const SizedBox(
                   height: 15,
