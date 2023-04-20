@@ -143,8 +143,8 @@ Padding boxGrid(BuildContext context, String title, Color color) {
   );
 }
 
-Padding boxProfile(BuildContext context, String fullName, String email, String phoneNumber,
-    String cite, String userImage) {
+Padding boxProfile(BuildContext context, String fullName, String email,
+    String phoneNumber, String cite, String userImage) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Column(
@@ -244,12 +244,15 @@ Padding boxProfile(BuildContext context, String fullName, String email, String p
             ),
           ],
         ),
+        const SizedBox(
+          height: 10,
+        ),
         Column(
           children: [
             Image(
               image: NetworkImage(userImage),
-              width: 400,
-              height: 300,
+              width: 500,
+              height: 400,
             )
           ],
         ),

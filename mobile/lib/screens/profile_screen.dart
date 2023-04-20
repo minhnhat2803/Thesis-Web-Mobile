@@ -64,8 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "${widget.userData['email']}",
                     "${widget.userData['phoneNumber']}",
                     "${widget.userData['site']}",
-                    "https://cdn.dribbble.com/users/2417352/screenshots/15545122/media/81506a9091a5987d95dcb862035b5bd4.png?compress=1&resize=400x300"),
-                const SizedBox(height: 10),
+                    "${widget.userData['userAvatar']}"),
+                const SizedBox(height: 0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: ElevatedButton(

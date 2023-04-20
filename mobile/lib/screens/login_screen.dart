@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
@@ -18,6 +19,9 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
+  final storage = FirebaseStorage.instanceFor(
+      bucket: "gs://iot-project-course.appspot.com");
+
   void login(String email, String pass, context) async {
     try {
       if (email.isEmpty || pass.isEmpty) {
@@ -34,11 +38,21 @@ class _LogInScreenState extends State<LogInScreen> {
       var jsonResp = jsonDecode(response.body);
       if (jsonResp['statusCode'] == '200') {
         var userData = jsonResp['data'];
+        
+        //get user avatar with firebase storage
+        var ref = storage.ref().child(
+            'images/${userData['userAvatar'].toString().split('/').last}');
+        var url = await ref.getDownloadURL();
+        userData['userAvatar'] = url;
+
         await EasyLoading.show(
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)
             .then((value) => EasyLoading.dismiss());
-        await Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => HomeScreen(userData: userData, condition: 'login')));
+        await Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(userData: userData, condition: 'login')));
       } else {
         await EasyLoading.showError(jsonResp['message']);
       }
