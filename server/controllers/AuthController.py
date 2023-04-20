@@ -69,7 +69,7 @@ class AuthController:
           'email': email,
           'password': password,
           'userAvatar': url,
-          'userLicensePLate': userLicensePlate.upper(),
+          'userLicensePlate': userLicensePlate.upper(),
           'createdAt': createdAt,
           'updatedAt': updatedAt
         }
