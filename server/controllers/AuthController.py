@@ -4,6 +4,17 @@ from flask import jsonify, request
 from flask_bcrypt import Bcrypt
 import io
 import base64
+import cloudinary
+
+cloudinary.config( 
+  cloud_name = "nguyenle23", 
+  api_key = "647146617223385", 
+  api_secret = "6e1Uni92pvYBklSPlgfasV8BaCc",
+  secure = True
+)
+
+import cloudinary.uploader
+import cloudinary.api
 
 from database.DBConnection import DBConnection
 from firebase_admin import storage
@@ -53,22 +64,27 @@ class AuthController:
         image_file = decode_image(userAvatar)
         print(image_file)
 
-        bucket = storage.bucket()
-        print(bucket)
-        blob = bucket.blob("images/" + userID)
-        print(blob)
-        blob.upload_from_file(image_file, content_type = 'image/jpg') # Upload the image file object
+        cloudinary.uploader.upload(image_file, public_id = userID, folder = 'userAvatar')
 
-        print("---------Image uploaded successfully-----!")
-        url = blob.public_url
-        print('testttttt', url)
+        url_back = 'https://res.cloudinary.com/nguyenle23/image/upload/v1683619876/userAvatar/' + userID + '.png'
+
+        #upload image to firebase storage
+        # bucket = storage.bucket()
+        # print(bucket)
+        # blob = bucket.blob("images/" + userID)
+        # print(blob)
+        # blob.upload_from_file(image_file, content_type = 'image/jpg') # Upload the image file object
+
+        # print("---------Image uploaded successfully-----!")
+        # url = blob.public_url
+        # print('testttttt', url)
   
         #save user to firebase firestore
         data = {
           'userID': userID,
           'email': email,
           'password': password,
-          'userAvatar': url,
+          'userAvatar': url_back,
           'userLicensePlate': userLicensePlate.upper(),
           'createdAt': createdAt,
           'updatedAt': updatedAt

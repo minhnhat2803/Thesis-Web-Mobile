@@ -7,6 +7,10 @@ import numpy as np
 from flask import jsonify, request
 import pickle
 import face_recognition
+import serial
+
+serialcom = serial.Serial('COM13', 9600)
+serialcom.timeout = 1
 
 provinces = {
   "Cao Bằng": "11",
@@ -176,7 +180,7 @@ class AIController:
       if localNumber in plate_number:
         found_province = province
         break
-    
+
     plateNumber = None
     text = text.replace(" ", "")
     if('.' in text):
@@ -196,6 +200,12 @@ class AIController:
       else:
         plateNumber = 'None'
         print("Plate number not found")
+
+    def sendSignalToArduino():
+      serialcom.write(str('true').encode())
+
+    if province == 'Hồ Chí Minh':
+      sendSignalToArduino()
         
     print("Province:", found_province)
     print("License Plate:", text)
@@ -206,5 +216,6 @@ class AIController:
       "province": found_province,
       "licensePlate": text,
       "plateNumber": str(plateNumber),
+      "status": "Remove barrier"
     }
     return jsonify(data)

@@ -1,6 +1,4 @@
-
 from flask import Flask
-from config import DEBUG, HOST, PORT, SECRET_KEY
 from routes.Router import Router
 from flask_cors import CORS
 
@@ -14,4 +12,4 @@ def index():
 Router.run(app)
 
 if __name__ == '__main__':
-    app.run(host = HOST, port = PORT, debug = DEBUG)
+    app.run(host = '192.168.1.32', port = 8080)
