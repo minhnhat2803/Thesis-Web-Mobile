@@ -5,6 +5,7 @@ import 'package:mobile/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.userData});
+  // ignore: prefer_typing_uninitialized_variables
   final userData;
 
   @override
@@ -94,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

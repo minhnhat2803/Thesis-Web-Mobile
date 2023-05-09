@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
+import 'package:mobile/global_variables.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
 import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/register_screen.dart';
@@ -19,9 +19,6 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
-  final storage = FirebaseStorage.instanceFor(
-      bucket: "gs://iot-project-course.appspot.com");
-
   void login(String email, String pass, context) async {
     try {
       if (email.isEmpty || pass.isEmpty) {
@@ -29,7 +26,7 @@ class _LogInScreenState extends State<LogInScreen> {
         return;
       }
 
-      String url = 'http://192.168.1.16:8080/auth/login';
+      String url = 'http://$ipAddr:$port/auth/login';
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
@@ -38,12 +35,6 @@ class _LogInScreenState extends State<LogInScreen> {
       var jsonResp = jsonDecode(response.body);
       if (jsonResp['statusCode'] == '200') {
         var userData = jsonResp['data'];
-        
-        //get user avatar with firebase storage
-        var ref = storage.ref().child(
-            'images/${userData['userAvatar'].toString().split('/').last}');
-        var url = await ref.getDownloadURL();
-        userData['userAvatar'] = url;
 
         await EasyLoading.show(
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)
@@ -57,6 +48,7 @@ class _LogInScreenState extends State<LogInScreen> {
         await EasyLoading.showError(jsonResp['message']);
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error: ${e.toString()}');
     }
   }
@@ -71,7 +63,7 @@ class _LogInScreenState extends State<LogInScreen> {
             child: SingleChildScrollView(
                 child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+                  20, MediaQuery.of(context).size.height * 0.1, 20, 0),
               child: Column(
                 children: <Widget>[
                   const Text('Smart Parking System',
@@ -97,7 +89,10 @@ class _LogInScreenState extends State<LogInScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  registerOption()
+                  registerOption(),
+                  const SizedBox(
+                    height: 25,
+                  ),
                 ],
               ),
             ))));
@@ -122,7 +117,7 @@ class _LogInScreenState extends State<LogInScreen> {
             " Register here",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-        )
+        ),
       ],
     );
   }

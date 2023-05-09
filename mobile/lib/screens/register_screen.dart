@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/global_Variables.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
 import 'package:mobile/screens/login_screen.dart';
 
@@ -32,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         imageString = base64Encode(imageTemporary);
       });
     } on PlatformException catch (e) {
+      // ignore: avoid_print
       print('Error: ${e.toString()}');
     }
   }
@@ -39,7 +41,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void register(
       String email, String pass, String userLicensePlate, context) async {
     try {
-      if (email.isEmpty || pass.isEmpty || userLicensePlate.isEmpty || imageString.isEmpty) {
+      if (email.isEmpty ||
+          pass.isEmpty ||
+          userLicensePlate.isEmpty ||
+          imageString.isEmpty) {
         await EasyLoading.showError('Please fill all the fields');
         return;
       }
@@ -48,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               status: 'Registering...', maskType: EasyLoadingMaskType.black)
           .then((value) => EasyLoading.dismiss());
 
-      String url = 'http://192.168.1.16:8080/auth/register';
+      String url = 'http://$ipAddr:$port/auth/register';
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
@@ -67,6 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await EasyLoading.showError(jsonResp['message']);
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error: ${e.toString()}');
     }
   }
@@ -85,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           color: Colors.green,
           child: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 90, 20, 0),
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/Notes.png", 300, 200),
@@ -107,8 +113,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                reusableTextField("50F2-567.89",
-                    Icons.directions_car, false, licensePlateController),
+                reusableTextField("50F2-567.89", Icons.directions_car, false,
+                    licensePlateController),
                 const SizedBox(
                   height: 15,
                 ),
@@ -125,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 submitButton(context, "Register", () {
                   register(

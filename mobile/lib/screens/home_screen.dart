@@ -5,7 +5,9 @@ import 'package:mobile/screens/profile_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.userData, required this.condition})
       : super(key: key);
+  // ignore: prefer_typing_uninitialized_variables
   final userData;
+  // ignore: prefer_typing_uninitialized_variables
   final condition;
 
   @override
