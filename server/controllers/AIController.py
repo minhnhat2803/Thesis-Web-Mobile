@@ -1,6 +1,7 @@
 import base64
 import os
 import re
+import time
 import cv2
 import easyocr  
 import numpy as np
@@ -79,6 +80,11 @@ provinces = {
 }
 
 class AIController:
+  def checkPosition():
+    checkPosition = serialcom.readline().decode('utf-8').rstrip()
+    print(checkPosition)
+    return checkPosition
+
   def faceDetect():
     cap = cv2.VideoCapture(0)
     cap.set(3, 640)
@@ -192,7 +198,6 @@ class AIController:
         plateNumber = 'None'
         print("Plate number not found")
     else:
-      print('false')
       pattern = r"\d{4}$"
       match = re.search(pattern, text)
       if match:
@@ -200,22 +205,21 @@ class AIController:
       else:
         plateNumber = 'None'
         print("Plate number not found")
+    
+    serialcom.write(str('true').encode())
+    print("Sending signal to Arduino")
 
-    def sendSignalToArduino():
-      serialcom.write(str('true').encode())
-
-    if province == 'Hồ Chí Minh':
-      sendSignalToArduino()
-        
+    time.sleep(2)
     print("Province:", found_province)
     print("License Plate:", text)
     print("Plate Number:", plateNumber)
 
+    time.sleep(6)
     data = {
       "message": "License plate found",
       "province": found_province,
       "licensePlate": text,
       "plateNumber": str(plateNumber),
-      "status": "Remove barrier"
+      "status": "success"
     }
     return jsonify(data)
