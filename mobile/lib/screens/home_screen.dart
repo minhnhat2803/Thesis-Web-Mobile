@@ -1,12 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
+import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/screens/profile_screen.dart';
+import 'package:mobile/global_variables.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.userData, required this.condition})
+  const HomeScreen(
+      {Key? key,
+      required this.userData,
+      required this.userBill,
+      required this.condition})
       : super(key: key);
   // ignore: prefer_typing_uninitialized_variables
   final userData;
+  // ignore: prefer_typing_uninitialized_variables
+  final userBill;
   // ignore: prefer_typing_uninitialized_variables
   final condition;
 
@@ -15,6 +26,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String getSystemTime() {
+    var now = DateTime.now();
+    return now.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,24 +59,33 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.menu,
-                    size: 45,
-                    color: Colors.grey[800],
-                  ),
                   IconButton(
                     onPressed: () {
                       var userProfile = widget.userData;
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfileScreen(userData: userProfile)));
+                              builder: (context) => ProfileScreen(
+                                  userData: userProfile,
+                                  userBill: widget.userBill)));
                     },
                     icon: const Icon(
                       Icons.person,
                       size: 45,
-                      color: Colors.grey,
+                      color: Colors.black,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LogInScreen()));
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      size: 45,
+                      color: Colors.black,
                     ),
                   ),
                 ],
@@ -74,21 +99,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     //check if condition is login or register
-                    widget.condition == 'login' ? 'Welcome Back' : 'Welcome,',
+                    widget.condition == 'login'
+                        ? 'Welcome Back,'
+                        : 'Welcome !!!',
                     style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
                   ),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${widget.userData['fullName']} |",
+                        "${widget.userData['email']}",
                         style: TextStyle(
                           fontSize: 30,
                           color: Colors.grey.shade800,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(
-                          width: 10), // Add some space between the texts
                       Text(
                         "${widget.userData['userLicensePlate']}",
                         style: const TextStyle(
@@ -110,6 +136,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Color.fromARGB(255, 204, 204, 204),
               ),
             ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                "Time in:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                '${widget.userBill[0]['timeIn']}',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
@@ -122,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            boxGrid(context, 'A1', Colors.green),
+            boxGrid(context, '${widget.userBill[0]['slot']}', Colors.green),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -136,7 +186,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            boxGrid(context, '20.000 VND', Colors.green),
+            boxGrid(
+                context, '${widget.userBill[0]['fee']}' + ' VND', Colors.green),
+            const SizedBox(height: 10),
           ]),
         ),
       ),

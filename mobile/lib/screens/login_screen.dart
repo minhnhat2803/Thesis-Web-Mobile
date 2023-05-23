@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
@@ -36,14 +37,31 @@ class _LogInScreenState extends State<LogInScreen> {
       if (jsonResp['statusCode'] == '200') {
         var userData = jsonResp['data'];
 
+        String url2 = 'http://$ipAddr:$port/bills/${userData['userID']}';
+        Response response2 = await get(Uri.parse(url2));
+        var userBill = jsonDecode(response2.body);
+        print(userBill);
+        if (userBill.length == 0) {
+          userBill = [
+            {
+              'userID': userData['userID'],
+              'slot': 'INACTIVE',
+              'fee': '0',
+              'timeIn': 'None',
+            }
+          ];
+        }
+
         await EasyLoading.show(
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)
             .then((value) => EasyLoading.dismiss());
         await Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    HomeScreen(userData: userData, condition: 'login')));
+                builder: (context) => HomeScreen(
+                    userData: userData,
+                    userBill: userBill,
+                    condition: 'login')));
       } else {
         await EasyLoading.showError(jsonResp['message']);
       }
@@ -56,6 +74,10 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.green,
+        ),
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -63,7 +85,7 @@ class _LogInScreenState extends State<LogInScreen> {
             child: SingleChildScrollView(
                 child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  20, MediaQuery.of(context).size.height * 0.1, 20, 0),
+                  20, MediaQuery.of(context).size.height * 0.05, 20, 0),
               child: Column(
                 children: <Widget>[
                   const Text('Smart Parking System',
@@ -117,6 +139,9 @@ class _LogInScreenState extends State<LogInScreen> {
             " Register here",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+        ),
+        const SizedBox(
+          height: 25,
         ),
       ],
     );

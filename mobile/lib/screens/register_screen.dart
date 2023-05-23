@@ -130,9 +130,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context, 'Camera', () => pickImage(ImageSource.camera)),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
                 submitButton(context, "Register", () {
                   register(
                       emailController.text.toString(),
@@ -140,6 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       licensePlateController.text.toString(),
                       context);
                 }),
+                const SizedBox(
+                  height: 25,
+                ),
               ],
             ),
           ))),

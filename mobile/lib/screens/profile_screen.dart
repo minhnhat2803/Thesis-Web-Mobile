@@ -4,9 +4,12 @@ import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key, required this.userData});
+  const ProfileScreen(
+      {super.key, required this.userData, required this.userBill});
   // ignore: prefer_typing_uninitialized_variables
   final userData;
+  // ignore: prefer_typing_uninitialized_variables
+  final userBill;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -27,7 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomeScreen(
-                        userData: widget.userData, condition: true)));
+                        userBill: widget.userBill,
+                        userData: widget.userData,
+                        condition: true)));
           },
         ),
         automaticallyImplyLeading: false,
@@ -58,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 boxProfile(
                     context,
                     "${widget.userData['fullName']}",
@@ -66,36 +71,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "${widget.userData['phoneNumber']}",
                     "${widget.userData['site']}",
                     "${widget.userData['userAvatar']}"),
-                const SizedBox(height: 0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: const BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 20,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LogInScreen()));
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
