@@ -30,6 +30,14 @@ class UserController:
       getUsers = DBConnection('users').get()
       for user in getUsers:
         data.append(user.to_dict())
+
+      for i in range(len(data)):
+        retrievedData = DBConnection('bills').where('userID', '==', data[i]['userID']).get()
+        if (len(retrievedData) > 0):
+          data[i]['bill'] = retrievedData[0].to_dict()
+        else:
+          data[i]['bill'] = None
+
       return jsonify(data)
     
   def getUserByID(userID):

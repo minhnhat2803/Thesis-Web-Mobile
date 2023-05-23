@@ -68,18 +68,6 @@ class AuthController:
 
         url_back = 'https://res.cloudinary.com/nguyenle23/image/upload/v1683619876/userAvatar/' + userID + '.png'
 
-        #upload image to firebase storage
-        # bucket = storage.bucket()
-        # print(bucket)
-        # blob = bucket.blob("images/" + userID)
-        # print(blob)
-        # blob.upload_from_file(image_file, content_type = 'image/jpg') # Upload the image file object
-
-        # print("---------Image uploaded successfully-----!")
-        # url = blob.public_url
-        # print('testttttt', url)
-  
-        #save user to firebase firestore
         data = {
           'userID': userID,
           'email': email,

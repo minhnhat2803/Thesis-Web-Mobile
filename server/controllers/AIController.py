@@ -1,7 +1,9 @@
 import base64
+import datetime
 import os
 import re
 import time
+import uuid
 import cv2
 import easyocr  
 import numpy as np
@@ -9,6 +11,10 @@ from flask import jsonify, request
 import pickle
 import face_recognition
 import serial
+from datetime import datetime
+import pytz
+
+from database.DBConnection import DBConnection
 
 serialcom = serial.Serial('COM13', 9600)
 serialcom.timeout = 1
@@ -135,26 +141,26 @@ class AIController:
       faceCurFram = face_recognition.face_locations(imgS)
       encodeCurFram = face_recognition.face_encodings(imgS, faceCurFram)
 
-      # if faceCurFram:
-      for encodeFace, faceLoc in zip(encodeCurFram, faceCurFram):
-        matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
-        faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
+      if faceCurFram:
+        for encodeFace, faceLoc in zip(encodeCurFram, faceCurFram):
+          matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
+          faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
 
-        matchIndex = np.argmin(faceDis)
-        if matches[matchIndex]:
-          print('id', imgID[matchIndex])
-          #print the image matched
-          name = imgID[matchIndex]
-          y1, x2, y2, x1 = faceLoc
-          y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
-          cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-          cv2.rectangle(img, (x1, y2-35), (x2, y2), (0, 255, 0), cv2.FILLED)
-          cv2.putText(img, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-          cv2.imshow('Webcam', img)
-          cv2.waitKey(1)
-        # else:
-        #   print('not found')
-        #   return jsonify({"message": "Not found face to detect"})
+          matchIndex = np.argmin(faceDis)
+          if matches[matchIndex]:
+            print('id', imgID[matchIndex])
+            #print the image matched
+            name = imgID[matchIndex]
+            y1, x2, y2, x1 = faceLoc
+            y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
+            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.rectangle(img, (x1, y2-35), (x2, y2), (0, 255, 0), cv2.FILLED)
+            cv2.putText(img, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+            cv2.imshow('Webcam', img)
+            cv2.waitKey(1)
+        else:
+          print('not found')
+          return jsonify({"message": "Not found face to detect"})
 
   def ocr():
     data = request.json
@@ -205,21 +211,50 @@ class AIController:
       else:
         plateNumber = 'None'
         print("Plate number not found")
-    
-    serialcom.write(str('true').encode())
-    print("Sending signal to Arduino")
 
-    time.sleep(2)
     print("Province:", found_province)
     print("License Plate:", text)
     print("Plate Number:", plateNumber)
 
-    time.sleep(6)
-    data = {
-      "message": "License plate found",
-      "province": found_province,
-      "licensePlate": text,
-      "plateNumber": str(plateNumber),
-      "status": "success"
-    }
-    return jsonify(data)
+    time.sleep(5)
+    checkUserExist = DBConnection('users').where('userLicensePlate', '==', plateNumber)
+    if checkUserExist:
+      print("User exist")
+      serialcom.write(str('true').encode())
+      print("Sending signal to Arduino")
+      
+      billID = str(uuid.uuid4())
+      user_query_result = checkUserExist.get()
+      userID = ''
+      for i in user_query_result:
+        getUserID = i.to_dict()['userID']
+        userID = getUserID
+      print(userID)
+
+      vietnam_timezone = pytz.timezone('Asia/Ho_Chi_Minh')
+      current_time = datetime.now(vietnam_timezone)
+      current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
+
+      DBConnection('bills').document(billID).set({
+        "userID": userID,
+        "fee": "20000",
+        "slot": "A1",
+        "timeIn": current_time_str,
+      })
+
+      data = {
+        "message": "User exist",
+        "province": found_province,
+        "licensePlate": text,
+        "plateNumber": str(plateNumber),
+        "status": "success",
+        "slot": "A1"
+      }
+      return jsonify(data)
+    else:
+      print("User not exist")
+      data = {
+        "message": "User not exist",
+        "status": "fail"
+      }
+      return jsonify(data)
