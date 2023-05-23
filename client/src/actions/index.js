@@ -17,3 +17,8 @@ export const getAllCustomer = async() => {
     return res;
 }
 
+export const getCustomerBill = async(userID) => {
+    const res = await axios.get(`${BASE_URL}bills/${userID}`);
+    return res;
+}
+

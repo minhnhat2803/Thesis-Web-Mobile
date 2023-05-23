@@ -1,49 +1,64 @@
-import React, { useRef, useCallback, useEffect } from "react";
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
 import Webcam from "react-webcam";
 import { scanImage, checkPosition } from "../actions";
+import { getAllCustomer } from "../actions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
-const cards = [
-  {
-    index: 0,
-    title: "Number of cameras",
-    data: 23,
-    background: "#517c64, #5bbd77",
-  },
-  {
-    index: 1,
-    title: "Total plates today",
-    data: 56,
-    background: "#f17335, #fcbc30",
-  },
-  {
-    index: 2,
-    title: "Total plates this week",
-    data: 500,
-    background: "#6382c1, #4ec5d1",
-  },
-  {
-    index: 3,
-    title: "Sites",
-    data: 2,
-    background: "#c52034, #701033",
-  },
-];
-
 function Dashboard() {
+  const showToastInfo = (data) => {
+    toast.info(data, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 8000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const showToastSuccess = (data) => {
+    toast.success(data, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 8000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    getAllCustomer().then((res) => {
+      if (res.status === 200) {
+        setData(res.data.length);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const res = await checkPosition();
-				const position = res.data;
-				console.log(position);
+        const position = res.data;
+        console.log(position);
+        
         if (position <= 10) {
+          showToastSuccess("You are in the right position " + position + " cm");
           await capture();
+        } else {
+          showToastInfo("Your position with the sensor is " + position + " cm");
         }
       } catch (err) {
         console.log(err);
@@ -64,6 +79,33 @@ function Dashboard() {
       console.log(err);
     }
   }, [camRef]);
+
+  const cards = [
+    {
+      index: 0,
+      title: "Number of cameras",
+      data: 2,
+      background: "#517c64, #5bbd77",
+    },
+    {
+      index: 1,
+      title: "Total plates today",
+      data: 30,
+      background: "#f17335, #fcbc30",
+    },
+    {
+      index: 2,
+      title: "Total vehicles currently on " + new Date().toLocaleDateString(),
+      data: data,
+      background: "#6382c1, #4ec5d1",
+    },
+    {
+      index: 3,
+      title: "Sites",
+      data: 2,
+      background: "#c52034, #701033",
+    },
+  ];
 
   return (
     <div className={cx("dashboard-container")}>
@@ -88,8 +130,6 @@ function Dashboard() {
         </div>
       </div>
       <div className={cx("dashboard-right")}>
-        {/* <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}></div> */}
-
         <Webcam className={cx("camera")} ref={camRef} />
         {/* <button className={cx("camera-btn")} onClick={capture}></button> */}
       </div>

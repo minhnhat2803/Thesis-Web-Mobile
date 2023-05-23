@@ -45,6 +45,11 @@ table {
   color: white;
 }
 
+.export-btn:hover {
+  background-color: #294335;
+  color: white;
+}
+
 thead {
   position: sticky;
   top: 0;

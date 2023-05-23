@@ -5,12 +5,15 @@ import classNames from "classnames/bind";
 import Header from "./components/Header";
 import Content from "./components/Dashboard";
 import Table from "./components/Table";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
 function App() {
   return (
     <div className={cx("container")}>
+      <ToastContainer />
       <div className={cx("dashboard-container")}>
         <TabBar />
         <div className={cx("main-content")}>
