@@ -216,8 +216,7 @@ class AIController:
     print("License Plate:", text)
     print("Plate Number:", plateNumber)
 
-    time.sleep(5)
-    checkUserExist = DBConnection('users').where('userLicensePlate', '==', plateNumber)
+    checkUserExist = DBConnection('users').where('userLicensePlate', '==', text)
     if checkUserExist:
       print("User exist")
       serialcom.write(str('true').encode())
