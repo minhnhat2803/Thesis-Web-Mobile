@@ -8,7 +8,7 @@ import 'package:mobile/screens/profile_screen.dart';
 import 'package:mobile/global_variables.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen(
+  HomeScreen(
       {Key? key,
       required this.userData,
       required this.userBill,
@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final userData;
   // ignore: prefer_typing_uninitialized_variables
-  final userBill;
+  dynamic userBill;
   // ignore: prefer_typing_uninitialized_variables
   final condition;
 
@@ -26,6 +26,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //update state
+  void updateState() async {
+    String url = 'http://$ipAddr:$port/bills/${widget.userData['userID']}';
+    Response response = await get(Uri.parse(url));
+    var userBill = jsonDecode(response.body);
+    if (userBill.length == 0) {
+      userBill = [
+        {
+          'userID': widget.userData['userID'],
+          'slot': 'INACTIVE',
+          'fee': '0',
+          'timeIn': 'None',
+        }
+      ];
+    }
+    setState(() {
+      widget.userBill = userBill;
+    });
+  }
+
   String getSystemTime() {
     var now = DateTime.now();
     return now.toString();
@@ -46,6 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         backgroundColor: Colors.green,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: () {
+          updateState();
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.refresh),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
