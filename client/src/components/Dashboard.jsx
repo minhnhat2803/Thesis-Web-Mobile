@@ -15,7 +15,7 @@ function Dashboard() {
   const showToastInfo = (data) => {
     toast.info(data, {
       position: toast.POSITION.TOP_RIGHT,
-      autoClose: 8000,
+      autoClose: 1500,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -28,7 +28,7 @@ function Dashboard() {
   const showToastSuccess = (data) => {
     toast.success(data, {
       position: toast.POSITION.TOP_RIGHT,
-      autoClose: 8000,
+      autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

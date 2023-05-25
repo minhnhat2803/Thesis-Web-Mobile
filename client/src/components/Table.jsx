@@ -4,11 +4,14 @@ import styles from "../styles/Table.module.css";
 import { getAllCustomer } from "../actions";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { FiRefreshCcw } from "react-icons/fi";
 
 const cx = classNames.bind(styles);
 
 function Table() {
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     getAllCustomer().then((res) => {
       if (res.status === 200) {
@@ -28,7 +31,7 @@ function Table() {
         setData(dataWithIndex);
       }
     });
-  }, []);
+  }, [refresh]);
 
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
@@ -44,6 +47,10 @@ function Table() {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
     saveAs(blob, "ParkingData.xlsx");
+  };
+
+  const refreshData = () => {
+    setRefresh(!refresh);
   };
 
   return (
@@ -91,6 +98,12 @@ function Table() {
                       onClick={exportToExcel}
                     >
                       Export to Excel
+                    </button>
+                    <button
+                      className={cx("refresh-btn")}
+                      onClick={refreshData}
+                    >
+                      <FiRefreshCcw />
                     </button>
                   </div>
                 </th>
