@@ -1,4 +1,4 @@
-# iSP - IoT - Based Smart Parking System
+# iSP - IoT Based Smart Parking System
 > The project for Internet of Things course.
 
 # Introduction
