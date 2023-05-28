@@ -176,8 +176,8 @@ class AIController:
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    reader = easyocr.Reader(['en'], )
-    results = reader.readtext(gray_image, detail=0, threshold=0.5)
+    reader = easyocr.Reader(['en'], gpu=True)
+    results = reader.readtext(gray_image, detail=0, threshold=0.4)
     text = ''
     for result in results:
         text += result

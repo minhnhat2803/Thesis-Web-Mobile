@@ -1,19 +1,22 @@
-# IoT Project
+# iSP - IoT Based Smart Parking System
 > The project for Internet of Things course.
 
 # Introduction
 <h4>Member</h4>
 
-| Number | ID | Name | Role | 
-| ----- | ----- | --------- | --------- | 
-
+| Number | ID | Name | 
+| ----- | ----- | --------- | 
+| 1 | ITITIU20112 | Nguyen Le Minh |
+| 2 | ITITIU20062| Nguyen Huu Minh Nhat |
+| 3 | ITITIU19194 | Truong Nhat Minh Quang |
+| 4 | ITITIU19076 | Dang Nguyen Nam Anh |
+| 5 | ITITIU19169 | Le Nguyen Binh Nguyen |
+| 6 | ITITIU19219 | Pham Quoc Tin |
 
 <h4>Motivation</h4> 
-<p>Our team originally planned to implement an issues tracker project to create a website to track the progress of a job or a project. However, the project was put on a hold since we did not found it captivating and that we wanted a more practical web application.
-In the end, we decied on our common interest, a very popular movie site: Netflix. Not only that it gave us inspiration when implementing since the whole team has the same hobby of watching movies. And at the same time, the project has more opportunities for each member to develop programming skills to guide the career path as well as its practical usage.</p>
-<p>Thanks to the analysis of Netflix's website, every member on the team can recognize and understand its operation and implement it with small inputs, or make up the basic website under other frameworks and libraries together.</p>
+<p>Our team originally planned to implement an AI model for automatically scanning the license plate when the vehicle want to park</p>
 
-<h4>Present slides: <a href=https://www.canva.com/design/DAFCz8WDbMk/view> here </a> </h4>
+<h4>Present slides: <a href=https://www.canva.com/design/DAFjhbSZAdY/gYEx7tmvrlS9z0Pk7vO0PA/view?utm_content=DAFjhbSZAdY&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu> here </a> </h4>
 
 <h2 id="table-of-contents"> :book: Table of Contents</h2>
 <details open="open">
@@ -24,6 +27,7 @@ In the end, we decied on our common interest, a very popular movie site: Netflix
     <li>
       <a href="#setup">Setup</a>
        <ul>
+         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Mobile</a></li>
         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Client</a></li>
         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/server">Server</a></li>
        </ul>
@@ -37,79 +41,93 @@ In the end, we decied on our common interest, a very popular movie site: Netflix
 
 <h2 id="general-information"> 🧮 General Information</h2>
 
-- **Client** : 
-- **Server** : 
+- **Mobile** : Using Flutter to build the UI of mobile application
+- **Client** : Using Vitejs is a tool to build ReactJS UI
+- **Server** : Using FLask framework to build the server
 
 <h2 id="features"> 📋 Features</h2>
 
 List the ready features here:
 
-| Field | Client | Dashboard | 
-| ----- | ----- | --------- | 
+| ----- | Features | 
+| ----- | ----- |
+| Mobile | Login, Register, Homepage, Profile, Logout |
+| Client | View user active, Take license plate picture |
+| Server | Authentication, OCR scanning, Facial recognition |
 
 <h2 id="setup"> 🧰 Setup</h2>
   <ul>
+    <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Mobile</a></li>
     <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Client</a></li>
     <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/server">Server</a></li>
    </ul>
  
-
 <h2 id="technologies"> 🖥️ Technologies</h2>
 
-### 1. Client
+### 1. Mobile
 | Plugin | README |
 | ------ | ------ |
+| Flutter | https://github.com/flutter/flutter |
 
-### 2. Server
+### 2. Client
 | Plugin | README |
 | ------ | ------ |
+| Vite | https://github.com/vitejs/vite |
+
+### 3. Server
+| Plugin | README |
+| ------ | ------ |
+| Flask | https://github.com/pallets/flask |
 
 <!-- FOLDER STRUCTURE -->
 <h2 id="folder-structure"> 🗺️ Folder Structure</h2>
+    
+    ├── mobile
+    │   ├── lib
+    │   │   ├── resuable_widgets
+    │   │   ├── screens
+    |   |   |   ├── home_screen.dart
+    |   |   |   ├── login_screen.dart
+    |   |   |   ├── profile.dart
+    |   |   |   ├── register_screen.dart
+    │   │   ├── global_variables.dart
+    │   │   ├── main.dart
    
     ├── client
     │   ├── src
     │   │   ├── actions
-    │   │   ├── authContext
     │   │   ├── components
-    │   │   ├── pages
-    │   │   ├── App.js
-    │   │   ├── index.js
+    │   │   ├── styles
+    │   │   ├── Container.jsx
+    │   │   ├── global.css
+    │   │   ├── main.jsx
    
     ├── server
     │   ├── src
-    │   │   ├── config
     │   │   ├── controllers
-    │   │   ├── middlewares
-    │   │   ├── models
+    │   │   ├── data
+    │   │   ├── database
     │   │   ├── routes
-    │   │   ├── server.js
+    │   │   ├── app.js
   
 <h2 id="diagram"> 🖥 Diagrams </h2>
 
-<h3> Use case diagram </h3> 
-
-<h3> Sequence diagram </h3> 
+<h3> Process diagram </h3> 
+<img src="https://res.cloudinary.com/nguyenle23/image/upload/v1685077153/iot/iSP_yraak5.png" alt="process_diagram" />
 
 <h2 id="screenshot"> 📸 Screenshots </h2>
 
-### Client
+### Mobile
+<img src="https://res.cloudinary.com/nguyenle23/image/upload/v1685077343/iot/mobile_uyyor0.png" alt="mobile_img" />
 
-### Server
+### Client
+<img src="https://res.cloudinary.com/nguyenle23/image/upload/v1685077406/iot/web_hro3i8.png" alt="web_img" />
 
 <h2 id="acknowledge"> 💼 Acknowledgement </h2>
 
-### References
-- Creating features My List
-- Improving search movies and developing search list 
-- Building quickly change user
-- Implement a recommendation system
-- Implement "last watched" and "continue watching" feature
-
 ### What We Learnt
-- Implementation of MERN stack technology
+- Implementation of AI technology with IoT system
 - Usage of different frameworks and libaries
 - Usage of Git, pull, merge and commit
 - Organize files to better manage development
-- Communication between Frontend and Backend developers
 - Importance of README.md
