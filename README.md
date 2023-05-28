@@ -16,7 +16,9 @@
 <h4>Motivation</h4> 
 <p>Our team originally planned to implement an AI model for automatically scanning the license plate when the vehicle want to park</p>
 
-<h4>Present slides: <a href=https://www.canva.com/design/DAFjhbSZAdY/gYEx7tmvrlS9z0Pk7vO0PA/view?utm_content=DAFjhbSZAdY&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu> here </a> </h4>
+<h4>Present slides: <a href=https://www.canva.com/design/DAFjhbSZAdY/gYEx7tmvrlS9z0Pk7vO0PA/view?utm_content=DAFjhbSZAdY&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu>here</a></h4>
+
+<h4>Report submission: <a href=https://github.com/namanh2310/IoT_Project/blob/main/IOT_PROJECT_REPORT.pdf>here<a/></h4>
 
 <h2 id="table-of-contents"> :book: Table of Contents</h2>
 <details open="open">
