@@ -45,6 +45,30 @@ table {
   color: white;
 }
 
+.export-btn:hover {
+  background-color: #294335;
+  color: white;
+}
+
+.refresh-btn {
+  width: fit-content;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  font-size: 18px;
+  background-color: #517c64;
+  border: none;
+  border-radius: 50%;
+  font-weight: bold;
+  color: white;
+}
+
+.refresh-btn:hover {
+  opacity: 0.8;
+}
+
 thead {
   position: sticky;
   top: 0;

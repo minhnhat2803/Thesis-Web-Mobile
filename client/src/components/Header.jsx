@@ -29,7 +29,7 @@ function Header() {
                 </div>
                 <div className={cx("header-user")}>
                     <div className={cx("sub-content")}>
-                        <p>Hi, John Doe</p>
+                        <p>Notifications</p>
                         <FontAwesomeIcon icon={faBell} />
                     </div>
                 </div>
