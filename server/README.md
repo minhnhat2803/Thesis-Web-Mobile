@@ -12,3 +12,9 @@
 | [plugins/flask-bcrypt/README.md](https://github.com/maxcountryman/flask-bcrypt) |
 | [plugins/firebase-admin-python/README.md](https://github.com/firebase/firebase-admin-python) |
 
+## Command ##
+> Notice: To install all the necessary package before running 
+```
+python 'app.py'
+```
+
