@@ -27,7 +27,8 @@
     <li>
       <a href="#setup">Setup</a>
        <ul>
-         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Mobile</a></li>
+        <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/arduino">Arduino</a></li>
+        <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/mobile">Mobile</a></li>
         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Client</a></li>
         <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/server">Server</a></li>
        </ul>
@@ -35,12 +36,13 @@
     <li><a href="#technologies">Technologies</a></li>
     <li><a href="#folder-structure">Folder Structure</a></li>
     <li><a href="#screenshot">Screenshot</a></li>
-    <li><a href="#acknowledge">Acknowledge</a></li>
+    <li><a href="#acknowledgement">Acknowledgement</a></li>
   </ol>
 </details>
 
 <h2 id="general-information"> 🧮 General Information</h2>
 
+- **Arduino** : For uploading code to make the automatically executing from the Arduino UNO R3
 - **Mobile** : Using Flutter to build the UI of mobile application
 - **Client** : Using Vitejs is a tool to build ReactJS UI
 - **Server** : Using FLask framework to build the server
@@ -51,13 +53,15 @@ List the ready features here:
 
 | ----- | Features | 
 | ----- | ----- |
+| Arduino | Checking distance, automatically open the barrier when having the signal, LED on to guide customer to the parking slot |
 | Mobile | Login, Register, Homepage, Profile, Logout |
 | Client | View user active, Take license plate picture |
 | Server | Authentication, OCR scanning, Facial recognition |
 
 <h2 id="setup"> 🧰 Setup</h2>
   <ul>
-    <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Mobile</a></li>
+    <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/arduino">Arduino</a></li>
+    <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/mobile">Mobile</a></li>
     <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/client">Client</a></li>
     <li><a href="https://github.com/namanh2310/IoT_Project/tree/main/server">Server</a></li>
    </ul>
@@ -123,9 +127,10 @@ List the ready features here:
 ### Client
 <img src="https://res.cloudinary.com/nguyenle23/image/upload/v1685077406/iot/web_hro3i8.png" alt="web_img" />
 
-<h2 id="acknowledge"> 💼 Acknowledgement </h2>
+<h2 id="acknowledgement"> 💼 Acknowledgement </h2>
 
 ### What We Learnt
+- Communicating and connecting between hardware and software
 - Implementation of AI technology with IoT system
 - Usage of different frameworks and libaries
 - Usage of Git, pull, merge and commit
