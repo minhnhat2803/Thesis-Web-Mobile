@@ -12,5 +12,8 @@
 | [plugins/image_picker/README.md](https://pub.dev/packages/image_picker) |
 | [plugins/http/README.md](https://pub.dev/packages/http) |
 
+## Tutorial for running ##
+1. Initialize the emulator(Android Studio)
+2. Run the project via plugin in the VS-Code
 
 
