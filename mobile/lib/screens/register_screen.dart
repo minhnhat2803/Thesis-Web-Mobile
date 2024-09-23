@@ -62,6 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       var jsonResp = jsonDecode(response.body);
+      print(jsonResp);
       if (jsonResp['statusCode'] == '200') {
         await EasyLoading.show(
                 status: 'Logging in...', maskType: EasyLoadingMaskType.black)

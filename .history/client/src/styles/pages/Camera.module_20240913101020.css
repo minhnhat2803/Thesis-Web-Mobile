@@ -1,0 +1,21 @@
+.cameraContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .cameraFeed {
+    margin: 10px;
+  }
+  
+  .cameraTitle {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .cameraVideo {
+    width: 400px;
+    height: 300px;
+    border: 1px solid #ccc;
+  }
+  

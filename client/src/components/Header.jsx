@@ -16,7 +16,7 @@ function Header() {
                 <div className={cx("header-title")}>
                     <div className={cx("sub-content")}>
                         <FontAwesomeIcon icon={faCar} />
-                        <p>Entry Gate System</p>
+                        <p>Administration</p>
                     </div>
                 </div>
             </div>
