@@ -1,4 +1,9 @@
-{
+import firebase_admin
+from firebase_admin import credentials, firestore
+from firebase_admin import credentials
+
+cred = credentials.Certificate({
+
   "type": "service_account",
   "project_id": "iot-smart-parking-72f94",
   "private_key_id": "435656757049f82801be1e932e74e53e89be5f0d",
@@ -10,4 +15,12 @@
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-6ubd4%40iot-smart-parking-72f94.iam.gserviceaccount.com",
   "universe_domain": "googleapis.com"
-}
+
+})
+
+firebase_admin.initialize_app(cred, {'storageBucket': 'iot-smart-parking-72f94.appspot.com'})
+
+def DBConnection(collectionName):
+  client = firestore.client()
+  db = client.collection(collectionName)
+  return db
