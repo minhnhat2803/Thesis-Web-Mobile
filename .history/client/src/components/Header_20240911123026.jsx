@@ -33,7 +33,7 @@ function Header() {
                         <FontAwesomeIcon icon={faBell} />
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     );
 }
