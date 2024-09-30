@@ -75,7 +75,7 @@ function TabBar() {
     <div className={cx("tabBar-container")}>
       <div className={cx("logo")}>
         <img
-          src="../src/assets/img/smartparking.png"
+          src="../src/assets/img/iotlogo.png"
           className={cx("logo-text")}
         />
       </div>
