@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/pages/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
-import { scanImage, checkPosition, getAllCustomer } from "../actions";
+import Webcam from "react-webcam";
+import { scanImage, checkPosition } from "../actions";
+import { getAllCustomer } from "../actions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,8 +39,6 @@ function Dashboard() {
   };
 
   const [data, setData] = useState([]);
-  
-  // Lấy dữ liệu từ API (tổng số lượng khách hàng)
   useEffect(() => {
     getAllCustomer().then((res) => {
       if (res.status === 200) {
@@ -47,14 +47,13 @@ function Dashboard() {
     });
   }, []);
 
-  // Kiểm tra khoảng cách với sensor mỗi 20 giây
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const res = await checkPosition();
         const position = res.data;
         console.log(position);
-
+        
         if (position <= 10) {
           showToastSuccess("You are in the right position " + position + " cm");
           await capture();
@@ -69,16 +68,17 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  // Thay thế webcam bằng luồng từ Raspberry Pi
-  const capture = async () => {
+  const camRef = useRef(null);
+  const capture = useCallback(async () => {
+    const imageSrc = camRef.current.getScreenshot();
     try {
-      const res = await scanImage("http://<pi-ip-address>:8080/stream");
+      const res = await scanImage(imageSrc);
       console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [camRef]);
 
   const cards = [
     {
@@ -130,12 +130,8 @@ function Dashboard() {
         </div>
       </div>
       <div className={cx("dashboard-right")}>
-        {/* Thay thế webcam bằng luồng từ camera Raspberry Pi */}
-        <img
-          className={cx("camera")}
-          src="http://<pi-ip-address>:8080/stream"
-          alt="Raspberry Pi Camera Stream"
-        />
+        <Webcam className={cx("camera")} ref={camRef} />
+        {/* <button className={cx("camera-btn")} onClick={capture}></button> */}
       </div>
     </div>
   );
