@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../styles/pages/Profile.module.css";
 import { auth } from "../config/firebase"; // Import auth từ Firebase config
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
@@ -8,21 +8,6 @@ function Profile() {
   const [userInfo, setUserInfo] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // Khi trang tải lại, kiểm tra xem thông tin đăng nhập có trong localStorage không
-  useEffect(() => {
-    const storedUserInfo = localStorage.getItem("userInfo");
-    if (storedUserInfo) {
-      setUserInfo(JSON.parse(storedUserInfo));
-    }
-  }, []);
-
-  // Lưu thông tin vào localStorage khi userInfo thay đổi
-  useEffect(() => {
-    if (userInfo) {
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
-    }
-  }, [userInfo]);
 
   // Đăng nhập
   const handleLoginSubmit = async (e) => {
@@ -76,10 +61,8 @@ function Profile() {
     setSelectedImage(e.target.files[0]);
   };
 
-  // Đăng xuất và xóa thông tin đăng nhập khỏi localStorage
   const handleLogout = () => {
     setUserInfo(null);
-    localStorage.removeItem("userInfo");
   };
 
   return (
