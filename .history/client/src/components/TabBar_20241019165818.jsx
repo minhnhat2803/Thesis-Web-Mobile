@@ -44,7 +44,7 @@ const tabs = [
     index: 4,
     title: "Slots",
     icon: faCheckToSlot,
-    path: "/slots",
+    path: "/slót",
   },
   // {
   //   index: 5,

@@ -42,9 +42,9 @@ const tabs = [
   },
   {
     index: 4,
-    title: "Slots",
+    title: "Setting",
     icon: faCheckToSlot,
-    path: "/slots",
+    path: "/setting",
   },
   // {
   //   index: 5,

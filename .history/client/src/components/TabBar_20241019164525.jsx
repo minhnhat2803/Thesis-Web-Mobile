@@ -10,7 +10,6 @@ import {
   faUser,
   faMoneyBills,
   faCamera,
-  faCheckToSlot,
 } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
@@ -40,12 +39,12 @@ const tabs = [
     icon: faMoneyBills,
     path: "/cash",
   },
-  {
-    index: 4,
-    title: "Slots",
-    icon: faCheckToSlot,
-    path: "/slots",
-  },
+  // {
+  //   index: 4,
+  //   title: "Setting",
+  //   icon: faGear,
+  //   path: "/setting",
+  // },
   // {
   //   index: 5,
   //   title: "Logout",

@@ -1,0 +1,46 @@
+import React, { useState, useEffect } from 'react';
+import styles from '../styles/pages/Slots.module.css';
+
+const Slots = ({ slotsData = [] }) => {
+  const [selectedSlot, setSelectedSlot] = useState(null);
+
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(slot); // Khi click vào slot, mở modal với thông tin slot
+  };
+
+  useEffect(() => {
+    console.log(slotsData); // Kiểm tra dữ liệu truyền vào từ sensor
+  }, [slotsData]);
+
+  return (
+    <div className={styles.container}>
+      <h1>Parking Slots</h1>
+      <div className={styles.grid}>
+        {slotsData.map((slot) => (
+          <div
+            key={slot.id}
+            className={slot.isOccupied ? styles.occupied : styles.available}
+            onClick={() => handleSlotClick(slot)}
+          >
+            Slot {slot.id}
+          </div>
+        ))}
+      </div>
+
+      {/* Hiển thị modal nếu đã chọn slot */}
+      {selectedSlot && (
+        <div className={styles.overlay}>
+          <div className={styles.modal}>
+            <button onClick={() => setSelectedSlot(null)} className={styles.closeButton}>X</button>
+            <h2>Car Information</h2>
+            <p>License Plate: {selectedSlot?.carInfo?.licensePlate || 'N/A'}</p>
+            <p>Parking Time: {selectedSlot?.carInfo?.parkingTime || 'N/A'}</p>
+            <img src={selectedSlot?.carInfo?.imageUrl || '/placeholder.jpg'} alt="Car Image" className={styles.carImage} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Slots;

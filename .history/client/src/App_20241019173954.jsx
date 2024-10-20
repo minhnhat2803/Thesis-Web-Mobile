@@ -24,7 +24,7 @@ function App() {
           <div className={cx("main-content")}>
             <Routes>
               <Route path="/dashboard" element={<><Header /><Content /><Table /></>} />
-              <Route path="/slots" element={<Slots />} />
+              <Route path="/setting" element={<Slots />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/cash" element={<Cash />} />
               <Route path="/camera" element={<Camera />} />
