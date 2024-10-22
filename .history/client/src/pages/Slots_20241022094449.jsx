@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore'; // Import Firestore functions
-import { db } from '../config/firebase.js'; // Import Firebase config
 import styles from '../styles/pages/Slots.module.css';
 
 const Slots = () => {
   const [slotsData, setSlotsData] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  // Hàm lấy dữ liệu từ Firebase
+  // Hàm lấy dữ liệu từ API
   const fetchSlotsData = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'parkingSlots'));
-      const slots = querySnapshot.docs.map(doc => doc.data());
-      setSlotsData(slots);
+      const response = await fetch('https://run.mocky.io/v3/616ebdcc-eb37-4396-b93d-9659ad62c721'); // URL của API
+      const data = await response.json();
+      setSlotsData(data);
     } catch (error) {
       console.error('Error fetching slot data:', error);
     }
@@ -25,7 +23,7 @@ const Slots = () => {
   };
 
   useEffect(() => {
-    fetchSlotsData(); // Gọi Firebase khi component được render
+    fetchSlotsData(); // Gọi API khi component được render
   }, []);
 
   return (

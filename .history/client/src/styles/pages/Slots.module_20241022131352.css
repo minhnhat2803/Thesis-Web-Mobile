@@ -43,10 +43,10 @@ h1 {
 }
 
 .available:hover, .occupied:hover {
-    opacity: 0.9; 
+    opacity: 0.9; /* Tăng độ rõ cho slot khi hover */
 }
 
-
+/* Modal styles */
 .overlay {
     position: fixed;
     top: 0;
@@ -64,9 +64,9 @@ h1 {
     padding: 20px;
     border-radius: 10px;
     max-width: 500px;
-    width: 90%; 
+    width: 90%; /* Chiếm 90% chiều rộng màn hình */
     position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Thêm bóng cho modal */
 }
 
 .closeButton {
@@ -77,9 +77,7 @@ h1 {
     top: 10px;
     right: 10px;
     cursor: pointer;
-    z-index: 1000; 
-    color: black; 
-    display: block; 
+    display: block; /* Đảm bảo nút luôn hiển thị */
 }
 
 .carImage {

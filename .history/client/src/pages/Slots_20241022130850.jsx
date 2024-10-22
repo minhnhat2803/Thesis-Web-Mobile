@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore'; // Import Firestore functions
-import { db } from '../config/firebase.js'; // Import Firebase config
+import { db } from '../config/firebase.js; // Import Firebase config
 import styles from '../styles/pages/Slots.module.css';
 
 const Slots = () => {

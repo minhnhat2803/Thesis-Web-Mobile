@@ -43,7 +43,7 @@ h1 {
 }
 
 .available:hover, .occupied:hover {
-    opacity: 0.9; 
+    opacity: 0.9; /* Tăng độ rõ cho slot khi hover */
 }
 
 
