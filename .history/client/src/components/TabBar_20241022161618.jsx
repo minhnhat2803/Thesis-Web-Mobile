@@ -41,7 +41,7 @@ const tabs = [
     path: "/cash",
   },
   {
-    index: 3,
+    index: 4,
     title: "Slots",
     icon: faCheckToSlot,
     path: "/slots",

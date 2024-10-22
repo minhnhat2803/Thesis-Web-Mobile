@@ -9,6 +9,7 @@ import Table from "./components/Table";
 import Slots from "./pages/Slots";
 import Profile from "./pages/Profile";
 import Cash from "./pages/Cash";
+import Camera from "./pages/Camera";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const cx = classNames.bind(styles);

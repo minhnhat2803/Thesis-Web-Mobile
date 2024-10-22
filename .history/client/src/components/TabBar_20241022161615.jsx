@@ -35,13 +35,13 @@ const tabs = [
   //   path: "/camera",
   // },
   {
-    index: 2,
+    index: 3,
     title: "Cash",
     icon: faMoneyBills,
     path: "/cash",
   },
   {
-    index: 3,
+    index: 4,
     title: "Slots",
     icon: faCheckToSlot,
     path: "/slots",
