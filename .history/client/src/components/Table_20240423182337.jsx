@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/Table.module.css";
-import { db } from "../config/firebase"; // Đảm bảo bạn đã cấu hình Firebase
-import { collection, getDocs } from "firebase/firestore";
+import { getAllCustomer } from "../actions";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -14,32 +13,31 @@ function Table() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const usersCollection = collection(db, "users");
-      const userSnapshot = await getDocs(usersCollection);
-      const userData = userSnapshot.docs.map((doc, index) => {
-        const data = doc.data();
-        return {
-          index: index + 1,
-          email: data.email || "N/A",
-          userLicensePlate: data.userLicensePlate || "N/A",
-          createdAt: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : "N/A",
-          timeStamp: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString() : "N/A",
-          userAvatar: data.userAvatar || "",
-          bill: data.bill || 0,
-        };
-      });
-      setData(userData);
-    };
-
-    fetchUsers();
+    getAllCustomer().then((res) => {
+      if (res.status === 200) {
+        const dataWithIndex = res.data.map((data, index) => {
+          if (data.bill == null) {
+            data.bill = 0;
+          } else {
+            data.bill = data.bill;
+          }
+          return {
+            ...data,
+            createdAt: new Date(data.createdAt).toLocaleDateString(),
+            timeStamp: new Date(data.createdAt).toLocaleTimeString(),
+            index: index + 1,
+          };
+        });
+        setData(dataWithIndex);
+      }
+    });
   }, [refresh]);
 
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(data);
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "UsersData");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataCustomers");
 
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
@@ -48,7 +46,7 @@ function Table() {
     const blob = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(blob, "UsersData.xlsx");
+    saveAs(blob, "ParkingData.xlsx");
   };
 
   const refreshData = () => {
@@ -57,7 +55,7 @@ function Table() {
 
   return (
     <>
-      {data.length === 0 ? (
+      {data.length == 0 ? (
         <h1
           style={{
             padding: "50px",
@@ -78,10 +76,33 @@ function Table() {
                     <span className={cx("records-number")}>
                       Records: {data.length}
                     </span>
-                    <button className={cx("export-btn")} onClick={exportToExcel}>
+                    <span className={cx("rows-number")}>
+                      No of rows in table: {data.length}
+                    </span>
+                    <select
+                      defaultValue={"Sortby"}
+                      className={cx("select-type")}
+                    >
+                      <option value="Sortby" disabled>
+                        Sort by
+                      </option>
+                      <option value="s-no">S.no</option>
+                      <option value="customerName">Customer</option>
+                      <option value="plate-no">Plate No.</option>
+                      <option value="date">Date</option>
+                      <option value="time-stamp">TimeStamp</option>
+                      <option value="site">Site</option>
+                    </select>
+                    <button
+                      className={cx("export-btn")}
+                      onClick={exportToExcel}
+                    >
                       Export to Excel
                     </button>
-                    <button className={cx("refresh-btn")} onClick={refreshData}>
+                    <button
+                      className={cx("refresh-btn")}
+                      onClick={refreshData}
+                    >
                       <FiRefreshCcw />
                     </button>
                   </div>
@@ -98,17 +119,17 @@ function Table() {
               </tr>
             </thead>
             <tbody>
-              {data.map((user) => (
-                <tr key={user.index}>
-                  <td>{user.index}</td>
-                  <td>{user.email}</td>
-                  <td>{user.userLicensePlate}</td>
-                  <td>{user.createdAt}</td>
-                  <td>{user.bill === 0 ? "Not parking" : user.timeStamp}</td>
+              {data.map((data) => (
+                <tr key={data.index}>
+                  <td>{data.index}</td>
+                  <td>{data.email}</td>
+                  <td>{data.userLicensePlate}</td>
+                  <td>{data.createdAt}</td>
+                  <td>{data.bill == 0 ? "Not parking" : data.bill.timeIn}</td>
                   <td>
                     <img
-                      src={user.userAvatar}
-                      alt="Avatar"
+                      src={data.userAvatar}
+                      alt="plate"
                       style={{
                         width: "100px",
                         height: "100px",
@@ -116,7 +137,9 @@ function Table() {
                       }}
                     />
                   </td>
-                  <td>{user.bill === 0 ? "0 VND" : `${user.bill.fee} VND`}</td>
+                  <td>
+                    {data.bill == 0 ? 0 + " VND" : data.bill.fee + " VND"}
+                  </td>
                 </tr>
               ))}
             </tbody>

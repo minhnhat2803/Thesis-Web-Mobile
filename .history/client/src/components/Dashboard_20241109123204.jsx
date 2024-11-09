@@ -1,44 +1,20 @@
-import React, { useRef, useCallback, useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/pages/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
-import Webcam from "react-webcam";
-import { scanImage, checkPosition } from "../actions";
-import { getAllCustomer } from "../actions";
+import { checkPosition, getAllCustomer } from "../actions";
 import { toast } from "react-toastify";
+import Webcam from "react-webcam"; // Import Webcam từ react-webcam
 import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
-  const showToastInfo = (data) => {
-    toast.info(data, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
-  const showToastSuccess = (data) => {
-    toast.success(data, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
   const [data, setData] = useState([]);
+  const [plateInfo, setPlateInfo] = useState([]);
+  const webcamRef = useRef(null); // Ref để truy cập webcam
+
   useEffect(() => {
     getAllCustomer().then((res) => {
       if (res.status === 200) {
@@ -53,10 +29,13 @@ function Dashboard() {
         const res = await checkPosition();
         const position = res.data;
         console.log(position);
-        
+
         if (position <= 10) {
           showToastSuccess("You are in the right position " + position + " cm");
-          await capture();
+          const plateData = await capture(); // Gọi hàm capture để lấy thông tin biển số
+          if (plateData) {
+            setPlateInfo((prev) => [...prev, plateData]); // Cập nhật biển số mới vào danh sách
+          }
         } else {
           showToastInfo("Your position with the sensor is " + position + " cm");
         }
@@ -68,44 +47,17 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const camRef = useRef(null);
-  const capture = useCallback(async () => {
-    const imageSrc = camRef.current.getScreenshot();
+  const capture = async () => {
     try {
-      const res = await scanImage(imageSrc);
+      const imageSrc = webcamRef.current.getScreenshot(); // Chụp ảnh từ webcam
+      // Ở đây, bạn có thể gửi imageSrc đến API nhận diện biển số
+      const res = await scanImage(imageSrc); // Giả sử scanImage nhận hình ảnh từ webcam
       console.log(res.data);
-      return res.data;
+      return res.data; // Trả về dữ liệu biển số
     } catch (err) {
       console.log(err);
     }
-  }, [camRef]);
-
-  const cards = [
-    {
-      index: 0,
-      title: "Number of cameras",
-      data: 2,
-      background: "#517c64, #5bbd77",
-    },
-    {
-      index: 1,
-      title: "Total plates today",
-      data: 30,
-      background: "#f17335, #fcbc30",
-    },
-    {
-      index: 2,
-      title: "Total vehicles currently on " + new Date().toLocaleDateString(),
-      data: data,
-      background: "#6382c1, #4ec5d1",
-    },
-    {
-      index: 3,
-      title: "Sites",
-      data: 2,
-      background: "#c52034, #701033",
-    },
-  ];
+  };
 
   return (
     <div className={cx("dashboard-container")}>
@@ -114,6 +66,7 @@ function Dashboard() {
           <FontAwesomeIcon size="2x" icon={faTableColumns} />
           <p>Statistics</p>
         </div>
+        {/* Hiển thị các thẻ thống kê */}
         <div className={cx("function-cards-container")}>
           {cards.map((card, index) => (
             <div
@@ -128,10 +81,27 @@ function Dashboard() {
             </div>
           ))}
         </div>
+        {/* Hiển thị thông tin biển số đã nhận diện */}
+        <div className={cx("plate-info-container")}>
+          <h3>Recognized Plates</h3>
+          <ul>
+            {plateInfo.map((plate, index) => (
+              <li key={index}>Plate: {plate.number} - Time: {plate.time}</li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className={cx("dashboard-right")}>
-        <Webcam className={cx("camera")} ref={camRef} />
-        {/* <button className={cx("camera-btn")} onClick={capture}></button> */}
+        <div className={cx("camera-container")}>
+          <h2>Webcam Feed</h2>
+          <Webcam
+            ref={webcamRef}
+            className={cx("camera")}
+            screenshotFormat="image/jpeg"
+            width={640}
+            height={480}
+          />
+        </div>
       </div>
     </div>
   );

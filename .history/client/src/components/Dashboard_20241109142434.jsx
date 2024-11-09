@@ -3,9 +3,10 @@ import classNames from "classnames/bind";
 import styles from "../styles/pages/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
-import { scanImage, checkPosition, getAllCustomer } from "../actions";
+import { scanImage, checkPosition } from "../actions"; // Giả định bạn có hàm scanImage để lấy ảnh từ camera
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { db, storage } from "../";
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,6 @@ function Dashboard() {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
       theme: "light",
     });
   };
@@ -31,29 +31,38 @@ function Dashboard() {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
       theme: "light",
     });
   };
 
   const [data, setData] = useState([]);
-  
-  // Lấy dữ liệu từ API (tổng số lượng khách hàng)
+  const [cameraFeeds, setCameraFeeds] = useState([]);
+
+  const cameraUrls = [
+    "http://192.168.1.5:8080/?action=stream",
+  ];
+
   useEffect(() => {
-    getAllCustomer().then((res) => {
-      if (res.status === 200) {
-        setData(res.data.length);
-      }
-    });
+    setCameraFeeds(cameraUrls);
+
+    // Lấy dữ liệu xe từ Firestore
+    const fetchVehicles = async () => {
+      const snapshot = await db.collection("Vehicles").get();
+      const vehiclesData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setData(vehiclesData);
+    };
+    fetchVehicles();
   }, []);
 
-  // Kiểm tra khoảng cách với sensor mỗi 20 giây
+  // Kiểm tra vị trí mỗi 20 giây
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const res = await checkPosition();
         const position = res.data;
-        console.log(position);
 
         if (position <= 10) {
           showToastSuccess("You are in the right position " + position + " cm");
@@ -69,12 +78,25 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  // Thay thế webcam bằng luồng từ Raspberry Pi
+  // Hàm chụp và lưu dữ liệu vào Firestore
   const capture = async () => {
     try {
-      const res = await scanImage("http://<pi-ip-address>:8080/stream");
-      console.log(res.data);
-      return res.data;
+      const imageBlob = await scanImage("http://192.168.1.5:8080/stream"); // Giả định hàm scanImage trả về blob hình ảnh
+      const licensePlate = "Biển số giả định"; // Bạn có thể thay thế bằng hàm nhận diện biển số thực tế
+      
+      // Upload ảnh lên Firebase Storage
+      const fileName = `vehicle_images/${Date.now()}.jpg`;
+      const imageRef = storage.ref(fileName);
+      await imageRef.put(imageBlob);
+      const imageUrl = await imageRef.getDownloadURL();
+
+      // Lưu thông tin vào Firestore
+      await db.collection("Vehicles").add({
+        licensePlate,
+        imageUrl,
+        entryTime: firebase.firestore.FieldValue.serverTimestamp(),
+        slotNumber: Math.floor(Math.random() * 100) + 1, // Số slot giả định
+      });
     } catch (err) {
       console.log(err);
     }
@@ -84,19 +106,19 @@ function Dashboard() {
     {
       index: 0,
       title: "Number of cameras",
-      data: 2,
+      data: cameraFeeds.length,
       background: "#517c64, #5bbd77",
     },
     {
       index: 1,
       title: "Total plates today",
-      data: 30,
+      data: data.length,
       background: "#f17335, #fcbc30",
     },
     {
       index: 2,
       title: "Total vehicles currently on " + new Date().toLocaleDateString(),
-      data: data,
+      data: data.length,
       background: "#6382c1, #4ec5d1",
     },
     {
@@ -130,12 +152,16 @@ function Dashboard() {
         </div>
       </div>
       <div className={cx("dashboard-right")}>
-        {/* Thay thế webcam bằng luồng từ camera Raspberry Pi */}
-        <img
-          className={cx("camera")}
-          src="http://<pi-ip-address>:8080/stream"
-          alt="Raspberry Pi Camera Stream"
-        />
+        {cameraFeeds.map((url, index) => (
+          <div key={index} className={cx("camera-container")}>
+            <h2>Camera {index + 1}</h2>
+            <img
+              className={cx("camera")}
+              src={url}
+              alt={`Raspberry Pi Camera Stream ${index + 1}`}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

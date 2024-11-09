@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/Table.module.css";
-import { db } from "../config/firebase"; // Đảm bảo bạn đã cấu hình Firebase
+import { db } from "../"; // Đảm bảo bạn đã cấu hình Firebase
 import { collection, getDocs } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
