@@ -150,7 +150,6 @@ function Dashboard() {
                 {/* Hiển thị luồng camera từ Raspberry Pi */}
                 {cameraFeeds.map((url, index) => (
                     <div key={index} className={cx("camera-container")}>
-                        <h2>Camera {index + 1}</h2>
                         <img
                             className={cx("camera")}
                             src={url}
