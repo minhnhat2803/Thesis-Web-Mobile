@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/pages/Profile.module.css";
-import { auth } from "../config/firebase"; // Import auth từ Firebase config
+import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../config/AuthContext"; // Import AuthContext để quản lý đăng nhập
 
 function Profile() {
+  const { login, logout } = useAuth(); // Lấy các hàm login và logout từ AuthContext
   const [isLogin, setIsLogin] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // Khi trang tải lại, kiểm tra xem thông tin đăng nhập có trong localStorage không
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
     if (storedUserInfo) {
@@ -17,34 +18,32 @@ function Profile() {
     }
   }, []);
 
-  // Lưu thông tin vào localStorage khi userInfo thay đổi
   useEffect(() => {
     if (userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
     }
   }, [userInfo]);
 
-  // Đăng nhập
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.elements[0].value;
     const password = e.target.elements[1].value;
 
     try {
-      // Đăng nhập với Firebase
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const currentDateTime = new Date().toLocaleString();
-
-      setUserInfo({
+      const loggedInUserInfo = {
         email: userCredential.user.email,
         lastLogin: currentDateTime,
-      });
+      };
+
+      login(loggedInUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
+      setUserInfo(loggedInUserInfo);
     } catch (error) {
       alert("Login failed: " + error.message);
     }
   };
 
-  // Đăng ký
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.elements[0].value;
@@ -57,15 +56,15 @@ function Profile() {
     }
 
     try {
-      // Đăng ký với Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-      setUserInfo({
+      const registeredUserInfo = {
         email: userCredential.user.email,
         lastLogin: new Date().toLocaleString(),
         profilePicture: selectedImage,
-      });
+      };
 
+      login(registeredUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
+      setUserInfo(registeredUserInfo);
       setIsLogin(true);
     } catch (error) {
       alert("Registration failed: " + error.message);
@@ -76,9 +75,9 @@ function Profile() {
     setSelectedImage(e.target.files[0]);
   };
 
-  // Đăng xuất và xóa thông tin đăng nhập khỏi localStorage
   const handleLogout = () => {
     setUserInfo(null);
+    logout(); // Xóa trạng thái đăng nhập từ AuthContext
     localStorage.removeItem("userInfo");
   };
 

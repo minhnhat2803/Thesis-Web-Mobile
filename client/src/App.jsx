@@ -9,30 +9,58 @@ import Table from "./components/Table";
 import Slots from "./pages/Slots";
 import Profile from "./pages/Profile";
 import Cash from "./pages/Cash";
+import ProtectedRoute from "../src/config/ProtectedRoute"; // Import ProtectedRoute
+import { AuthProvider } from "../src/config/AuthContext"; // Import AuthProvider
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const cx = classNames.bind(styles);
 
 function App() {
   return (
-    <Router>
-      <div className={cx("container")}>
-        <ToastContainer />
-        <div className={cx("dashboard-container")}>
-          <TabBar />
-          <div className={cx("main-content")}>
-            <Routes>
-              <Route path="/dashboard" element={<><Header /><Content /><Table /></>} />
-              <Route path="/slots" element={<Slots />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/cash" element={<Cash />} />
-              {/* <Auth />
-            <span> </span> */}
-            </Routes>
+    <AuthProvider>
+      <Router>
+        <div className={cx("container")}>
+          <ToastContainer />
+          <div className={cx("dashboard-container")}>
+            <TabBar />
+            <div className={cx("main-content")}>
+              <Routes>
+                <Route path="/profile" element={<Profile />} />
+                <Route 
+                  path="/dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <>
+                        <Header />
+                        <Content />
+                        <Table />
+                      </>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/slots" 
+                  element={
+                    <ProtectedRoute>
+                      <Slots />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/cash" 
+                  element={
+                    <ProtectedRoute>
+                      <Cash />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </div>
           </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
