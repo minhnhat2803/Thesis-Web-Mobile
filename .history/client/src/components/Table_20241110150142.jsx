@@ -15,8 +15,6 @@ function Table() {
 
   useEffect(() => {
     const fetchLicensePlates = async () => {
-      console.log("Refreshing data..."); // Debugging: Check when data is refreshed
-
       const licenseCollection = collection(db, "license-plate");
       const licenseSnapshot = await getDocs(licenseCollection);
       const licenseData = licenseSnapshot.docs.map((doc, index) => {
@@ -28,8 +26,6 @@ function Table() {
           imageUrl: data.imageUrl || "",
         };
       });
-
-      console.log(licenseData); // Log the fetched data
       setData(licenseData);
     };
 
@@ -53,7 +49,7 @@ function Table() {
   };
 
   const refreshData = () => {
-    setRefresh(!refresh); // Toggle the refresh state to trigger useEffect
+    setRefresh(!refresh);
   };
 
   return (
