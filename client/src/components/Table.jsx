@@ -14,30 +14,35 @@ function Table() {
     const [data, setData] = useState([]);
     const [refresh, setRefresh] = useState(false);
 
+    // Fetch data from Firebase Firestore and update the state
+    const fetchLicensePlates = async () => {
+        console.log("Refreshing data...");
+        const licenseCollection = collection(db, "license_plates");
+        const licenseSnapshot = await getDocs(licenseCollection);
+        const licenseData = licenseSnapshot.docs.map((doc, index) => {
+            const data = doc.data();
+            return {
+                index: index + 1,
+                slot_id: data.slot_id || "N/A",
+                license_plate: data.license_plate || "N/A",
+                entry_time: data.entry_time || "N/A",
+                image_url: data.image_url || "",
+            };
+        });
+        setData(licenseData);
+    };
+
+    // useEffect hook to refresh data every 3 seconds
     useEffect(() => {
-        const fetchLicensePlates = async () => {
-            console.log("Refreshing data...");
+        fetchLicensePlates(); // Fetch data when the component first mounts
 
-            // Reference the Firestore collection
-            const licenseCollection = collection(db, "license_plates");
-            const licenseSnapshot = await getDocs(licenseCollection);
-            const licenseData = licenseSnapshot.docs.map((doc, index) => {
-                const data = doc.data();
-                return {
-                    index: index + 1,
-                    slot_id: data.slot_id || "N/A",
-                    license_plate: data.license_plate || "N/A",
-                    entry_time: data.entry_time || "N/A",
-                    image_url: data.image_url || "",
-                };
-            });
+        const interval = setInterval(() => {
+            fetchLicensePlates(); // Refresh data every 3 seconds
+        }, 2000);
 
-            console.log(licenseData); // Log the fetched data
-            setData(licenseData);
-        };
-
-        fetchLicensePlates();
-    }, [refresh]);
+        // Cleanup the interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
 
     const exportToExcel = () => {
         const workbook = XLSX.utils.book_new();
@@ -52,10 +57,6 @@ function Table() {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
         saveAs(blob, "LicensePlates.xlsx");
-    };
-
-    const refreshData = () => {
-        setRefresh(!refresh); // Toggle to trigger useEffect
     };
 
     return (
@@ -89,7 +90,7 @@ function Table() {
                                         </button>
                                         <button
                                             className={cx("refresh-btn")}
-                                            onClick={refreshData}
+                                            onClick={fetchLicensePlates} // Manual refresh button
                                         >
                                             <FiRefreshCcw />
                                         </button>
@@ -106,8 +107,7 @@ function Table() {
                         <tbody>
                             {data.map((item) => (
                                 <tr key={item.index}>
-                                    <td>{item.slot_id}</td>{" "}
-                                    {/* Display slot_id */}
+                                    <td>{item.slot_id}</td>
                                     <td>{item.license_plate}</td>
                                     <td>{item.entry_time}</td>
                                     <td>
@@ -251,5 +251,4 @@ function Table() {
 //         </>
 //     );
 // }
-
 export default Table;

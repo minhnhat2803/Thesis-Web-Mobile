@@ -41,7 +41,7 @@ function Dashboard() {
 
     // URLs của camera từ Raspberry Pi
     const cameraUrls = [
-        "http://192.168.1.6:8080/?action=stream", // Camera feed từ Raspberry Pi
+        "http://192.168.1.4:8080/?action=stream", // Camera feed từ Raspberry Pi
     ];
 
     useEffect(() => {
@@ -86,7 +86,7 @@ function Dashboard() {
     const capture = async () => {
         try {
             const res = await scanImage(
-                "http://192.168.1.6:8080/?action=stream"
+                "http://192.168.1.4:8080/?action=stream"
             );
             console.log(res.data);
             return res.data;
