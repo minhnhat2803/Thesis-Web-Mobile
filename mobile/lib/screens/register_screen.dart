@@ -53,14 +53,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               status: 'Registering...', maskType: EasyLoadingMaskType.black)
           .then((value) => EasyLoading.dismiss());
 
-      String url = 'http://$ipAddr:$port/auth/register';
+      String url = 'http://10.0.2.2:8000/auth/register';
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
         'userLicensePlate': userLicensePlate,
         'userAvatar': imageString
       });
-
       var jsonResp = jsonDecode(response.body);
       print(jsonResp);
       if (jsonResp['statusCode'] == '200') {

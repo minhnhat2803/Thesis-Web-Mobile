@@ -17,16 +17,18 @@ function Table() {
     // Fetch data from Firebase Firestore and update the state
     const fetchLicensePlates = async () => {
         console.log("Refreshing data...");
-        const licenseCollection = collection(db, "license_plates");
+        const licenseCollection = collection(db, "license-plate");
         const licenseSnapshot = await getDocs(licenseCollection);
         const licenseData = licenseSnapshot.docs.map((doc, index) => {
             const data = doc.data();
             return {
                 index: index + 1,
-                slot_id: data.slot_id || "N/A",
-                license_plate: data.license_plate || "N/A",
-                entry_time: data.entry_time || "N/A",
-                image_url: data.image_url || "",
+                slotID: data.slotID || "N/A",
+                licensePlate: data.licensePlate || "N/A",
+                timeIn: data.timeIn
+                        ? new Date(data.timeIn.seconds * 1000).toLocaleString()
+                        : "N/A",
+                imageUrl: data.imageUrl || "",
             };
         });
         setData(licenseData);
@@ -100,19 +102,18 @@ function Table() {
                             <tr className={cx("header")}>
                                 <td>Slot number</td>
                                 <td>License Plate</td>
-                                <td>Time In</td>
                                 <td>Image</td>
+                                <td>Time in</td>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((item) => (
-                                <tr key={item.index}>
-                                    <td>{item.slot_id}</td>
-                                    <td>{item.license_plate}</td>
-                                    <td>{item.entry_time}</td>
+                               <tr key={item.index}>
+                               <td>{item.slotID}</td>
+                               <td>{item.licensePlate}</td>
                                     <td>
                                         <img
-                                            src={item.image_url}
+                                            src={item.imageUrl}
                                             alt="License Plate"
                                             style={{
                                                 width: "100px",
@@ -121,6 +122,7 @@ function Table() {
                                             }}
                                         />
                                     </td>
+                                <td>{item.timeIn}</td>  
                                 </tr>
                             ))}
                         </tbody>

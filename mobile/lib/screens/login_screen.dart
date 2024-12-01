@@ -27,7 +27,7 @@ class _LogInScreenState extends State<LogInScreen> {
         return;
       }
 
-      String url = 'http://$ipAddr:$port/auth/login';
+      String url = 'http://10.0.2.2:8000/auth/login';
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
@@ -37,7 +37,7 @@ class _LogInScreenState extends State<LogInScreen> {
       if (jsonResp['statusCode'] == '200') {
         var userData = jsonResp['data'];
 
-        String url2 = 'http://$ipAddr:$port/bills/${userData['userID']}';
+        String url2 = 'http://10.0.2.2:8000/bills/${userData['userID']}';
         Response response2 = await get(Uri.parse(url2));
         var userBill = jsonDecode(response2.body);
         print(userBill);
