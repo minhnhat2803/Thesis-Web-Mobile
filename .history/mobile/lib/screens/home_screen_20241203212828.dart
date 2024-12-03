@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
-import 'package:mobile/screens/login_screen.dart';
-import 'package:mobile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
@@ -49,44 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        actions: [
-          // Profile Button
-          IconButton(
-            icon: const Icon(
-              Icons.person,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              var userProfile = widget.userData;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(
-                    userData: userProfile,
-                    userBill: widget.userBill,
-                  ),
-                ),
-              );
-            },
-          ),
-          // Logout Button
-          IconButton(
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LogInScreen(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
@@ -98,6 +58,43 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              // Header Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      var userProfile = widget.userData;
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                    userData: userProfile,
+                                    userBill: widget.userBill,
+                                  )));
+                    },
+                    icon: const Icon(
+                      Icons.person,
+                      size: 45,
+                      color: Colors.black,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LogInScreen()));
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      size: 45,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               // User Info Section
               Card(
                 elevation: 4,

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
-import 'package:mobile/screens/login_screen.dart';
-import 'package:mobile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
-  dynamic userBill;
+  final dynamic userBill;
   final String condition;
 
   HomeScreen({
@@ -49,44 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        actions: [
-          // Profile Button
-          IconButton(
-            icon: const Icon(
-              Icons.person,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              var userProfile = widget.userData;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(
-                    userData: userProfile,
-                    userBill: widget.userBill,
-                  ),
-                ),
-              );
-            },
-          ),
-          // Logout Button
-          IconButton(
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LogInScreen(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,

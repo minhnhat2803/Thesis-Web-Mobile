@@ -6,7 +6,7 @@ import 'package:mobile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
-  dynamic userBill;
+  final dynamic userBill;
   final String condition;
 
   HomeScreen({

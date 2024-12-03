@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (context) => HomeScreen(
                         userBill: widget.userBill,
                         userData: widget.userData,
-                        condition: 'true')));
+                        condition: 'true)));
           },
         ),
         automaticallyImplyLeading: false,
