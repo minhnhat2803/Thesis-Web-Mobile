@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   //update state
   void updateState() async {
-    String url = 'http://10.0.2.2:8000/bills/${widget.userData['userID']}';
+    String url = 'http://$ipAddr:$port/bills/${widget.userData['userID']}';
     Response response = await get(Uri.parse(url));
     var userBill = jsonDecode(response.body);
     if (userBill.length == 0) {

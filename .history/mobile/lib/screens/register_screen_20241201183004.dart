@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               status: 'Registering...', maskType: EasyLoadingMaskType.black)
           .then((value) => EasyLoading.dismiss());
 
-      String url = 'http://10.0.2.2:8000/auth/register';
+      String url = 'http://192.168.2.10:8000/auth/register';
       Response response = await post(Uri.parse(url), body: {
         'email': email,
         'password': pass,
