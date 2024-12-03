@@ -2,5 +2,5 @@
 
 library global_variables;
 
-String ipAddr = '192.168.10.252'; 
-String port = '8000';
+String ipAddr = '192.168.1.32';
+String port = '8080';

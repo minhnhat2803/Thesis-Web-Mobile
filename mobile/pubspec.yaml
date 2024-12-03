@@ -62,7 +62,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/smartparking.png"
+  image_path: "assets/images/iotlogo.png"
 
 # The following section is specific to Flutter packages.
 flutter:
