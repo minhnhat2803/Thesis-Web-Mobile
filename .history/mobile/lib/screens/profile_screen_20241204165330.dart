@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/login_screen.dart';
+import 'package:mobile/screens/home_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final dynamic userData;
@@ -15,7 +15,16 @@ class ProfileScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // Điều hướng trở lại HomeScreen khi nhấn nút back
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                  userData: userData,
+                  userBill: userBill,
+                  condition: 'login',  // Hoặc 'register' tùy thuộc vào điều kiện
+                ),
+              ),
+            );
           },
         ),
         title: const Text(
@@ -24,25 +33,6 @@ class ProfileScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        actions: [
-          // Logout Button
-          IconButton(
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              // Điều hướng đến LoginScreen khi nhấn logout
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LogInScreen(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

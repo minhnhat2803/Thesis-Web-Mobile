@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,6 +66,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     userData: userProfile,
                     userBill: widget.userBill,
                   ),
+                ),
+              );
+            },
+          ),
+          // Logout Button
+          IconButton(
+            icon: const Icon(
+              Icons.logout,
+              size: 30,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LogInScreen(),
                 ),
               );
             },

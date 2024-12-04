@@ -69,6 +69,27 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+          // Logout Button
+          IconButton(
+            icon: const Icon(
+              Icons.logout,
+              size: 30,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // Điều hướng đến trang Profile khi nhấn logout
+              var userProfile = widget.userData;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(
+                    userData: userProfile,
+                    userBill: widget.userBill,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
