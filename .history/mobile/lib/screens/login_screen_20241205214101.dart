@@ -59,7 +59,8 @@ class _LogInScreenState extends State<LogInScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => HomeScreen(
-                    userData: userData, // Chỉ truyền userData
+                    userData: userData,
+                    userBill: userBill,
                     condition: 'login')));
       } else {
         await EasyLoading.showError(jsonResp['message']);

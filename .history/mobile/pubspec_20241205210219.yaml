@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    image_picker: ^0.8.7+3  
+    firebase_core: ^2.16.0
+    cloud_firestore: ^4.10.0
   http: ^0.13.5
   image_picker: ^0.8.7+3
   #store image

@@ -5,10 +5,12 @@ import 'package:mobile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
+  dynamic userBill;
   final String condition;
 
   HomeScreen({
     required this.userData,
+    required this.userBill,
     required this.condition,
   });
 
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ];
     }
     setState(() {
-      // Không cần cập nhật userBill nữa
+      widget.userBill = userBill;
     });
   }
 
@@ -56,12 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () {
               var userProfile = widget.userData;
-              // Không truyền userBill vào ProfileScreen nữa
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(
-                    userData: userProfile, // Chỉ truyền userData
+                    userData: userProfile,
+                    userBill: widget.userBill,
                   ),
                 ),
               );
@@ -117,8 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.directions_car,
-                              color: Colors.green),
+                          const Icon(Icons.directions_car, color: Colors.green),
                           const SizedBox(width: 8),
                           Text(
                             widget.userData['userLicensePlate'],
@@ -146,15 +147,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.access_time,
-                            color: Colors.green),
+                        leading:
+                            const Icon(Icons.access_time, color: Colors.green),
                         title: const Text(
                           'Time In',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          'None', // Bạn có thể thay thế đây bằng thông tin từ userBill hoặc giữ nguyên 'None'
+                          widget.userBill[0]['timeIn'],
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -168,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          'None', // Thay thế bằng dữ liệu thực tế nếu cần
+                          widget.userBill[0]['slot'],
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -181,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          '0 VND', // Thay thế nếu cần
+                          '${widget.userBill[0]['fee']} VND',
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
