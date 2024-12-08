@@ -104,11 +104,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(  // Căn giữa "Payment Method"
-          child: const Text(
-            "Payment Method",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
+        const Text(
+          "Payment Method",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 10),
         Row(
@@ -156,11 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           ),
         ] else if (selectedPaymentMethod == 'Wallet') ...[
-          Center(
-            child: const Text(
-              "Supported wallets: Momo, ZaloPay",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+          const Text(
+            "Supported wallets: Momo, ZaloPay",
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
           const SizedBox(height: 10),
           Center(

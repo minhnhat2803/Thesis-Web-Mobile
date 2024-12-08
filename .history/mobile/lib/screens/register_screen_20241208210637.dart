@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile/global_Variables.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
 import 'package:mobile/screens/login_screen.dart';
 
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void register(String email, String pass, String userLicensePlate, context) async {
+  void register(String email, String pass, String userLicensePlate, BuildContext context) async {
     try {
       if (email.isEmpty || pass.isEmpty || userLicensePlate.isEmpty || imageString.isEmpty) {
         await EasyLoading.showError('Please fill all the fields');
@@ -59,44 +59,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
 
-      await EasyLoading.show(
-              status: 'Registering...', maskType: EasyLoadingMaskType.black)
-          .then((value) => EasyLoading.dismiss());
+      // Hiển thị trạng thái đang đăng ký
+      await EasyLoading.show(status: 'Registering...', maskType: EasyLoadingMaskType.black);
 
-      String url = 'http://10.0.2.2:8000/auth/register';
-      Map<String, dynamic> body = {
+      // Tạo document ID ngẫu nhiên
+      String docId = FirebaseFirestore.instance.collection('users').doc().id;
+
+      // Chuẩn bị dữ liệu để lưu
+      Map<String, dynamic> userData = {
+        'userID': docId,
         'email': email,
-        'password': pass,
+        'password': pass, // Lưu ý: Nên hash mật khẩu trước khi lưu
         'userLicensePlate': userLicensePlate,
         'userAvatar': imageString,
         'paymentMethod': selectedPaymentMethod,
+        'createdAt': Timestamp.now(),
+        'updatedAt': Timestamp.now(),
       };
 
       if (selectedPaymentMethod == 'Card') {
-        body.addAll({
+        userData.addAll({
           'cardNumber': cardNumberController.text,
           'cardHolderName': cardHolderNameController.text,
           'expiryDate': expiryDateController.text,
           'cvv': cvvController.text,
         });
-      } else if (selectedPaymentMethod == 'Wallet') {
-        // Add wallet specific fields if needed
       }
 
-      Response response = await post(Uri.parse(url), body: body);
-      var jsonResp = jsonDecode(response.body);
-      print(jsonResp);
-      if (jsonResp['statusCode'] == '200') {
-        await EasyLoading.show(
-                status: 'Logging in...', maskType: EasyLoadingMaskType.black)
-            .then((value) => EasyLoading.dismiss());
-        await Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LogInScreen()));
-      } else {
-        await EasyLoading.showError(jsonResp['message']);
-      }
+      // Lưu vào Firestore
+      await FirebaseFirestore.instance.collection('users').doc(docId).set(userData);
+
+      // Hiển thị thông báo thành công
+      await EasyLoading.showSuccess('Registered Successfully');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
     } catch (e) {
-      print('Error: ${e.toString()}');
+      await EasyLoading.showError('Registration Failed: ${e.toString()}');
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 
@@ -104,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(  // Căn giữa "Payment Method"
+        Center(
           child: const Text(
             "Payment Method",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
@@ -232,5 +231,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
-  }
-}

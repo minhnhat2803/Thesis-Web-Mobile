@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/global_Variables.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void register(String email, String pass, String userLicensePlate, context) async {
+  Future<void> register(String email, String pass, String userLicensePlate, BuildContext context) async {
     try {
       if (email.isEmpty || pass.isEmpty || userLicensePlate.isEmpty || imageString.isEmpty) {
         await EasyLoading.showError('Please fill all the fields');
@@ -60,43 +60,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
 
       await EasyLoading.show(
-              status: 'Registering...', maskType: EasyLoadingMaskType.black)
-          .then((value) => EasyLoading.dismiss());
+          status: 'Registering...', maskType: EasyLoadingMaskType.black);
 
-      String url = 'http://10.0.2.2:8000/auth/register';
-      Map<String, dynamic> body = {
+      // Lưu dữ liệu vào Firestore Database
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      Map<String, dynamic> userData = {
         'email': email,
         'password': pass,
         'userLicensePlate': userLicensePlate,
         'userAvatar': imageString,
         'paymentMethod': selectedPaymentMethod,
+        'createdAt': DateTime.now().toIso8601String(),
       };
 
       if (selectedPaymentMethod == 'Card') {
-        body.addAll({
+        userData.addAll({
           'cardNumber': cardNumberController.text,
           'cardHolderName': cardHolderNameController.text,
           'expiryDate': expiryDateController.text,
           'cvv': cvvController.text,
         });
-      } else if (selectedPaymentMethod == 'Wallet') {
-        // Add wallet specific fields if needed
       }
 
-      Response response = await post(Uri.parse(url), body: body);
-      var jsonResp = jsonDecode(response.body);
-      print(jsonResp);
-      if (jsonResp['statusCode'] == '200') {
-        await EasyLoading.show(
-                status: 'Logging in...', maskType: EasyLoadingMaskType.black)
-            .then((value) => EasyLoading.dismiss());
-        await Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LogInScreen()));
-      } else {
-        await EasyLoading.showError(jsonResp['message']);
-      }
+      await firestore.collection('users').add(userData);
+
+      await EasyLoading.dismiss();
+      await EasyLoading.showSuccess('Registration Successful');
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LogInScreen()),
+      );
     } catch (e) {
+      await EasyLoading.dismiss();
       print('Error: ${e.toString()}');
+      await EasyLoading.showError('Registration failed');
     }
   }
 
@@ -104,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(  // Căn giữa "Payment Method"
+        Center(
           child: const Text(
             "Payment Method",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
@@ -219,9 +217,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 25),
                 submitButton(context, "Register", () {
                   register(
-                    emailController.text.toString(),
-                    passController.text.toString(),
-                    licensePlateController.text.toString(),
+                    emailController.text.trim(),
+                    passController.text.trim(),
+                    licensePlateController.text.trim(),
                     context,
                   );
                 }),

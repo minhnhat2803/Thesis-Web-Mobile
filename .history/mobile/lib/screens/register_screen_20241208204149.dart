@@ -104,20 +104,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(  // Căn giữa "Payment Method"
-          child: const Text(
-            "Payment Method",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
+        const Text(
+          "Payment Method",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedPaymentMethod == 'Card' ? Colors.orange : Colors.grey,
-              ),
+              style: ElevatedButton.styleFrom(primary: selectedPaymentMethod == 'Card' ? Colors.orange : Colors.grey),
               onPressed: () {
                 setState(() {
                   selectedPaymentMethod = 'Card';
@@ -126,9 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: const Text("Card"),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedPaymentMethod == 'Wallet' ? Colors.orange : Colors.grey,
-              ),
+              style: ElevatedButton.styleFrom(primary: selectedPaymentMethod == 'Wallet' ? Colors.orange : Colors.grey),
               onPressed: () {
                 setState(() {
                   selectedPaymentMethod = 'Wallet';
@@ -156,20 +150,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           ),
         ] else if (selectedPaymentMethod == 'Wallet') ...[
-          Center(
-            child: const Text(
-              "Supported wallets: Momo, ZaloPay",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+          const Text(
+            "Supported wallets: Momo, ZaloPay",
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
           const SizedBox(height: 10),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                // Navigate to wallet payment logic
-              },
-              child: const Text("Connect to Wallet"),
-            ),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate to wallet payment logic
+            },
+            child: const Text("Connect to Wallet"),
           ),
         ],
       ],
