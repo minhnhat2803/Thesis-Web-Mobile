@@ -72,8 +72,7 @@ class ProfileScreen extends StatelessWidget {
               // Profile Section
               Card(
                 elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -85,20 +84,17 @@ class ProfileScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       Text(
                         userData['fullName'] ?? 'No name',
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         userData['email'] ?? 'No email',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.grey),
+                        style: const TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         userData['phoneNumber'] ?? 'No phone number',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.grey),
+                        style: const TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -109,18 +105,14 @@ class ProfileScreen extends StatelessWidget {
               // Update Personal Information Section
               Card(
                 elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
                         'Update Information',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                       const SizedBox(height: 16),
                       TextField(
@@ -180,18 +172,14 @@ class ProfileScreen extends StatelessWidget {
               // Change Password Section
               Card(
                 elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
                         'Change Password',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                       const SizedBox(height: 16),
                       TextField(
@@ -225,18 +213,14 @@ class ProfileScreen extends StatelessWidget {
               // Link Bank Card Section
               Card(
                 elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
                         'Link Bank Card for Online Payments',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                       const SizedBox(height: 16),
                       TextField(
