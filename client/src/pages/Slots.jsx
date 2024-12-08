@@ -1,61 +1,139 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore'; // Import Firestore functions
-import { db } from '../config/firebase.js'; // Import Firebase config
-import styles from '../styles/pages/Slots.module.css';
+import React, { useState, useEffect } from "react";
+import { db } from "../config/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
-  const [slotsData, setSlotsData] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+    const [slots, setSlots] = useState([]);
+    const [selectedSlot, setSelectedSlot] = useState(null); // State to hold the selected slot info
 
-  // Hàm lấy dữ liệu từ Firebase
-  const fetchSlotsData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'parkingSlots'));
-      const slots = querySnapshot.docs.map(doc => doc.data());
-      setSlotsData(slots);
-    } catch (error) {
-      console.error('Error fetching slot data:', error);
-    }
-  };
+    // Fetch data from Firestore
+    const fetchData = async () => {
+        try {
+            // Fetch parking slot data (statuses)
+            const slotSnapshot = await getDocs(collection(db, "parking_slots"));
+            const slotData = slotSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
 
-  const handleSlotClick = (slot) => {
-    if (slot.isOccupied) {
-      setSelectedSlot(slot); // Khi click vào slot, mở modal với thông tin slot
-    }
-  };
+            // Fetch license plate data
+            const licenseCollection = collection(db, "license_plates");
+            const licenseSnapshot = await getDocs(licenseCollection);
+            const licenseData = licenseSnapshot.docs.map((doc, index) => {
+                const data = doc.data();
+                return {
+                    index: index + 1,
+                    slotID: data.slot_id || "N/A",
+                    licensePlate: data.license_plate || "N/A",
+                    timeIn: data.entry_time || "N/A",
+                    imageUrl: data.image_url || "",
+                };
+            });
 
-  useEffect(() => {
-    fetchSlotsData(); // Gọi Firebase khi component được render
-  }, []);
+            // Merge slot data with license plate information
+            const mergedData = slotData.map((slot) => {
+                const plateInfo = licenseData.find(
+                    (plate) => plate.slotID === slot.id
+                );
+                return {
+                    ...slot,
+                    status: plateInfo ? "Occupied" : "Available", // Set status based on license plate info
+                    plateInfo, // Add plateInfo to the slot data
+                };
+            });
 
-  return (
-    <div className={styles.container}>
-      <h1>Parking Slots</h1>
-      <div className={styles.grid}>
-        {slotsData.map((slot) => (
-          <div
-            key={slot.id}
-            className={slot.isOccupied ? styles.occupied : styles.available}
-            onClick={() => handleSlotClick(slot)}
-          >
-            Slot {slot.id}
-          </div>
-        ))}
-      </div>
+            setSlots(mergedData);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+    };
 
-      {selectedSlot && (
-        <div className={styles.overlay}>
-          <div className={styles.modal}>
-            <button onClick={() => setSelectedSlot(null)} className={styles.closeButton}>X</button>
-            <h2>Car Information</h2>
-            <p>License Plate: {selectedSlot.carInfo.licensePlate}</p>
-            <p>Parking Time: {selectedSlot.carInfo.parkingTime}</p>
-            <img src={selectedSlot.carInfo.imageUrl} alt="Car Image" className={styles.carImage} />
-          </div>
+    // Fetch data when component mounts
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    // Function to handle clicking on a slot
+    const handleSlotClick = (slot) => {
+        setSelectedSlot(slot); // Set the selected slot data for popup
+    };
+
+    // Close the popup
+    const closePopup = () => {
+        setSelectedSlot(null); // Reset the selected slot
+    };
+
+    return (
+        <div className={styles.container}>
+            <header className={styles.header}>
+                <h1>Parking Lot Overview</h1>
+            </header>
+
+            {/* Display the legend for Occupied and Available statuses */}
+            <div className={styles.legend}>
+                <div className={styles.legendItem}>
+                    <span className={styles.legendOccupied}></span> Occupied
+                </div>
+                <div className={styles.legendItem}>
+                    <span className={styles.legendAvailable}></span> Available
+                </div>
+            </div>
+
+            <div className={styles.parkingLot}>
+                {/* Display all slots, using grid layout */}
+                <div className={styles.parkingLotGrid}>
+                    {slots.map((slot) => (
+                        <div
+                            key={slot.id}
+                            className={`${styles.slot} ${
+                                slot.status === "Occupied"
+                                    ? styles.occupied
+                                    : styles.available
+                            }`}
+                            onClick={() => handleSlotClick(slot)} // Handle click to open popup
+                        >
+                            <p>{slot.id}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Popup to display vehicle info */}
+            {selectedSlot && (
+                <div className={styles.popup}>
+                    <div className={styles.popupContent}>
+                        <button
+                            className={styles.closeBtn}
+                            onClick={closePopup}
+                        >
+                            X
+                        </button>
+                        <h2>{selectedSlot.id} - Vehicle Info</h2>
+                        {selectedSlot.status === "Occupied" ? (
+                            <>
+                                <p>
+                                    <strong>License Plate:</strong>{" "}
+                                    {selectedSlot.plateInfo.licensePlate}
+                                </p>
+                                <p>
+                                    <strong>Entry Time:</strong>{" "}
+                                    {selectedSlot.plateInfo.timeIn}
+                                </p>
+                                <img
+                                    src={selectedSlot.plateInfo.imageUrl}
+                                    alt="Vehicle"
+                                    className={styles.vehicleImage}
+                                />
+                            </>
+                        ) : (
+                            <p>No vehicle in this slot.</p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Slots;
