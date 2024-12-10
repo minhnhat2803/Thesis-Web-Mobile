@@ -150,22 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Search Vehicle Section - chuyển lên đầu
-              TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: 'Enter License Plate',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: searchVehicle,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16), // Khoảng cách giữa thanh tìm kiếm và các phần dưới
-
               // User Info Section
               Card(
                 elevation: 4,
@@ -297,6 +281,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: const Text(
                   'Reserve a Slot',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Search Vehicle Section
+              TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  labelText: 'Enter License Plate',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: searchVehicle,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ],

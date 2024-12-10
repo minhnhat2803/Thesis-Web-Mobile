@@ -2,115 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:mobile/screens/profile_screen.dart';
-import 'package:mobile/screens/reservation_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
   final String condition;
 
-  const HomeScreen({
-    Key? key,
+  HomeScreen({
     required this.userData,
     required this.condition,
-  }) : super(key: key);
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late dynamic userBill;
-  TextEditingController searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    userBill = {
-      'userID': widget.userData['userID'],
-      'slot': 'INACTIVE',
-      'fee': '0',
-      'timeIn': 'None',
-    };
-    updateState();
-  }
-
   void updateState() async {
-    try {
-      String url = 'http://10.0.2.2:8000/bills/${widget.userData['userID']}';
-      Response response = await get(Uri.parse(url));
-      var billData = jsonDecode(response.body);
-
-      setState(() {
-        userBill = billData.isNotEmpty ? billData[0] : userBill;
-      });
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-  }
-
-  void searchVehicle() async {
-    String licensePlate = searchController.text;
-    if (licensePlate.isNotEmpty) {
-      try {
-        String url = 'http://10.0.2.2:8000/vehicles/$licensePlate';
-        Response response = await get(Uri.parse(url));
-        var vehicleData = jsonDecode(response.body);
-
-        if (vehicleData.isNotEmpty) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Vehicle Information'),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.network(vehicleData[0]['imageUrl'] ?? ''),
-                    const SizedBox(height: 8),
-                    Text('License Plate: ${vehicleData[0]['licensePlate']}'),
-                    Text('Slot Number: ${vehicleData[0]['slot']}'),
-                    Text('Time In: ${vehicleData[0]['timeIn']}'),
-                    Text('Parking Fee: ${vehicleData[0]['fee']} VND'),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Close'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          _showErrorDialog('No vehicle found with this license plate.');
+    String url = 'http://10.0.2.2:8000/bills/${widget.userData['userID']}';
+    Response response = await get(Uri.parse(url));
+    var userBill = jsonDecode(response.body);
+    if (userBill.isEmpty) {
+      userBill = [
+        {
+          'userID': widget.userData['userID'],
+          'slot': 'INACTIVE',
+          'fee': '0',
+          'timeIn': 'None',
         }
-      } catch (e) {
-        print('Error fetching vehicle data: $e');
-        _showErrorDialog('Error fetching data.');
-      }
-    } else {
-      _showErrorDialog('Please enter a license plate.');
+      ];
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
+    setState(() {
+      // Không cần cập nhật userBill nữa
+    });
   }
 
   @override
@@ -123,16 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        automaticallyImplyLeading: false, // Bỏ nút back
         actions: [
+          // Profile Button
           IconButton(
-            icon: const Icon(Icons.person, size: 30, color: Colors.white),
+            icon: const Icon(
+              Icons.person,
+              size: 30,
+              color: Colors.white,
+            ),
             onPressed: () {
-              Navigator.push(
+              var userProfile = widget.userData;
+              // Không truyền userBill vào ProfileScreen nữa
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(
-                    userData: widget.userData,
+                    userData: userProfile, // Chỉ truyền userData
                   ),
                 ),
               );
@@ -150,22 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Search Vehicle Section - chuyển lên đầu
-              TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: 'Enter License Plate',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: searchVehicle,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16), // Khoảng cách giữa thanh tìm kiếm và các phần dưới
-
               // User Info Section
               Card(
                 elevation: 4,
@@ -241,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          userBill['timeIn'] ?? 'None',
+                          'None', // Bạn có thể thay thế đây bằng thông tin từ userBill hoặc giữ nguyên 'None'
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -255,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          userBill['slot'] ?? 'None',
+                          'None', // Thay thế bằng dữ liệu thực tế nếu cần
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -268,35 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         subtitle: Text(
-                          '${userBill['fee']} VND',
+                          '0 VND', // Thay thế nếu cần
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Reserve Slot Button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ReservationScreen(
-                        userData: widget.userData,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Reserve a Slot',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

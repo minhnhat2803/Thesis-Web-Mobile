@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late dynamic userBill;
-  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -48,71 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void searchVehicle() async {
-    String licensePlate = searchController.text;
-    if (licensePlate.isNotEmpty) {
-      try {
-        String url = 'http://10.0.2.2:8000/vehicles/$licensePlate';
-        Response response = await get(Uri.parse(url));
-        var vehicleData = jsonDecode(response.body);
-
-        if (vehicleData.isNotEmpty) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Vehicle Information'),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.network(vehicleData[0]['imageUrl'] ?? ''),
-                    const SizedBox(height: 8),
-                    Text('License Plate: ${vehicleData[0]['licensePlate']}'),
-                    Text('Slot Number: ${vehicleData[0]['slot']}'),
-                    Text('Time In: ${vehicleData[0]['timeIn']}'),
-                    Text('Parking Fee: ${vehicleData[0]['fee']} VND'),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Close'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          _showErrorDialog('No vehicle found with this license plate.');
-        }
-      } catch (e) {
-        print('Error fetching vehicle data: $e');
-        _showErrorDialog('Error fetching data.');
-      }
-    } else {
-      _showErrorDialog('Please enter a license plate.');
-    }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        automaticallyImplyLeading: false, // Bỏ nút back
         actions: [
           IconButton(
             icon: const Icon(Icons.person, size: 30, color: Colors.white),
@@ -150,22 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Search Vehicle Section - chuyển lên đầu
-              TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: 'Enter License Plate',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: searchVehicle,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16), // Khoảng cách giữa thanh tìm kiếm và các phần dưới
-
               // User Info Section
               Card(
                 elevation: 4,

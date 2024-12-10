@@ -1,26 +1,8 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:mobile/global_Variables.dart';
-import 'package:mobile/resuable_widgets/resuable_widgets.dart';
-import 'package:mobile/screens/login_screen.dart';
-
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController licensePlateController = TextEditingController();
-
+  
   var imageString = '';
 
   Future pickImage(ImageSource source) async {
