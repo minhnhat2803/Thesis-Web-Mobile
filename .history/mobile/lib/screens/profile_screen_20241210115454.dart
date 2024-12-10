@@ -239,6 +239,7 @@ class ProfileScreen extends StatelessWidget {
                             print("Unlink card logic here");
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+
                           child: const Text('Unlink Card'),
                         ),
                       ] else ...[

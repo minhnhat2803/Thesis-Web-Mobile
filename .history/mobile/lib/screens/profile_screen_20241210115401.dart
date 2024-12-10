@@ -177,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Manage Bank Card Section
+              // Change Password Section
               Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(
@@ -187,67 +187,85 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Manage Linked Bank Card',
+                        'Change Password',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.green),
                       ),
                       const SizedBox(height: 16),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Current Password',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'New Password',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle password change logic here
+                        },
+                        child: const Text('Change Password'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
 
-                      // Hiển thị thông tin thẻ đã liên kết
-                      if (userData['linkedCard'] != null) ...[
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Card Number',
-                            prefixIcon: Icon(Icons.credit_card),
-                          ),
-                          controller: TextEditingController(
-                            text: userData['linkedCard']['cardNumber'] ??
-                                'No Card',
-                          ),
-                          readOnly: true,
+              // Link Bank Card Section
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Link Bank Card for Online Payments',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Card Number',
+                          prefixIcon: Icon(Icons.credit_card),
                         ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Card Expiry Date',
-                            prefixIcon: Icon(Icons.calendar_today),
-                          ),
-                          controller: TextEditingController(
-                            text: userData['linkedCard']['expiryDate'] ??
-                                'No Expiry Date',
-                          ),
-                          readOnly: true,
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Card Expiry Date',
+                          prefixIcon: Icon(Icons.calendar_today),
                         ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Card Holder Name',
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                          controller: TextEditingController(
-                            text: userData['linkedCard']['holderName'] ??
-                                'No Name',
-                          ),
-                          readOnly: true,
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Card Holder Name',
+                          prefixIcon: Icon(Icons.person),
                         ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Xử lý unlink card
-                            print("Unlink card logic here");
-                          },
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                          child: const Text('Unlink Card'),
-                        ),
-                      ] else ...[
-                        Text(
-                          'No Bank Card Linked',
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle card linking logic here
+                        },
+                        child: const Text('Link Card'),
+                      ),
                     ],
                   ),
                 ),
