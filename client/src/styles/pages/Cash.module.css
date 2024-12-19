@@ -1,41 +1,36 @@
-.cashContainer {
-    padding: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .paymentTable {
+.dashboardContainer {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .paymentTable th,
-  .paymentTable td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
-  }
-  
-  .paymentTable th {
-    background-color: #517c64;
-    color: white;
-  }
-  
-  .paymentTable td {
-    background-color: #f4f6f8;
-  }
-  
-  .licensePlateImage {
-    width: 100px;
     height: auto;
-    border-radius: 5px;
-  }
-  
-  .paymentTable tr:hover {
-    background-color: #eef5f2;
-  }
-  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.functionCardsContainer {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.cardContainer {
+    width: calc(100% / 2 - 16px); /* Adjust for responsiveness */
+    height: 500px; /* Set height based on design preference */
+    border-radius: 12px;
+    padding: 24px;
+    margin: 8px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
+}
+.cardContainer p {
+    font-size: 48px; /* Bigger data text */
+    font-weight: bold;
+    margin: 0;
+}

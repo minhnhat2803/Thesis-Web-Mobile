@@ -1,63 +1,53 @@
 import React from "react";
 import styles from "../styles/pages/Cash.module.css";
 
-function Cash() {
-  // Dữ liệu mẫu của các giao dịch thanh toán
-  const paymentData = [
+const cards = [
     {
-      username: "John Doe",
-      licensePlateImage: "/path/to/license-plate-image.jpg",
-      parkingDuration: "5 hours",
-      totalAmount: "$25.00",
-      paymentStatus: "Paid",
-      paymentTime: "2024-09-20 14:30",
+        index: 0,
+        title: "Number of cameras",
+        data: 2, // Replace with dynamic `cameraFeeds.length` if available
+        background: "#517c64, #5bbd77",
     },
     {
-      username: "Jane Smith",
-      licensePlateImage: "/path/to/license-plate-image2.jpg",
-      parkingDuration: "3 hours",
-      totalAmount: "$15.00",
-      paymentStatus: "Unpaid",
-      paymentTime: "-",
+        index: 1,
+        title: "Total plates today",
+        data: 30,
+        background: "#f17335, #fcbc30",
     },
-    // Thêm các dòng khác theo nhu cầu
-  ];
+    {
+        index: 2,
+        title: "Total vehicles currently on " + new Date().toLocaleDateString(),
+        data: 45, // Replace with dynamic `data` if available
+        background: "#6382c1, #4ec5d1",
+    },
+    {
+        index: 3,
+        title: "Sites",
+        data: 2,
+        background: "#c52034, #701033",
+    },
+];
 
-  return (
-    <div className={styles.cashContainer}>
-      <h1>Payment Information</h1>
-      <table className={styles.paymentTable}>
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>License Plate</th>
-            <th>Parking Duration</th>
-            <th>Total Amount</th>
-            <th>Payment Status</th>
-            <th>Payment Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paymentData.map((payment, index) => (
-            <tr key={index}>
-              <td>{payment.username}</td>
-              <td>
-                <img
-                  src={payment.licensePlateImage}
-                  alt="License Plate"
-                  className={styles.licensePlateImage}
-                />
-              </td>
-              <td>{payment.parkingDuration}</td>
-              <td>{payment.totalAmount}</td>
-              <td>{payment.paymentStatus}</td>
-              <td>{payment.paymentTime}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+function Cash() {
+    return (
+        <div className={styles.dashboardContainer}>
+            <h1>Statistics</h1>
+            <div className={styles.functionCardsContainer}>
+                {cards.map((card) => (
+                    <div
+                        key={card.index}
+                        className={styles.cardContainer}
+                        style={{
+                            background: `linear-gradient(${card.background})`,
+                        }}
+                    >
+                        <h2>{card.title}</h2>
+                        <p>{card.data}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default Cash;

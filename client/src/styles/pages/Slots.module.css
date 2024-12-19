@@ -126,13 +126,11 @@
 }
 
 .slot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px; /* Adjust slot height */
-    background-color: #f0f0f0;
-    border: 2px solid #ccc;
-    cursor: pointer;
+    border: 1px solid #efeef3; /* Light grey border between slots */
+    text-align: center;
+    padding: 15px;
+    border-radius: 4px; /* Optional: for rounded corners */
+    background-color: white; /* Ensure slot backgrounds don't overlap */
 }
 
 .occupied {

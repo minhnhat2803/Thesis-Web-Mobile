@@ -39,24 +39,25 @@ function Dashboard() {
     const [data, setData] = useState([]);
     const [cameraFeeds, setCameraFeeds] = useState([]);
 
-    // URLs của camera từ Raspberry Pi
+    // URLs of camera feeds from Raspberry Pi
     const cameraUrls = [
-        "http://192.168.1.5:8080/?action=stream", // Camera feed từ Raspberry Pi
+        "http://192.168.1.5:8081/?action=stream", // Camera 1
+        "http://192.168.1.5:8082/?action=stream", // Camera 2
     ];
 
     useEffect(() => {
-        // Lấy dữ liệu từ API (tổng số lượng khách hàng)
+        // Fetch total customer data
         getAllCustomer().then((res) => {
             if (res.status === 200) {
                 setData(res.data.length);
             }
         });
 
-        // Đặt URLs của camera
+        // Set camera URLs
         setCameraFeeds(cameraUrls);
     }, []);
 
-    // Kiểm tra khoảng cách với sensor mỗi 20 giây
+    // Check position every 20 seconds
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
@@ -82,7 +83,6 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    // Thay thế webcam bằng luồng từ Raspberry Pi
     const capture = async () => {
         try {
             const res = await scanImage(
@@ -95,68 +95,33 @@ function Dashboard() {
         }
     };
 
-    const cards = [
-        {
-            index: 0,
-            title: "Number of cameras",
-            data: cameraFeeds.length,
-            background: "#517c64, #5bbd77",
-        },
-        {
-            index: 1,
-            title: "Total plates today",
-            data: 30,
-            background: "#f17335, #fcbc30",
-        },
-        {
-            index: 2,
-            title:
-                "Total vehicles currently on " +
-                new Date().toLocaleDateString(),
-            data: data,
-            background: "#6382c1, #4ec5d1",
-        },
-        {
-            index: 3,
-            title: "Sites",
-            data: 2,
-            background: "#c52034, #701033",
-        },
-    ];
-
     return (
         <div className={cx("dashboard-container")}>
-            <div className={cx("dashboard-left")}>
-                <div className={cx("dashboard-title")}>
-                    <FontAwesomeIcon size="2x" icon={faTableColumns} />
-                    <p>Statistics</p>
-                </div>
-                <div className={cx("function-cards-container")}>
-                    {cards.map((card, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                background: `linear-gradient(to bottom right, ${card.background})`,
-                            }}
-                            className={cx("card-container")}
-                        >
-                            <p className={cx("title")}>{card.title}</p>
-                            <p className={cx("data")}>{card.data}</p>
-                        </div>
-                    ))}
-                </div>
+            <div className={cx("dashboard-title")}>
+                <FontAwesomeIcon size="2x" icon={faTableColumns} />
+                <p>Camera Feeds</p>
             </div>
-            <div className={cx("dashboard-right")}>
-                {/* Hiển thị luồng camera từ Raspberry Pi */}
-                {cameraFeeds.map((url, index) => (
-                    <div key={index} className={cx("camera-container")}>
-                        <img
-                            className={cx("camera")}
-                            src={url}
-                            alt={`Raspberry Pi Camera Stream ${index + 1}`}
-                        />
+            <div className={cx("camera-frame")}>
+                <div className={cx("camera-left")}>
+                    <div className={cx("camera-overlay")}>
+                        <p className={cx("camera-name")}>Camera 1 - In</p>
                     </div>
-                ))}
+                    <img
+                        className={cx("camera")}
+                        src={cameraFeeds[0]}
+                        alt="Camera 1 Stream"
+                    />
+                </div>
+                <div className={cx("camera-right")}>
+                    <div className={cx("camera-overlay")}>
+                        <p className={cx("camera-name")}>Camera 2 - Out</p>
+                    </div>
+                    <img
+                        className={cx("camera")}
+                        src={cameraFeeds[1]}
+                        alt="Camera 2 Stream"
+                    />
+                </div>
             </div>
         </div>
     );

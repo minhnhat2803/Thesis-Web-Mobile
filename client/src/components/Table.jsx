@@ -81,18 +81,20 @@ function Table() {
                                         <span className={cx("records-number")}>
                                             Records: {data.length}
                                         </span>
-                                        <button
-                                            className={cx("export-btn")}
-                                            onClick={exportToExcel}
-                                        >
-                                            Export to Excel
-                                        </button>
-                                        <button
-                                            className={cx("refresh-btn")}
-                                            onClick={fetchLicensePlates} // Manual refresh button
-                                        >
-                                            <FiRefreshCcw />
-                                        </button>
+                                        <div className={cx("button-group")}>
+                                            <button
+                                                className={cx("export-btn")}
+                                                onClick={exportToExcel}
+                                            >
+                                                Export to Excel
+                                            </button>
+                                            <button
+                                                className={cx("refresh-btn")}
+                                                onClick={fetchLicensePlates} // Manual refresh button
+                                            >
+                                                <FiRefreshCcw />
+                                            </button>
+                                        </div>
                                     </div>
                                 </th>
                             </tr>

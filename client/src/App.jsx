@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TabBar from "./components/TabBar";
 import styles from "./styles/Container.module.css";
 import classNames from "classnames/bind";
-import Header from "./components/Header";
 import Content from "./components/Dashboard";
 import Table from "./components/Table";
 import Slots from "./pages/Slots";
@@ -17,51 +16,50 @@ import "react-toastify/dist/ReactToastify.css";
 const cx = classNames.bind(styles);
 
 function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <div className={cx("container")}>
-          <ToastContainer />
-          <div className={cx("dashboard-container")}>
-            <TabBar />
-            <div className={cx("main-content")}>
-              <Routes>
-                <Route path="/profile" element={<Profile />} />
-                <Route 
-                  path="/dashboard" 
-                  element={
-                    <ProtectedRoute>
-                      <>
-                        <Header />
-                        <Content />
-                        <Table />
-                      </>
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/slots" 
-                  element={
-                    <ProtectedRoute>
-                      <Slots />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/cash" 
-                  element={
-                    <ProtectedRoute>
-                      <Cash />
-                    </ProtectedRoute>
-                  } 
-                />
-              </Routes>
-            </div>
-          </div>
-        </div>
-      </Router>
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                <div className={cx("container")}>
+                    <ToastContainer />
+                    <div className={cx("dashboard-container")}>
+                        <TabBar />
+                        <div className={cx("main-content")}>
+                            <Routes>
+                                <Route path="/profile" element={<Profile />} />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute>
+                                            <>
+                                                <Content />
+                                                <Table />
+                                            </>
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/slots"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Slots />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/cash"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Cash />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                            </Routes>
+                        </div>
+                    </div>
+                </div>
+            </Router>
+        </AuthProvider>
+    );
 }
 
 export default App;
