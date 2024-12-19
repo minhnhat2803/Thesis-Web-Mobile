@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ReservationScreen extends StatefulWidget {
-  final dynamic userData; // Nhận dữ liệu người dùng từ HomeScreen
+  final dynamic userData; // Nhận thông tin người dùng từ màn hình trước đó
 
   const ReservationScreen({super.key, required this.userData});
 
@@ -12,40 +13,72 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   String? selectedSlot; // Lưu trữ slot được chọn
-  final List<String> availableSlots = [
-    'A1',
-    'A2',
-    'B1',
-    'B2',
-    'C1',
-    'C2'
-  ]; // Các slot khả dụng, cô có thể lấy từ API hoặc database
+  List<Map<String, dynamic>> availableSlots = []; // Danh sách các slot khả dụng
 
-  void confirmReservation() async {
+  @override
+  void initState() {
+    super.initState();
+    fetchAvailableSlots(); // Lấy danh sách các slot khả dụng khi load màn hình
+  }
+
+  // Lấy danh sách các slot từ Firestore
+  Future<void> fetchAvailableSlots() async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('slots')
+          .where('status', isEqualTo: 'available')
+          .get();
+
+      setState(() {
+        availableSlots = snapshot.docs.map((doc) {
+          return {
+            'slot_id': doc.id,
+            'data': doc.data() as Map<String, dynamic>,
+          };
+        }).toList();
+      });
+    } catch (e) {
+      await EasyLoading.showError('Error loading slots: ${e.toString()}');
+    }
+  }
+
+  // Xác nhận đặt chỗ
+  Future<void> confirmReservation() async {
     try {
       if (selectedSlot == null) {
         await EasyLoading.showError('Please select a slot before confirming');
         return;
       }
 
-      // Giả lập xác nhận đặt slot thành công
-      await EasyLoading.show(
-          status: 'Reserving slot...', maskType: EasyLoadingMaskType.black);
+      // Tìm slot được chọn trong danh sách
+      final slot = availableSlots.firstWhere(
+        (slot) => slot['slot_id'] == selectedSlot,
+        orElse: () => {},
+      );
 
-      // Thêm code gửi dữ liệu đến server nếu cần
-      // Ví dụ:
-      // String url = 'http://10.0.2.2:8000/reserve';
-      // Response response = await post(Uri.parse(url), body: {
-      //   'userID': widget.userData['userID'],
-      //   'slot': selectedSlot,
-      // });
-      // var jsonResponse = jsonDecode(response.body);
-      // if (jsonResponse['statusCode'] == '200') {
-      //   ...
-      // }
+      if (slot.isEmpty) {
+        await EasyLoading.showError('Invalid slot selected');
+        return;
+      }
 
-      await EasyLoading.dismiss();
+      // Cập nhật trạng thái slot trong Firestore
+      await FirebaseFirestore.instance
+          .collection('slots')
+          .doc(selectedSlot)
+          .update({
+        'status': 'reserved',
+        'reserved_by': widget.userData['userID'], // Lưu userID
+        'reserved_at': FieldValue.serverTimestamp(), // Lưu thời gian đặt
+      });
+
+      // Hiển thị thông báo thành công
       await EasyLoading.showSuccess('Reservation successful');
+
+      // Cập nhật lại danh sách các slot khả dụng
+      fetchAvailableSlots();
+      setState(() {
+        selectedSlot = null; // Reset trạng thái chọn slot
+      });
     } catch (e) {
       await EasyLoading.showError('An error occurred: ${e.toString()}');
     }
@@ -55,10 +88,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Reservation',
-          style: TextStyle(fontWeight: FontWeight.bold), // In đậm chữ "Reservation"
-        ),
+        title: const Text('Reservation'),
         backgroundColor: Colors.green,
         centerTitle: true,
       ),
@@ -80,19 +110,22 @@ class _ReservationScreenState extends State<ReservationScreen> {
               child: ListView.builder(
                 itemCount: availableSlots.length,
                 itemBuilder: (context, index) {
-                  String slot = availableSlots[index];
+                  final slot = availableSlots[index];
+                  final slotId = slot['slot_id'];
+                  final slotData = slot['data'];
+
                   return ListTile(
                     title: Text(
-                      'Slot $slot',
+                      'Slot ${slotId}',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: selectedSlot == slot
+                        color: selectedSlot == slotId
                             ? Colors.green
                             : Colors.black87,
                       ),
                     ),
-                    trailing: selectedSlot == slot
+                    trailing: selectedSlot == slotId
                         ? const Icon(
                             Icons.check_circle,
                             color: Colors.green,
@@ -100,7 +133,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                         : null,
                     onTap: () {
                       setState(() {
-                        selectedSlot = slot; // Cập nhật slot được chọn
+                        selectedSlot = slotId; // Cập nhật slot được chọn
                       });
                     },
                   );

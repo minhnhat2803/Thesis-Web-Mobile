@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ReservationScreen extends StatefulWidget {
   final dynamic userData; // Nhận dữ liệu người dùng từ HomeScreen
@@ -21,28 +23,32 @@ class _ReservationScreenState extends State<ReservationScreen> {
     'C2'
   ]; // Các slot khả dụng, cô có thể lấy từ API hoặc database
 
-  void confirmReservation() async {
+  // Lấy email người dùng hiện tại từ Firebase Auth
+  Future<String> getUserEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.email ?? '';
+  }
+
+  // Lưu thông tin đặt chỗ vào Firestore
+  Future<void> saveReservation() async {
     try {
       if (selectedSlot == null) {
         await EasyLoading.showError('Please select a slot before confirming');
         return;
       }
 
-      // Giả lập xác nhận đặt slot thành công
       await EasyLoading.show(
           status: 'Reserving slot...', maskType: EasyLoadingMaskType.black);
 
-      // Thêm code gửi dữ liệu đến server nếu cần
-      // Ví dụ:
-      // String url = 'http://10.0.2.2:8000/reserve';
-      // Response response = await post(Uri.parse(url), body: {
-      //   'userID': widget.userData['userID'],
-      //   'slot': selectedSlot,
-      // });
-      // var jsonResponse = jsonDecode(response.body);
-      // if (jsonResponse['statusCode'] == '200') {
-      //   ...
-      // }
+      // Lấy email người dùng
+      String email = await getUserEmail();
+
+      // Lưu thông tin đặt chỗ vào Firestore
+      await FirebaseFirestore.instance.collection('reservations').add({
+        'userEmail': email,
+        'slot': selectedSlot,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
 
       await EasyLoading.dismiss();
       await EasyLoading.showSuccess('Reservation successful');
@@ -51,14 +57,15 @@ class _ReservationScreenState extends State<ReservationScreen> {
     }
   }
 
+  void confirmReservation() {
+    saveReservation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Reservation',
-          style: TextStyle(fontWeight: FontWeight.bold), // In đậm chữ "Reservation"
-        ),
+        title: const Text('Reservation'),
         backgroundColor: Colors.green,
         centerTitle: true,
       ),
