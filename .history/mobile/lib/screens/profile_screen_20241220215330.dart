@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Quay lại màn hình trước
+            Navigator.pop(context);
           },
         ),
         title: const Text(
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout, size: 30, color: Colors.white),
             onPressed: () {
-              // Gọi hàm đăng xuất để quay lại màn hình đăng nhập
+              // Xử lý đăng xuất
               _logout(context);
             },
           ),
@@ -39,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Phần thông tin người dùng
+                // Profile Section
                 Card(
                   elevation: 5,
                   shape: RoundedRectangleBorder(
@@ -84,12 +84,14 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Hàm đăng xuất và quay về màn hình đăng nhập
+  // Hàm đăng xuất
   void _logout(BuildContext context) {
-    // Xóa bất kỳ dữ liệu người dùng nào (nếu có)
-    // Ví dụ: SharedPreferences.remove('userToken') nếu có lưu thông tin đăng nhập
+    // Xóa dữ liệu người dùng (ví dụ: xóa token lưu trong SharedPreferences)
+    // Ví dụ: SharedPreferences.getInstance().then((prefs) {
+    //   prefs.remove('userToken');
+    // });
 
-    // Điều hướng về màn hình đăng nhập
+    // Chuyển hướng về màn hình đăng nhập
     Navigator.pushReplacementNamed(context, '/login');
   }
 }

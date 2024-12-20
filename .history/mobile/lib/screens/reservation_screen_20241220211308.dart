@@ -20,7 +20,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
     'C1',
     'C2',
     'D1',
-    'D2',
+    
   ]; // Các slot khả dụng, cô có thể lấy từ API hoặc database
 
   void confirmReservation() async {
