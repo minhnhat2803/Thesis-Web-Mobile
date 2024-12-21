@@ -98,6 +98,8 @@ const Slots = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Popup to display vehicle info */}
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
@@ -135,6 +137,8 @@ const Slots = () => {
                     </div>
                 </div>
             )}
+
+            {/* Zoomed Image Popup */}
             {zoomedImageUrl && (
                 <div className={styles.popup} onClick={closeZoomedImage}>
                     <div className={styles.popupContent}>

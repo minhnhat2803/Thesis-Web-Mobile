@@ -6,8 +6,8 @@ import styles from "../styles/pages/Slots.module.css";
 const Slots = () => {
     const [slots, setSlots] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(null); 
-    const [isImageZoomed, setIsImageZoomed] = useState(false); 
-    const [zoomedImageUrl, setZoomedImageUrl] = useState(""); 
+    const [isImageZoomed, setIsImageZoomed] = useState(false); // State to handle zoomed image
+    const [zoomedImageUrl, setZoomedImageUrl] = useState(""); // State for zoomed image URL
     const fetchData = async () => {
         try {
             const slotSnapshot = await getDocs(collection(db, "parking_slots"));
@@ -59,11 +59,11 @@ const Slots = () => {
     };
 
     const handleImageClick = (imageUrl) => {
-        setZoomedImageUrl(imageUrl); 
+        setZoomedImageUrl(imageUrl); // Set the image URL to be zoomed
     };
 
     const closeZoomedImage = () => {
-        setZoomedImageUrl(""); 
+        setZoomedImageUrl(""); // Close the zoomed image
     };
 
     return (
@@ -98,6 +98,8 @@ const Slots = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Popup to display vehicle info */}
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
@@ -135,6 +137,8 @@ const Slots = () => {
                     </div>
                 </div>
             )}
+
+            {/* Zoomed Image Popup */}
             {zoomedImageUrl && (
                 <div className={styles.popup} onClick={closeZoomedImage}>
                     <div className={styles.popupContent}>

@@ -5,9 +5,8 @@ import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
     const [slots, setSlots] = useState([]);
-    const [selectedSlot, setSelectedSlot] = useState(null); 
-    const [isImageZoomed, setIsImageZoomed] = useState(false); 
-    const [zoomedImageUrl, setZoomedImageUrl] = useState(""); 
+    const [selectedSlot, setSelectedSlot] = useState(null); // State to hold the selected slot info
+
     const fetchData = async () => {
         try {
             const slotSnapshot = await getDocs(collection(db, "parking_slots"));
@@ -30,9 +29,7 @@ const Slots = () => {
             });
 
             const mergedData = slotData.map((slot) => {
-                const plateInfo = licenseData.find(
-                    (plate) => plate.slotID === slot.id
-                );
+                const plateInfo = licenseData.find((plate) => plate.slotID === slot.id);
                 return {
                     ...slot,
                     status: plateInfo ? "Occupied" : "Available",
@@ -56,14 +53,6 @@ const Slots = () => {
 
     const closePopup = () => {
         setSelectedSlot(null);
-    };
-
-    const handleImageClick = (imageUrl) => {
-        setZoomedImageUrl(imageUrl); 
-    };
-
-    const closeZoomedImage = () => {
-        setZoomedImageUrl(""); 
     };
 
     return (
@@ -93,56 +82,31 @@ const Slots = () => {
                             }`}
                             onClick={() => handleSlotClick(slot)}
                         >
-                            <p>{slot.id}</p>
+                            <h2>{slot.id}</h2>
+                            <p>{slot.status}</p>
                         </div>
                     ))}
                 </div>
             </div>
+
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
-                        <button
-                            className={styles.closeBtn}
-                            onClick={closePopup}
-                        >
-                            X
-                        </button>
-                        <h2>{selectedSlot.id} - Vehicle Info</h2>
+                        <button className={styles.closeBtn} onClick={closePopup}>X</button>
+                        <h2>Slot {selectedSlot.id} - Vehicle Info</h2>
                         {selectedSlot.status === "Occupied" ? (
                             <>
-                                <p>
-                                    <strong>License Plate:</strong>{" "}
-                                    {selectedSlot.plateInfo.licensePlate}
-                                </p>
-                                <p>
-                                    <strong>Entry Time:</strong>{" "}
-                                    {selectedSlot.plateInfo.timeIn}
-                                </p>
+                                <p><strong>License Plate:</strong> {selectedSlot.plateInfo.licensePlate}</p>
+                                <p><strong>Entry Time:</strong> {selectedSlot.plateInfo.timeIn}</p>
                                 <img
                                     src={selectedSlot.plateInfo.imageUrl}
                                     alt="Vehicle"
                                     className={styles.vehicleImage}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            selectedSlot.plateInfo.imageUrl
-                                        )
-                                    }
                                 />
                             </>
                         ) : (
                             <p>No vehicle in this slot.</p>
                         )}
-                    </div>
-                </div>
-            )}
-            {zoomedImageUrl && (
-                <div className={styles.popup} onClick={closeZoomedImage}>
-                    <div className={styles.popupContent}>
-                        <img
-                            src={zoomedImageUrl}
-                            alt="Zoomed Vehicle"
-                            className={styles.popupImage}
-                        />
                     </div>
                 </div>
             )}

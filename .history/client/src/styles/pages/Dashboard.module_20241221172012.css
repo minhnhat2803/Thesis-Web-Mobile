@@ -89,7 +89,7 @@
         height: auto;
         flex-direction: column;
         gap: 16px;
-        background-color: transparent;
+        background-color: transparent; /* Đảm bảo không có nền màu xanh */
         border-radius: 12px;
         box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
     }

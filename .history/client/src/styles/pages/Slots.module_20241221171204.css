@@ -11,7 +11,7 @@ header {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 2px;
     color: #333;
 }
 
@@ -63,16 +63,16 @@ h1 {
     transition: background-color 0.3s;
 }
 
-/* .slot:hover {
+.slot:hover {
     background-color: #f0f0f0;
-} */
+}
 
 .occupied {
-    background-color: #ff4d4d;
+    background-color: #fdd;
 }
 
 .available {
-    background-color: green;
+    background-color: #dfffd6;
 }
 
 .popup {
@@ -115,9 +115,9 @@ h1 {
     background-color: #ff4d4d;
     color: white;
     border: none;
-    padding: 4px 8px;
+    padding: 8px 12px;
     cursor: pointer;
-    font-size: 9px;
+    font-size: 8px;
     /* transition: background-color 0.3s ease; */
 }
 

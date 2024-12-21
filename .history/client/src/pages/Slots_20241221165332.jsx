@@ -5,9 +5,8 @@ import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
     const [slots, setSlots] = useState([]);
-    const [selectedSlot, setSelectedSlot] = useState(null); 
-    const [isImageZoomed, setIsImageZoomed] = useState(false); 
-    const [zoomedImageUrl, setZoomedImageUrl] = useState(""); 
+    const [selectedSlot, setSelectedSlot] = useState(null);
+
     const fetchData = async () => {
         try {
             const slotSnapshot = await getDocs(collection(db, "parking_slots"));
@@ -58,14 +57,6 @@ const Slots = () => {
         setSelectedSlot(null);
     };
 
-    const handleImageClick = (imageUrl) => {
-        setZoomedImageUrl(imageUrl); 
-    };
-
-    const closeZoomedImage = () => {
-        setZoomedImageUrl(""); 
-    };
-
     return (
         <div className={styles.container}>
             <header className={styles.header}>
@@ -98,13 +89,11 @@ const Slots = () => {
                     ))}
                 </div>
             </div>
+
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
-                        <button
-                            className={styles.closeBtn}
-                            onClick={closePopup}
-                        >
+                        <button className={styles.closeBtn} onClick={closePopup}>
                             X
                         </button>
                         <h2>{selectedSlot.id} - Vehicle Info</h2>
@@ -122,27 +111,11 @@ const Slots = () => {
                                     src={selectedSlot.plateInfo.imageUrl}
                                     alt="Vehicle"
                                     className={styles.vehicleImage}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            selectedSlot.plateInfo.imageUrl
-                                        )
-                                    }
                                 />
                             </>
                         ) : (
                             <p>No vehicle in this slot.</p>
                         )}
-                    </div>
-                </div>
-            )}
-            {zoomedImageUrl && (
-                <div className={styles.popup} onClick={closeZoomedImage}>
-                    <div className={styles.popupContent}>
-                        <img
-                            src={zoomedImageUrl}
-                            alt="Zoomed Vehicle"
-                            className={styles.popupImage}
-                        />
                     </div>
                 </div>
             )}

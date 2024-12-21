@@ -135,6 +135,8 @@ const Slots = () => {
                     </div>
                 </div>
             )}
+
+            {/* Zoomed Image Popup */}
             {zoomedImageUrl && (
                 <div className={styles.popup} onClick={closeZoomedImage}>
                     <div className={styles.popupContent}>

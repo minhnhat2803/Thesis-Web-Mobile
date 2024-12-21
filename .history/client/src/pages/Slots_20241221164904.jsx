@@ -5,17 +5,19 @@ import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
     const [slots, setSlots] = useState([]);
-    const [selectedSlot, setSelectedSlot] = useState(null); 
-    const [isImageZoomed, setIsImageZoomed] = useState(false); 
-    const [zoomedImageUrl, setZoomedImageUrl] = useState(""); 
+    const [selectedSlot, setSelectedSlot] = useState(null); // State to hold the selected slot info
+
+    // Fetch data from Firestore
     const fetchData = async () => {
         try {
+            // Fetch parking slot data (statuses)
             const slotSnapshot = await getDocs(collection(db, "parking_slots"));
             const slotData = slotSnapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
 
+            // Fetch license plate data
             const licenseCollection = collection(db, "license_plates");
             const licenseSnapshot = await getDocs(licenseCollection);
             const licenseData = licenseSnapshot.docs.map((doc, index) => {
@@ -29,14 +31,15 @@ const Slots = () => {
                 };
             });
 
+            // Merge slot data with license plate information
             const mergedData = slotData.map((slot) => {
                 const plateInfo = licenseData.find(
                     (plate) => plate.slotID === slot.id
                 );
                 return {
                     ...slot,
-                    status: plateInfo ? "Occupied" : "Available",
-                    plateInfo,
+                    status: plateInfo ? "Occupied" : "Available", // Set status based on license plate info
+                    plateInfo, // Add plateInfo to the slot data
                 };
             });
 
@@ -46,24 +49,19 @@ const Slots = () => {
         }
     };
 
+    // Fetch data when component mounts
     useEffect(() => {
         fetchData();
     }, []);
 
+    // Function to handle clicking on a slot
     const handleSlotClick = (slot) => {
-        setSelectedSlot(slot);
+        setSelectedSlot(slot); // Set the selected slot data for popup
     };
 
+    // Close the popup
     const closePopup = () => {
-        setSelectedSlot(null);
-    };
-
-    const handleImageClick = (imageUrl) => {
-        setZoomedImageUrl(imageUrl); 
-    };
-
-    const closeZoomedImage = () => {
-        setZoomedImageUrl(""); 
+        setSelectedSlot(null); // Reset the selected slot
     };
 
     return (
@@ -72,6 +70,7 @@ const Slots = () => {
                 <h1>Parking Lot Overview</h1>
             </header>
 
+            {/* Display the legend for Occupied and Available statuses */}
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
                     <span className={styles.legendOccupied}></span> Occupied
@@ -82,6 +81,7 @@ const Slots = () => {
             </div>
 
             <div className={styles.parkingLot}>
+                {/* Display all slots, using grid layout */}
                 <div className={styles.parkingLotGrid}>
                     {slots.map((slot) => (
                         <div
@@ -91,13 +91,15 @@ const Slots = () => {
                                     ? styles.occupied
                                     : styles.available
                             }`}
-                            onClick={() => handleSlotClick(slot)}
+                            onClick={() => handleSlotClick(slot)} // Handle click to open popup
                         >
                             <p>{slot.id}</p>
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/* Popup to display vehicle info */}
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
@@ -122,27 +124,11 @@ const Slots = () => {
                                     src={selectedSlot.plateInfo.imageUrl}
                                     alt="Vehicle"
                                     className={styles.vehicleImage}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            selectedSlot.plateInfo.imageUrl
-                                        )
-                                    }
                                 />
                             </>
                         ) : (
                             <p>No vehicle in this slot.</p>
                         )}
-                    </div>
-                </div>
-            )}
-            {zoomedImageUrl && (
-                <div className={styles.popup} onClick={closeZoomedImage}>
-                    <div className={styles.popupContent}>
-                        <img
-                            src={zoomedImageUrl}
-                            alt="Zoomed Vehicle"
-                            className={styles.popupImage}
-                        />
                     </div>
                 </div>
             )}

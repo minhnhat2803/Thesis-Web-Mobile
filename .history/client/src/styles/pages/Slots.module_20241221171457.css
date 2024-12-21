@@ -63,16 +63,16 @@ h1 {
     transition: background-color 0.3s;
 }
 
-/* .slot:hover {
+.slot:hover {
     background-color: #f0f0f0;
-} */
+}
 
 .occupied {
     background-color: #ff4d4d;
 }
 
 .available {
-    background-color: green;
+    background-color: #dfffd6;
 }
 
 .popup {

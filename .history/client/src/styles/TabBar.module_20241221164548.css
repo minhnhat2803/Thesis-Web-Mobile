@@ -22,7 +22,7 @@
   background-color: #517c64; /* Đặt nền nút toggle thành màu đen */
   color: #fff; /* Đặt màu icon thành trắng */
   padding: 10px;
-  border-radius: 25%;
+  border-radius: 50%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng để dễ nhận diện */
 }
 
