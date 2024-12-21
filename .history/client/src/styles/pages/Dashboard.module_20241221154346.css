@@ -1,0 +1,61 @@
+/* General container styling */
+.dashboard-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Updated right section for camera streaming */
+.dashboard-right {
+    width: 80%;
+    height: 70vh;
+    background-color: #517c64;
+    border-radius: 12px;
+    box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.camera-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* Responsive adjustments */
+@media screen and (min-width: 740px) and (max-width: 1024px) {
+    .dashboard-right {
+        width: 90%;
+        height: 60vh;
+    }
+}
+
+@media screen and (max-width: 739px) {
+    .dashboard-container {
+        flex-direction: column;
+        height: auto;
+        padding: 16px;
+    }
+
+    .dashboard-right {
+        width: 100%;
+        height: 50vh;
+    }
+}
