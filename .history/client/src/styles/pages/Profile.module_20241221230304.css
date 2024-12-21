@@ -1,0 +1,189 @@
+.profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #eef2f5;
+  padding: 20px; /* Giảm padding để tiết kiệm không gian hơn */
+}
+
+.formContainer {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  height: auto; /* Thay đổi height để tự động điều chỉnh theo nội dung */
+  max-width: 450px; /* Giới hạn chiều rộng tối đa */
+}
+
+h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  text-align: center;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.profileDetails {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profileDetails button {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #e74c3c;
+  transition: background-color 0.3s ease;
+}
+
+.profileDetails button:hover {
+  background-color: #c0392b;
+}
+
+.profileDetails p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #34495e;
+  line-height: 1.5;
+}
+
+.profileDetails ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.profileDetails ul li {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #7f8c8d;
+}
+
+.loginForm p,
+.registerForm p {
+  text-align: center;
+  margin-top: 10px;
+  color: #34495e;
+  font-size: 14px;
+}
+
+.loginForm span,
+.registerForm span {
+  color: #3498db; /* Màu xanh lá */
+  font-weight: bold; /* In đậm chữ */
+  cursor: pointer; /* Con trỏ khi hover */
+  transition: color 0.3s ease;
+}
+
+.loginForm span:hover,
+.registerForm span:hover {
+  text-decoration: underline; /* Gạch chân khi hover */
+  color: #2980b9;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .formContainer {
+      padding: 20px;
+  }
+
+  h2 {
+      font-size: 20px;
+  }
+
+  button {
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+      width: 100%;
+      max-width: 350px;
+      padding: 15px;
+  }
+
+  h2 {
+      font-size: 18px;
+  }
+
+  input {
+      padding: 10px;
+  }
+
+  button {
+      font-size: 14px;
+      padding: 10px;
+  }
+
+  p {
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+      width: 100%;
+      padding: 10px;
+  }
+
+  h2 {
+      font-size: 16px;
+  }
+
+  input {
+      padding: 8px;
+  }
+
+  button {
+      font-size: 12px;
+      padding: 8px;
+  }
+
+  p {
+      font-size: 12px;
+  }
+
+  span {
+      font-size: 12px;
+  }
+}

@@ -8,6 +8,7 @@ function Profile() {
   const { login, logout } = useAuth(); // Lấy các hàm login và logout từ AuthContext
   const [isLogin, setIsLogin] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
@@ -82,6 +83,12 @@ function Profile() {
             <h2>Profile Information</h2>
             <p>Email: {userInfo.email}</p>
             <p>Last Login: {userInfo.lastLogin}</p>
+            <p>
+              Password: <span>{showPassword ? userInfo.password : "******"}</span>
+              <button onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </p>
             <button onClick={handleLogout}>Logout</button>
           </div>
         ) : isLogin ? (

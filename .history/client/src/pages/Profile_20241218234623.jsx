@@ -8,6 +8,8 @@ function Profile() {
   const { login, logout } = useAuth(); // Lấy các hàm login và logout từ AuthContext
   const [isLogin, setIsLogin] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
@@ -58,6 +60,7 @@ function Profile() {
       const registeredUserInfo = {
         email: userCredential.user.email,
         lastLogin: new Date().toLocaleString(),
+        profilePicture: selectedImage,
       };
 
       login(registeredUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
@@ -66,6 +69,10 @@ function Profile() {
     } catch (error) {
       alert("Registration failed: " + error.message);
     }
+  };
+
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
   };
 
   const handleLogout = () => {
@@ -80,8 +87,17 @@ function Profile() {
         {userInfo ? (
           <div className={styles.profileDetails}>
             <h2>Profile Information</h2>
+            {userInfo.profilePicture && (
+              <img src={URL.createObjectURL(userInfo.profilePicture)} alt="Profile" width="100" />
+            )}
             <p>Email: {userInfo.email}</p>
             <p>Last Login: {userInfo.lastLogin}</p>
+            <p>
+              Password: <span>{showPassword ? userInfo.password : "******"}</span>
+              <button onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </p>
             <button onClick={handleLogout}>Logout</button>
           </div>
         ) : isLogin ? (
@@ -104,6 +120,13 @@ function Profile() {
               <label>Email: <input type="email" required /></label>
               <label>Password: <input type="password" required /></label>
               <label>Confirm Password: <input type="password" required /></label>
+              <label>Profile Picture: <input type="file" accept="image/*" onChange={handleImageChange} /></label>
+              {selectedImage && (
+                <div>
+                  <p>Selected image: {selectedImage.name}</p>
+                  <img src={URL.createObjectURL(selectedImage)} alt="Selected" width="100" />
+                </div>
+              )}
               <button type="submit">Register</button>
             </form>
             <p className={styles.toggleForm}>
