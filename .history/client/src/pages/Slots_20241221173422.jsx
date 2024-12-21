@@ -75,7 +75,7 @@ const Slots = () => {
 
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
-                    <span className={styles.legendOccupied}></span> Unavailable
+                    <span className={styles.legendOccupied}></span> Occupied
                 </div>
                 <div className={styles.legendItem}>
                     <span className={styles.legendAvailable}></span> Available

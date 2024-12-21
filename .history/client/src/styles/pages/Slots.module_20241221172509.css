@@ -17,7 +17,6 @@ h1 {
 
 .legend {
     display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
@@ -44,17 +43,30 @@ h1 {
 
 .parkingLot {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    padding: 10px;
+}
+
+.parkingLotMap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.parkingLotImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
 }
 
 .parkingLotGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     margin-top: 20px;
-    width: 100%;
 }
 
 .slot {
@@ -64,9 +76,6 @@ h1 {
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .occupied {
@@ -100,7 +109,6 @@ h1 {
     flex-direction: column;
     align-items: center;
     position: relative;
-    overflow-y: auto;
 }
 
 .popupContent img {

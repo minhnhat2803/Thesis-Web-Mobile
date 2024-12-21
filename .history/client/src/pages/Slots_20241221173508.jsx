@@ -88,7 +88,7 @@ const Slots = () => {
                         <div
                             key={slot.id}
                             className={`${styles.slot} ${
-                                slot.status === "Occupied"
+                                slot.status === "Un"
                                     ? styles.occupied
                                     : styles.available
                             }`}

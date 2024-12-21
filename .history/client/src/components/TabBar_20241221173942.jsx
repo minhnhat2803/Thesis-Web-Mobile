@@ -36,7 +36,7 @@ const tabs = [
   {
     index: 3,
     title: "Slots",
-    icon: faParking,
+    icon: faPa,
     path: "/slots",
   },
 ];

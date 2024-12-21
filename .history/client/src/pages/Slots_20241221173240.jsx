@@ -36,7 +36,7 @@ const Slots = () => {
                 );
                 return {
                     ...slot,
-                    status: plateInfo ? "Occupied" : "Available",
+                    status: plateInfo ? "" : "Available",
                     plateInfo,
                 };
             });
@@ -70,12 +70,12 @@ const Slots = () => {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Parking Slots Management</h1>
+                <h1>Parking Lot Overview</h1>
             </header>
 
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
-                    <span className={styles.legendOccupied}></span> Unavailable
+                    <span className={styles.legendOccupied}></span> Occupied
                 </div>
                 <div className={styles.legendItem}>
                     <span className={styles.legendAvailable}></span> Available

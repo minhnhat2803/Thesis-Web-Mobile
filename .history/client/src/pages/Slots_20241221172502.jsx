@@ -8,7 +8,6 @@ const Slots = () => {
     const [selectedSlot, setSelectedSlot] = useState(null); 
     const [isImageZoomed, setIsImageZoomed] = useState(false); 
     const [zoomedImageUrl, setZoomedImageUrl] = useState(""); 
-
     const fetchData = async () => {
         try {
             const slotSnapshot = await getDocs(collection(db, "parking_slots"));
@@ -70,12 +69,12 @@ const Slots = () => {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Parking Slots Management</h1>
+                <h1>Parking Lot Overview</h1>
             </header>
 
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
-                    <span className={styles.legendOccupied}></span> Unavailable
+                    <span className={styles.legendOccupied}></span> Occupied
                 </div>
                 <div className={styles.legendItem}>
                     <span className={styles.legendAvailable}></span> Available
@@ -83,6 +82,14 @@ const Slots = () => {
             </div>
 
             <div className={styles.parkingLot}>
+                <div className={styles.parkingLotMap}>
+                    <img 
+                        src="/path-to-your-parking-map.jpg" 
+                        alt="Parking Lot Map" 
+                        className={styles.parkingLotImage}
+                    />
+                </div>
+                
                 <div className={styles.parkingLotGrid}>
                     {slots.map((slot) => (
                         <div
@@ -99,6 +106,7 @@ const Slots = () => {
                     ))}
                 </div>
             </div>
+
             {selectedSlot && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
@@ -136,6 +144,7 @@ const Slots = () => {
                     </div>
                 </div>
             )}
+
             {zoomedImageUrl && (
                 <div className={styles.popup} onClick={closeZoomedImage}>
                     <div className={styles.popupContent}>

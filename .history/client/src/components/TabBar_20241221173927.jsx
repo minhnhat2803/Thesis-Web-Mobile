@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTableList,
   faUser,
-  faParking,
+  faPersonWalkingLuggage,
   faChartPie,
   faChevronLeft,
   faChevronRight,
@@ -36,7 +36,7 @@ const tabs = [
   {
     index: 3,
     title: "Slots",
-    icon: faParking,
+    icon: faCheckToSlot,
     path: "/slots",
   },
 ];

@@ -88,8 +88,8 @@ const Slots = () => {
                         <div
                             key={slot.id}
                             className={`${styles.slot} ${
-                                slot.status === "Occupied"
-                                    ? styles.occupied
+                                slot.status === "Unavailable"
+                                    ? styles.unavailable
                                     : styles.available
                             }`}
                             onClick={() => handleSlotClick(slot)}
