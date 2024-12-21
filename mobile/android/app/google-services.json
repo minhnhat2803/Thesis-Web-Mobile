@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "305978002116",
-    "firebase_url": "https://iot-project-course-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "iot-project-course",
-    "storage_bucket": "iot-project-course.appspot.com"
+    "project_number": "144827756125",
+    "project_id": "iot-smart-parking-72f94",
+    "storage_bucket": "iot-smart-parking-72f94.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:305978002116:android:f2eca618d346767f059791",
+        "mobilesdk_app_id": "1:144827756125:android:241f0fdfbd1b18294ae7b4",
         "android_client_info": {
           "package_name": "com.example.mobile"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "305978002116-nj449nkuathchfv5907fgtqlvn7b6aeo.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBNuE6B5igg0FTQn6EJJyClAYH8dzb630E"
+          "current_key": "AIzaSyDymApwbWGVE5a_DdaLw3xz-Vmsv4EqdI0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "305978002116-nj449nkuathchfv5907fgtqlvn7b6aeo.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
