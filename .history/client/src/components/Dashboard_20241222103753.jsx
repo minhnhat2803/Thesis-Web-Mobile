@@ -77,7 +77,7 @@ function Dashboard() {
     const capture = async () => {
         try {
             const res = await scanImage(
-                "http://192.168.1.5:8080/?action=stream"
+                "http://192.168.2.27:8082/?action=stream"
             );
             console.log(res.data);
             return res.data;

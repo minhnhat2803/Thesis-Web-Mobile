@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/pages/Dashboard.module.css";
-import { scanImage, checkPosition, getAllCustomer } from "../actions";
+import { scanImage, checkPosition } from "../actions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
+    const [cameraFeeds, setCameraFeeds] = useState([]);
+
     const showToastInfo = (data) => {
         toast.info(data, {
             position: toast.POSITION.TOP_RIGHT,
@@ -16,7 +18,6 @@ function Dashboard() {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            progress: undefined,
             theme: "light",
         });
     };
@@ -29,12 +30,9 @@ function Dashboard() {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            progress: undefined,
             theme: "light",
         });
     };
-
-    const [cameraFeeds, setCameraFeeds] = useState([]);
 
     // URLs của camera từ Raspberry Pi
     const cameraUrls = [
@@ -43,7 +41,6 @@ function Dashboard() {
     ];
 
     useEffect(() => {
-        // Đặt URLs của camera
         setCameraFeeds(cameraUrls);
     }, []);
 
@@ -73,7 +70,7 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    // Thay thế webcam bằng luồng từ Raspberry Pi
+    // Chụp ảnh từ camera
     const capture = async () => {
         try {
             const res = await scanImage(
@@ -92,11 +89,13 @@ function Dashboard() {
                 {/* Hiển thị luồng camera từ Raspberry Pi */}
                 {cameraFeeds.map((url, index) => (
                     <div key={index} className={cx("camera-container")}>
-                        <img
+                        <iframe
                             className={cx("camera")}
                             src={url}
-                            alt={`Raspberry Pi Camera Stream ${index + 1}`}
-                        />
+                            title={`Raspberry Pi Camera Stream ${index + 1}`}
+                            frameBorder="0"
+                            allowFullScreen
+                        ></iframe>
                     </div>
                 ))}
             </div>

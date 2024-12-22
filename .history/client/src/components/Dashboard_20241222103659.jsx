@@ -39,7 +39,7 @@ function Dashboard() {
     // URLs của camera từ Raspberry Pi
     const cameraUrls = [
         "http://192.168.2.27:8081/?action=stream", // Camera feed từ Raspberry Pi 1
-        "http://192.168.2.27:8082/?action=stream", // Camera feed từ Raspberry Pi 2
+        "http://192.168.2.27:8080/?action=stream", // Camera feed từ Raspberry Pi 2
     ];
 
     useEffect(() => {
