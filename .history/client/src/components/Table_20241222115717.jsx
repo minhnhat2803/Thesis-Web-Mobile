@@ -11,8 +11,6 @@ const cx = classNames.bind(styles);
 
 function Table() {
   const [data, setData] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const fetchLicensePlates = async () => {
     const licenseCollection = collection(db, "licensePlates");
     const licenseSnapshot = await getDocs(licenseCollection);
@@ -51,14 +49,6 @@ function Table() {
     saveAs(blob, "LicensePlates.xlsx");
   };
 
-  const openImageModal = (imageUrl) => {
-    setSelectedImage(imageUrl);
-  };
-
-  const closeImageModal = () => {
-    setSelectedImage(null);
-  };
-
   return (
     <div className={cx("table-container")}>
       {data.length === 0 ? (
@@ -77,10 +67,10 @@ function Table() {
           <table className={cx("custom-table")}>
             <thead>
               <tr>
-                <th>Slot Location</th>
+                <th>Slot Number</th>
                 <th>License Plate</th>
-                <th>License Plate Image</th>
-                <th>Activity</th>
+                <th>Image</th>
+                <th>Time In</th>
               </tr>
             </thead>
             <tbody>
@@ -89,30 +79,13 @@ function Table() {
                   <td>{item.slotID}</td>
                   <td>{item.licensePlate}</td>
                   <td>
-                    <img
-                      src={item.imageUrl}
-                      alt="License Plate"
-                      className={cx("table-image")}
-                      onClick={() => openImageModal(item.imageUrl)}
-                    />
+                    <img src={item.imageUrl} alt="License Plate" className={cx("table-image")} />
                   </td>
                   <td>{item.timeIN}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </>
-      )}
-
-      {selectedImage && (
-        <>
-          <div
-            className={cx("image-modal-overlay", { active: selectedImage })}
-            onClick={closeImageModal}
-          />
-          <div className={cx("image-modal", { active: selectedImage })}>
-            <img src={selectedImage} alt="Zoomed License Plate" />
-          </div>
         </>
       )}
     </div>

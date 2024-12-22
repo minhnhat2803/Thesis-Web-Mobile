@@ -33,7 +33,7 @@ function Table() {
     fetchLicensePlates();
     const interval = setInterval(() => {
       fetchLicensePlates();
-    }, 5000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -41,6 +41,7 @@ function Table() {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, "LicensePlates");
+
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
@@ -60,27 +61,39 @@ function Table() {
   };
 
   return (
-    <div className={cx("table-container")}>
+    <>
       {data.length === 0 ? (
         <h1 className={cx("no-data")}>No Data Available</h1>
       ) : (
-        <>
-          <div className={cx("interact-row")}>
-            <span className={cx("records-number")}>Records: {data.length}</span>
-            <button className={cx("export-btn")} onClick={exportToExcel}>
-              Export to Excel
-            </button>
-            <button className={cx("refresh-btn")} onClick={fetchLicensePlates}>
-              <FiRefreshCcw />
-            </button>
-          </div>
+        <div className={cx("table-container")}>
           <table className={cx("custom-table")}>
             <thead>
               <tr>
-                <th>Slot Location</th>
+                <th colSpan="4">
+                  <div className={cx("interact-row")}>
+                    <span className={cx("records-number")}>
+                      Records: {data.length}
+                    </span>
+                    <button
+                      className={cx("export-btn")}
+                      onClick={exportToExcel}
+                    >
+                      Export to Excel
+                    </button>
+                    <button
+                      className={cx("refresh-btn")}
+                      onClick={fetchLicensePlates}
+                    >
+                      <FiRefreshCcw />
+                    </button>
+                  </div>
+                </th>
+              </tr>
+              <tr>
+                <th>Slot Number</th>
                 <th>License Plate</th>
-                <th>License Plate Image</th>
-                <th>Activity</th>
+                <th>Image</th>
+                <th>Time In</th>
               </tr>
             </thead>
             <tbody>
@@ -101,21 +114,26 @@ function Table() {
               ))}
             </tbody>
           </table>
-        </>
+        </div>
       )}
-
       {selectedImage && (
         <>
           <div
-            className={cx("image-modal-overlay", { active: selectedImage })}
+            className={cx("image-modal-overlay", {
+              active: selectedImage,
+            })}
             onClick={closeImageModal}
           />
-          <div className={cx("image-modal", { active: selectedImage })}>
+          <div
+            className={cx("image-modal", {
+              active: selectedImage,
+            })}
+          >
             <img src={selectedImage} alt="Zoomed License Plate" />
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }
 

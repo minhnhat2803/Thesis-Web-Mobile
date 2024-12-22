@@ -80,7 +80,7 @@ function Table() {
                 <th>Slot Location</th>
                 <th>License Plate</th>
                 <th>License Plate Image</th>
-                <th>Activity</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>

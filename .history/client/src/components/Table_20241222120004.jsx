@@ -79,8 +79,8 @@ function Table() {
               <tr>
                 <th>Slot Location</th>
                 <th>License Plate</th>
-                <th>License Plate Image</th>
-                <th>Activity</th>
+                <th>Image</th>
+                <th>Time In</th>
               </tr>
             </thead>
             <tbody>
