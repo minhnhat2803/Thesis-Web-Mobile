@@ -21,12 +21,13 @@ table {
 }
 
 .interact-row {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 8px 16px;
-    position: relative; /* Ensure the interact row is positioned */
-    z-index: 2;
+    position: relative;
+    box-sizing: border-box;
 }
 
 .records-number {
@@ -141,7 +142,19 @@ td {
     padding-top: 24px;
     padding-bottom: 12px;
 }
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
+.delete-button:hover {
+    background-color: #ff1a1a;
+}
 .download-button {
     position: relative;
     border-width: 0;

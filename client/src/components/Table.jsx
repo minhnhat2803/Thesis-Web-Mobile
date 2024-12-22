@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/Table.module.css";
 import { db } from "../config/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    deleteDoc,
+    doc,
+    updateDoc,
+} from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -22,6 +28,7 @@ function Table() {
         const licenseData = licenseSnapshot.docs.map((doc, index) => {
             const data = doc.data();
             return {
+                id: doc.id,
                 index: index + 1,
                 slotID: data.slot_id || "N/A",
                 licensePlate: data.license_plate || "N/A",
@@ -30,6 +37,27 @@ function Table() {
             };
         });
         setData(licenseData);
+        // setLoading(false);
+    };
+    const deleteSlot = async (id, slotID) => {
+        try {
+            console.log(`Deleting slot with ID: ${id} and slotID: ${slotID}`);
+            // Delete the document from the license_plates collection
+            await deleteDoc(doc(db, "license_plates", id));
+            console.log(`Deleted document with ID: ${id} from license_plates`);
+
+            // Update the corresponding slot in the parking_slots collection
+            const slotDoc = doc(db, "parking_slots", slotID);
+            await updateDoc(slotDoc, {
+                license_plate: null,
+                status: "available",
+            });
+            console.log(`Updated slot with ID: ${slotID} to available`);
+
+            fetchLicensePlates(); // Refresh data after deletion
+        } catch (error) {
+            console.error("Error deleting document: ", error);
+        }
     };
 
     // useEffect hook to refresh data every 3 seconds
@@ -37,7 +65,7 @@ function Table() {
         fetchLicensePlates(); // Fetch data when the component first mounts
 
         const interval = setInterval(() => {
-            fetchLicensePlates(); // Refresh data every 3 seconds
+            fetchLicensePlates(); // Refresh data every 2 seconds
         }, 2000);
 
         // Cleanup the interval on component unmount
@@ -159,6 +187,7 @@ function Table() {
                                 <td>License Plate</td>
                                 <td>Image</td>
                                 <td>Time in</td>
+                                <td>Actions</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,6 +207,16 @@ function Table() {
                                         />
                                     </td>
                                     <td>{item.timeIn}</td>
+                                    <td>
+                                        <button
+                                            className={cx("delete-button")}
+                                            onClick={() =>
+                                                deleteSlot(item.id, item.slotID)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

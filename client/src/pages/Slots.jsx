@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../config/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
@@ -45,7 +45,43 @@ const Slots = () => {
     };
 
     useEffect(() => {
+        // Fetch initial data
         fetchData();
+
+        // Subscribe to real-time updates for parking slots
+        const unsubscribeSlots = onSnapshot(
+            collection(db, "parking_slots"),
+            (snapshot) => {
+                const slotData = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setSlots(slotData);
+            },
+            (error) =>
+                console.error("Error listening to parking_slots: ", error)
+        );
+
+        // Subscribe to real-time updates for license plates
+        const unsubscribeLicensePlates = onSnapshot(
+            collection(db, "license_plates"),
+            (snapshot) => {
+                const licensePlateData = snapshot.docs.map((doc) => ({
+                    slotId: doc.data().slot_id,
+                    license_plate: doc.data().license_plate,
+                    image_url: doc.data().image_url,
+                }));
+                setLicensePlates(licensePlateData);
+            },
+            (error) =>
+                console.error("Error listening to license_plates: ", error)
+        );
+
+        // Cleanup subscriptions on component unmount
+        return () => {
+            unsubscribeSlots();
+            unsubscribeLicensePlates();
+        };
     }, []);
 
     const handleSlotClick = (slot) => {

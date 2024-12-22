@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    flex-direction: column; /* Stack TabBar on top */
+    flex-direction: row; /* Stack TabBar on top */
     width: 100%;
     height: 100vh;
 }
@@ -10,6 +10,7 @@
     flex-direction: column; /* Stack content below TabBar */
     width: 100%;
     height: 100%;
+    margin-right: 20px;
 }
 
 .main-content {
