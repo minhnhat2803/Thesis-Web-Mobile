@@ -1,58 +1,46 @@
+.tabBar {
+    width: 100%;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
 .tabBar-container {
-  width: 120px;
-  background-color: #fdfbf9;
-  border-right: 2px solid #aaa0a057;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
 }
 
-.logo {
-  max-width: 100%;
-  height: 10%;
-  text-align: center;
+.tabCell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.3s, transform 0.2s;
 }
 
-.logo-text {
-  transform: translateY(25%);
-  width: 70%;
+.tabCell:active {
+    transform: scale(1); /* Add a press effect */
 }
 
-.tabs {
-  width: 100%;
-  height: 80%;
-}
-
-.tabCell-container {
-  width: 100%;
-  /* height: calc(100% / 3); */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.tabCell.active {
+    color: #007bff;
+    font-weight: bold; /* Make the active tab bold */
 }
 
 .tabCell-title {
-  margin-top: 8px;
-  font-size: 12px;
+    margin-top: 5px;
+    font-size: 12px;
 }
 
 @media (max-width: 739px) {
-  .tabBar-container {
-    width: 100vw;
-    height: 10vh;
-    display: flex;
-    /* padding-bottom: 80px; */
-    border-bottom: 3px solid #0000001a;
-    align-items: center;
-  }
-  .tabs {
-    width: 100%;
-    height: 80%;
-    display: flex;
-  }
-  .tabCell-container {
-    display: none;
-  }
-  .logo-text {
-    transform: translateY(-40%);
-    width: 70%;
-  }
+    .tabBar-container {
+        width: 100vw;
+        height: 10vh;
+    }
 }

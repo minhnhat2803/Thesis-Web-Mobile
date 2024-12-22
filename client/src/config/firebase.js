@@ -8,11 +8,10 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    //Firebase của Tín
     apiKey: "AIzaSyCu7e0PT6FZu02VN8MntyMf4wkEagug7No",
     authDomain: "thesis-f3e40.firebaseapp.com",
-    // databaseURL:
-    //     "https://thesis-f3e40-default-rtdb.asia-southeast1.firebasedatabase.app",
+    databaseURL:
+        "https://thesis-f3e40-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "thesis-f3e40",
     storageBucket: "thesis-f3e40.firebasestorage.app",
     messagingSenderId: "804795711136",

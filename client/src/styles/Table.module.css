@@ -9,12 +9,15 @@
     border-bottom: none;
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
+    position: relative;
+    z-index: 1;
 }
 
 table {
     border-collapse: collapse;
     width: 100%;
     margin: 0 auto;
+    position: relative;
 }
 
 .interact-row {
@@ -22,6 +25,8 @@ table {
     justify-content: space-between;
     align-items: center;
     padding: 8px 16px;
+    position: relative; /* Ensure the interact row is positioned */
+    z-index: 2;
 }
 
 .records-number {
@@ -35,34 +40,61 @@ table {
     display: flex;
     gap: 8px; /* Adds spacing between buttons */
 }
+.button {
+    background-color: transparent; /* Remove background color */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+}
 
-.export-btn {
-    min-width: 120px; /* Ensures the button is at least 120px wide */
-    height: 32px;
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color: #517c64;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    color: white;
+.loader {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    white-space: nowrap; /* Prevents text from wrapping */
+    height: 100%; /* Full height to center vertically */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.363);
+    z-index: 3; /* Ensure the loader is above other elements */
 }
 
-.export-btn:hover {
-    background-color: #3a5d4b;
-    color: white;
+.bar {
+    display: inline-block;
+    width: 3px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    animation: scale-up4 1s linear infinite;
+}
+
+.bar:nth-child(2) {
+    height: 35px;
+    margin: 0 5px;
+    animation-delay: 0.25s;
+}
+
+.bar:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+@keyframes scale-up4 {
+    20% {
+        background-color: #ffff;
+        transform: scaleY(1.5);
+    }
+
+    40% {
+        transform: scaleY(1);
+    }
 }
 
 .refresh-btn {
     padding: 8px;
     height: 32px;
     font-size: 18px;
-    background-color: #517c64;
+    background-color: #01e056;
     border: none;
     border-radius: 50%;
     font-weight: bold;
@@ -70,10 +102,22 @@ table {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.5s ease;
+    animation: spin 2s linear infinite;
 }
 
 .refresh-btn:hover {
     opacity: 0.8;
+    /* animation: spin 2s linear infinite; */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 thead {
@@ -98,6 +142,78 @@ td {
     padding-bottom: 12px;
 }
 
+.download-button {
+    position: relative;
+    border-width: 0;
+    color: white;
+    font-size: 12px; /* Smaller font size */
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 3; /* Ensure the button is above other elements */
+    background-color: transparent; /* Remove background color */
+    padding: 4px 8px; /* Smaller padding */
+}
+
+.download-button .docs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px; /* Smaller gap */
+    min-height: 30px; /* Smaller height */
+    padding: 0 5px; /* Smaller padding */
+    border-radius: 4px;
+    z-index: 4; /* Ensure the button content is above other elements */
+    background-color: transparent;
+    border: solid 1px transparent;
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.download-button:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.download {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90%;
+    margin: 0 auto;
+    z-index: 2; /* Ensure the download content is above the table */
+    border-radius: 4px;
+    transform: translateY(0%);
+    background-color: #01e056;
+    border: solid 1px #01e0572d;
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.download-button:hover .download {
+    transform: translateY(100%);
+}
+
+.download svg polyline,
+.download svg line {
+    animation: docs 1s infinite;
+}
+
+@keyframes docs {
+    0% {
+        transform: translateY(0%);
+    }
+
+    50% {
+        transform: translateY(-15%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
 @media screen and (min-width: 740px) and (max-width: 1024px) {
     ::-webkit-scrollbar {
         display: none;
@@ -120,15 +236,4 @@ td {
         border-bottom: none;
         margin: auto;
     }
-}
-
-.export-btn {
-    width: 15%;
-    height: 32px;
-    font-size: 14px;
-    background-color: #517c64;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    color: white;
 }

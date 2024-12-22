@@ -1,17 +1,23 @@
-.dashboard-container {
+.container {
+    display: flex;
+    flex-direction: column; /* Stack TabBar on top */
     width: 100%;
     height: 100vh;
-    background-color: #f4f6f8;
-    /* border-radius: 16px; */
-    /* overflow: hidden; */
+}
+
+.dashboard-container {
     display: flex;
-    /* box-shadow: 5px 16px 10px rgba(0, 0, 0, 0.1); */
+    flex-direction: column; /* Stack content below TabBar */
+    width: 100%;
+    height: 100%;
 }
 
 .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    margin-left: 80px;
-    margin-right: 100px;
+    height: 100%;
 }
 
 @media screen and (min-width: 740px) and (max-width: 1024px) {
@@ -36,15 +42,6 @@
         width: 100vw;
         height: auto;
         background-color: #f4f6f8;
-        /* border-radius: 16px; */
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 5px 16px 10px rgba(0, 0, 0, 0.1);
-    }
-    .main-content {
-        width: 100vw;
-        margin-left: 0px;
-        margin-right: 0px;
+        border-radius: 16px;
     }
 }

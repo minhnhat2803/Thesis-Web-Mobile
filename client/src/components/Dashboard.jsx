@@ -1,106 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "../styles/pages/Dashboard.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
-import { scanImage, checkPosition, getAllCustomer } from "../actions";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
-    const showToastInfo = (data) => {
-        toast.info(data, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
-    };
-
-    const showToastSuccess = (data) => {
-        toast.success(data, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
-    };
-
-    const [data, setData] = useState([]);
-    const [cameraFeeds, setCameraFeeds] = useState([]);
-
-    // URLs of camera feeds from Raspberry Pi
-    const cameraUrls = [
-        "http://192.168.1.5:8081/?action=stream", // Camera 1
-        "http://192.168.1.5:8082/?action=stream", // Camera 2
-    ];
+    const [cameraFeeds, setCameraFeeds] = useState([
+        "http://192.168.1.5:8081/?action=stream",
+        "http://192.168.1.5:8082/?action=stream",
+    ]);
 
     useEffect(() => {
-        // Fetch total customer data
-        getAllCustomer().then((res) => {
-            if (res.status === 200) {
-                setData(res.data.length);
-            }
-        });
+        const interval = setInterval(() => {
+            setCameraFeeds((prevFeeds) => [
+                `${prevFeeds[0]}?${new Date().getTime()}`, // Add a timestamp to force reload
+                `${prevFeeds[1]}?${new Date().getTime()}`, // Add a timestamp to force reload
+            ]);
+        }, 5000); // Refresh every 5 seconds
 
-        // Set camera URLs
-        setCameraFeeds(cameraUrls);
+        return () => clearInterval(interval); // Cleanup interval on component unmount
     }, []);
 
-    // Check position every 20 seconds
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            try {
-                const res = await checkPosition();
-                const position = res.data;
-                console.log(position);
-
-                if (position <= 10) {
-                    showToastSuccess(
-                        "You are in the right position " + position + " cm"
-                    );
-                    await capture();
-                } else {
-                    showToastInfo(
-                        "Your position with the sensor is " + position + " cm"
-                    );
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }, 20000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    const capture = async () => {
-        try {
-            const res = await scanImage(
-                "http://192.168.1.5:8080/?action=stream"
-            );
-            console.log(res.data);
-            return res.data;
-        } catch (err) {
-            console.log(err);
-        }
+    const handleImageError = (index) => {
+        console.log(`Camera ${index + 1} feed failed to load, reloading...`);
+        setCameraFeeds((prevFeeds) => [
+            ...prevFeeds.slice(0, index),
+            `${prevFeeds[index]}?${new Date().getTime()}`, // Add a timestamp to force reload
+            ...prevFeeds.slice(index + 1),
+        ]);
     };
 
     return (
         <div className={cx("dashboard-container")}>
-            <div className={cx("dashboard-title")}>
-                <FontAwesomeIcon size="2x" icon={faTableColumns} />
-                <p>Camera Feeds</p>
-            </div>
             <div className={cx("camera-frame")}>
                 <div className={cx("camera-left")}>
                     <div className={cx("camera-overlay")}>
@@ -110,6 +41,7 @@ function Dashboard() {
                         className={cx("camera")}
                         src={cameraFeeds[0]}
                         alt="Camera 1 Stream"
+                        onError={() => handleImageError(0)}
                     />
                 </div>
                 <div className={cx("camera-right")}>
@@ -120,6 +52,7 @@ function Dashboard() {
                         className={cx("camera")}
                         src={cameraFeeds[1]}
                         alt="Camera 2 Stream"
+                        onError={() => handleImageError(1)}
                     />
                 </div>
             </div>

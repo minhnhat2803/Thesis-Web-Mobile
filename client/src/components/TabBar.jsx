@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Sử dụng useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../styles/TabBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faGear,
-    faTableList,
-    faSignOut,
-    faUser,
-    faMoneyBills,
-    faCamera,
-    faCheckToSlot,
+    faTachometerAlt,
+    faUserCircle,
+    faChartLine,
+    faParking,
 } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
@@ -19,85 +16,52 @@ const tabs = [
     {
         index: 0,
         title: "Dashboard",
-        icon: faTableList,
-        path: "/dashboard", // Đường dẫn tương ứng với trang Dashboard
+        icon: faTachometerAlt,
+        path: "/dashboard",
     },
     {
         index: 1,
         title: "Profile",
-        icon: faUser,
-        path: "/profile", // Đường dẫn tương ứng với trang Setting
+        icon: faUserCircle,
+        path: "/profile",
     },
-    // {
-    //   index: 2,
-    //   title: "Camera",
-    //   icon: faCamera,
-    //   path: "/camera",
-    // },
     {
         index: 2,
-        title: "Statistics",
-        icon: faMoneyBills,
-        path: "/cash",
+        title: "Statistic",
+        icon: faChartLine,
+        path: "/statistic",
     },
     {
         index: 3,
         title: "Slots",
-        icon: faCheckToSlot,
+        icon: faParking,
         path: "/slots",
     },
-    // {
-    //   index: 5,
-    //   title: "Logout",
-    //   icon: faSignOut,
-    //   path: "/logout",
-    // },
 ];
 
 function TabBar() {
-    const [click, setClick] = useState(0); // Mặc định là tab Dashboard
     const navigate = useNavigate();
-    const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState(location.pathname);
 
     useEffect(() => {
-        // Khi đường dẫn thay đổi, cập nhật tab được chọn
-        const currentTab = tabs.findIndex(
-            (tab) => tab.path === location.pathname
-        );
-        if (currentTab !== -1) {
-            setClick(currentTab);
-        }
-    }, [location.pathname]); // Theo dõi sự thay đổi của pathname
-
-    const handleTabClick = (index, path) => {
-        setClick(index);
-        navigate(path);
-    };
+        setActiveTab(location.pathname);
+    }, [location]);
 
     return (
-        <div className={cx("tabBar-container")}>
-            <div className={cx("logo")}>
-                <img
-                    src="../src/assets/img/iotlogo.png"
-                    className={cx("logo-text")}
-                />
-            </div>
-            <div className={cx("tabs")}>
-                {tabs.map((tab, index) => (
+        <div className={cx("tabBar")}>
+            <div className={cx("tabBar-container")}>
+                {tabs.map((tab) => (
                     <div
-                        key={index}
-                        onClick={() => handleTabClick(index, tab.path)} // Thêm sự kiện điều hướng
-                        className={cx("tabCell-container")}
+                        key={tab.index}
+                        className={cx("tabCell", {
+                            active: activeTab === tab.path,
+                        })}
+                        onClick={() => navigate(tab.path)}
                         style={
-                            click === index
-                                ? {
-                                      color: "#517c64",
-                                      height: `calc(100% / ${tabs.length})`,
-                                  }
-                                : {
-                                      color: "#82c4a0",
-                                      height: `calc(100% / ${tabs.length})`,
-                                  }
+                            activeTab === tab.path
+                                ? { color: "#517c64" }
+                                : { color: "#82c4a0" }
                         }
                     >
                         <FontAwesomeIcon size="2x" icon={tab.icon} />

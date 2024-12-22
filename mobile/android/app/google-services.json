@@ -1,40 +1,30 @@
 {
-  "project_info": {
-    "project_number": "305978002116",
-    "firebase_url": "https://iot-project-course-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "iot-project-course",
-    "storage_bucket": "iot-project-course.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:305978002116:android:f2eca618d346767f059791",
-        "android_client_info": {
-          "package_name": "com.example.mobile"
-        }
-      },
-      "oauth_client": [
+    "project_info": {
+        "project_number": "804795711136",
+        "firebase_url": "https://thesis-f3e40-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "project_id": "thesis-f3e40",
+        "storage_bucket": "thesis-f3e40.firebasestorage.app"
+    },
+    "client": [
         {
-          "client_id": "305978002116-nj449nkuathchfv5907fgtqlvn7b6aeo.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBNuE6B5igg0FTQn6EJJyClAYH8dzb630E"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "305978002116-nj449nkuathchfv5907fgtqlvn7b6aeo.apps.googleusercontent.com",
-              "client_type": 3
+            "client_info": {
+                "mobilesdk_app_id": "1:804795711136:android:4cd499078b6b66f8ed93c5",
+                "android_client_info": {
+                    "package_name": "com.thesis.tinpham"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCvlBkbHIwTlLu0MSbipROKYdM7Y9kJPnY"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
             }
-          ]
         }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }

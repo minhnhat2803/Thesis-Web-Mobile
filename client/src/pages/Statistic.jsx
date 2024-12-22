@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/pages/Cash.module.css";
+import styles from "../styles/pages/Statistic.module.css";
 
 const cards = [
     {
@@ -28,9 +28,9 @@ const cards = [
     },
 ];
 
-function Cash() {
+function Statistic() {
     return (
-        <div className={styles.dashboardContainer}>
+        <div className={styles.statisticContainer}>
             <h1>Statistics</h1>
             <div className={styles.functionCardsContainer}>
                 {cards.map((card) => (
@@ -41,8 +41,8 @@ function Cash() {
                             background: `linear-gradient(${card.background})`,
                         }}
                     >
-                        <h2>{card.title}</h2>
-                        <p>{card.data}</p>
+                        <h3 className={styles.title}>{card.title}</h3>
+                        <p className={styles.data}>{card.data}</p>
                     </div>
                 ))}
             </div>
@@ -50,4 +50,4 @@ function Cash() {
     );
 }
 
-export default Cash;
+export default Statistic;

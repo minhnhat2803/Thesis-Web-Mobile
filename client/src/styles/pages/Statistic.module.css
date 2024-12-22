@@ -1,0 +1,58 @@
+.statisticContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.functionCardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 16px;
+    width: 100%;
+    height: 100%;
+}
+
+.cardContainer {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.data {
+    font-size: 24px;
+    color: #fff;
+    font-weight: bolder;
+}
+
+@media (min-width: 740px) {
+    .cardContainer {
+        width: 48%; /* Two items per row */
+        height: auto; /* Allow height to adjust based on content */
+    }
+}
+
+@media (min-width: 1024px) {
+    .cardContainer {
+        width: 48%; /* Two items per row */
+        height: auto; /* Allow height to adjust based on content */
+    }
+}

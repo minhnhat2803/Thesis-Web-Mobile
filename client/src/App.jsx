@@ -7,7 +7,7 @@ import Content from "./components/Dashboard";
 import Table from "./components/Table";
 import Slots from "./pages/Slots";
 import Profile from "./pages/Profile";
-import Cash from "./pages/Cash";
+import Statistic from "./pages/Statistic";
 import ProtectedRoute from "../src/config/ProtectedRoute"; // Import ProtectedRoute
 import { AuthProvider } from "../src/config/AuthContext"; // Import AuthProvider
 import { ToastContainer } from "react-toastify";
@@ -21,8 +21,8 @@ function App() {
             <Router>
                 <div className={cx("container")}>
                     <ToastContainer />
+                    <TabBar />
                     <div className={cx("dashboard-container")}>
-                        <TabBar />
                         <div className={cx("main-content")}>
                             <Routes>
                                 <Route path="/profile" element={<Profile />} />
@@ -46,10 +46,10 @@ function App() {
                                     }
                                 />
                                 <Route
-                                    path="/cash"
+                                    path="/statistic"
                                     element={
                                         <ProtectedRoute>
-                                            <Cash />
+                                            <Statistic />
                                         </ProtectedRoute>
                                     }
                                 />
