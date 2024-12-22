@@ -11,7 +11,9 @@ const cx = classNames.bind(styles);
 
 function Table() {
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const fetchLicensePlates = async () => {
+    console.log("Refreshing data...");
     const licenseCollection = collection(db, "licensePlates");
     const licenseSnapshot = await getDocs(licenseCollection);
     const licenseData = licenseSnapshot.docs.map((doc, index) => {
@@ -26,12 +28,11 @@ function Table() {
     });
     setData(licenseData);
   };
-
   useEffect(() => {
     fetchLicensePlates();
     const interval = setInterval(() => {
       fetchLicensePlates();
-    }, 5000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -39,6 +40,7 @@ function Table() {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, "LicensePlates");
+
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
@@ -50,27 +52,48 @@ function Table() {
   };
 
   return (
-    <div className={cx("table-container")}>
+    <>
       {data.length === 0 ? (
-        <h1 className={cx("no-data")}>No Data Available</h1>
+        <h1
+          style={{
+            padding: "50px",
+            textAlign: "center",
+            color: "green",
+            fontFamily: "Oxygen",
+          }}
+        >
+          No Data Available
+        </h1>
       ) : (
-        <>
-          <div className={cx("interact-row")}>
-            <span className={cx("records-number")}>Records: {data.length}</span>
-            <button className={cx("export-btn")} onClick={exportToExcel}>
-              Export to Excel
-            </button>
-            <button className={cx("refresh-btn")} onClick={fetchLicensePlates}>
-              <FiRefreshCcw />
-            </button>
-          </div>
-          <table className={cx("custom-table")}>
+        <div className={cx("table-container")}>
+          <table>
             <thead>
               <tr>
-                <th>Slot Number</th>
-                <th>License Plate</th>
-                <th>Image</th>
-                <th>Time In</th>
+                <th colSpan="4">
+                  <div className={cx("interact-row")}>
+                    <span className={cx("records-number")}>
+                      Records: {data.length}
+                    </span>
+                    <button
+                      className={cx("export-btn")}
+                      onClick={exportToExcel}
+                    >
+                      Export to Excel
+                    </button>
+                    <button
+                      className={cx("refresh-btn")}
+                      onClick={fetchLicensePlates} // Manual refresh button
+                    >
+                      <FiRefreshCcw />
+                    </button>
+                  </div>
+                </th>
+              </tr>
+              <tr className={cx("header")}>
+                <td>Slot number</td>
+                <td>License Plate</td>
+                <td>Image</td>
+                <td>Time in</td>
               </tr>
             </thead>
             <tbody>
@@ -79,17 +102,24 @@ function Table() {
                   <td>{item.slotID}</td>
                   <td>{item.licensePlate}</td>
                   <td>
-                    <img src={item.imageUrl} alt="License Plate" className={cx("table-image")} />
+                    <img
+                      src={item.imageUrl}
+                      alt="License Plate"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: 8,
+                      }}
+                    />
                   </td>
                   <td>{item.timeIN}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
-
 export default Table;
