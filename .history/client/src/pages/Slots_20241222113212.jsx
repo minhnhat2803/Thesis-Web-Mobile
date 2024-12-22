@@ -23,7 +23,7 @@ const Slots = () => {
                 const data = doc.data();
                 return {
                     index: index + 1,
-                    slotID: data.slotID || "N/A",
+                    slotID: data.slot_id || "N/A",
                     licensePlate: data.licensePlate || "N/A",
                     timeIN: data.timeIN || "N/A",
                     imageUrl: data.imageUrl || "",
@@ -75,7 +75,7 @@ const Slots = () => {
 
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
-                    <span className={styles.legendUnavailable}></span> Unavailable
+                    <span className={styles.legendOccupied}></span> Unavailable
                 </div>
                 <div className={styles.legendItem}>
                     <span className={styles.legendAvailable}></span> Available
@@ -89,7 +89,7 @@ const Slots = () => {
                             key={slot.id}
                             className={`${styles.slot} ${
                                 slot.status === "Unavailable"
-                                    ? styles.unavailable
+                                    ? styles.unavilable
                                     : styles.available
                             }`}
                             onClick={() => handleSlotClick(slot)}
@@ -109,7 +109,7 @@ const Slots = () => {
                             X
                         </button>
                         <h2>{selectedSlot.id} - Vehicle Info</h2>
-                        {selectedSlot.status === "Unavailable" ? (
+                        {selectedSlot.activity === "Unavailable" ? (
                             <>
                                 <p>
                                     <strong>License Plate:</strong>{" "}
@@ -117,7 +117,7 @@ const Slots = () => {
                                 </p>
                                 <p>
                                     <strong>Entry Time:</strong>{" "}
-                                    {selectedSlot.plateInfo.timeIN}
+                                    {selectedSlot.plateInfo.timeN}
                                 </p>
                                 <img
                                     src={selectedSlot.plateInfo.imageUrl}

@@ -26,7 +26,7 @@ const Slots = () => {
                     slotID: data.slotID || "N/A",
                     licensePlate: data.licensePlate || "N/A",
                     timeIN: data.timeIN || "N/A",
-                    imageUrl: data.imageUrl || "",
+                    imageUrl: data.imageỦl || "",
                 };
             });
 
@@ -36,7 +36,7 @@ const Slots = () => {
                 );
                 return {
                     ...slot,
-                    status: plateInfo ? "Unavailable" : "Available",
+                    status: plateInfo ? "Occupied" : "Available",
                     plateInfo,
                 };
             });
@@ -75,7 +75,7 @@ const Slots = () => {
 
             <div className={styles.legend}>
                 <div className={styles.legendItem}>
-                    <span className={styles.legendUnavailable}></span> Unavailable
+                    <span className={styles.legendOccupied}></span> Unavailable
                 </div>
                 <div className={styles.legendItem}>
                     <span className={styles.legendAvailable}></span> Available
@@ -88,8 +88,8 @@ const Slots = () => {
                         <div
                             key={slot.id}
                             className={`${styles.slot} ${
-                                slot.status === "Unavailable"
-                                    ? styles.unavailable
+                                slot.status === "Occupied"
+                                    ? styles.occupied
                                     : styles.available
                             }`}
                             onClick={() => handleSlotClick(slot)}
@@ -109,7 +109,7 @@ const Slots = () => {
                             X
                         </button>
                         <h2>{selectedSlot.id} - Vehicle Info</h2>
-                        {selectedSlot.status === "Unavailable" ? (
+                        {selectedSlot.status === "Occupied" ? (
                             <>
                                 <p>
                                     <strong>License Plate:</strong>{" "}
@@ -117,7 +117,7 @@ const Slots = () => {
                                 </p>
                                 <p>
                                     <strong>Entry Time:</strong>{" "}
-                                    {selectedSlot.plateInfo.timeIN}
+                                    {selectedSlot.plateInfo.timeIn}
                                 </p>
                                 <img
                                     src={selectedSlot.plateInfo.imageUrl}

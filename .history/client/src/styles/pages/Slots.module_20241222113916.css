@@ -27,14 +27,14 @@ h1 {
     margin-right: 20px;
 }
 
-.legendUnavailable,
+.legendU,
 .legendAvailable {
     width: 15px;
     height: 15px;
     border-radius: 50%;
 }
 
-.legendUnavailable {
+.legendOccupied {
     background-color: red;
 }
 

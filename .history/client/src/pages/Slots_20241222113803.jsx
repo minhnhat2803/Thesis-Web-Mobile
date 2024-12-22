@@ -117,7 +117,7 @@ const Slots = () => {
                                 </p>
                                 <p>
                                     <strong>Entry Time:</strong>{" "}
-                                    {selectedSlot.plateInfo.timeIN}
+                                    {selectedSlot.plateInfo.timeIn}
                                 </p>
                                 <img
                                     src={selectedSlot.plateInfo.imageUrl}

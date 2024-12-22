@@ -89,7 +89,7 @@ const Slots = () => {
                             key={slot.id}
                             className={`${styles.slot} ${
                                 slot.status === "Unavailable"
-                                    ? styles.unavailable
+                                    ? styles.unav
                                     : styles.available
                             }`}
                             onClick={() => handleSlotClick(slot)}
@@ -109,7 +109,7 @@ const Slots = () => {
                             X
                         </button>
                         <h2>{selectedSlot.id} - Vehicle Info</h2>
-                        {selectedSlot.status === "Unavailable" ? (
+                        {selectedSlot.status === "Occupied" ? (
                             <>
                                 <p>
                                     <strong>License Plate:</strong>{" "}
@@ -117,7 +117,7 @@ const Slots = () => {
                                 </p>
                                 <p>
                                     <strong>Entry Time:</strong>{" "}
-                                    {selectedSlot.plateInfo.timeIN}
+                                    {selectedSlot.plateInfo.timeIn}
                                 </p>
                                 <img
                                     src={selectedSlot.plateInfo.imageUrl}
