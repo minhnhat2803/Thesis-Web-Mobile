@@ -8,19 +8,22 @@ import {
     deleteDoc,
     doc,
     updateDoc,
+    query,
+    where,
 } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { FiRefreshCcw, FiTrash2, FiEdit2 } from "react-icons/fi";
+import { FiRefreshCcw, FiTrash2, FiEdit2 } from "react-icons/fi"; // Import edit icon
 
 const cx = classNames.bind(styles);
 
 function Table() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editingItem, setEditingItem] = useState(null);
-    const [notification, setNotification] = useState("");
-    const [showNotification, setShowNotification] = useState(false);
+    const [editingItem, setEditingItem] = useState(null); // State to hold the item being edited
+    const [availableSlots, setAvailableSlots] = useState([]); // State to hold available slots
+    const [notification, setNotification] = useState(""); // State to hold the notification message
+    const [showNotification, setShowNotification] = useState(false); // State to manage notification visibility
 
     // Fetch data from Firebase Firestore and update the state
     const fetchLicensePlates = async () => {
@@ -39,8 +42,20 @@ function Table() {
             };
         });
         setData(licenseData);
-        // setLoading(false);
     };
+
+    // Fetch available slots from Firebase Firestore
+    const fetchAvailableSlots = async () => {
+        const slotsCollection = collection(db, "parking_slots");
+        const q = query(slotsCollection, where("status", "==", "available"));
+        const slotsSnapshot = await getDocs(q);
+        const slotsData = slotsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        setAvailableSlots(slotsData);
+    };
+
     const deleteSlot = async (id, slotID) => {
         try {
             console.log(`Deleting slot with ID: ${id} and slotID: ${slotID}`);
@@ -56,12 +71,13 @@ function Table() {
             });
             console.log(`Updated slot with ID: ${slotID} to available`);
 
-            fetchLicensePlates();
-            showNotificationMessage("Delete Data Successfully");
+            fetchLicensePlates(); // Refresh data after deletion
+            showNotificationMessage("Delete Successfully");
         } catch (error) {
             console.error("Error deleting document: ", error);
         }
     };
+
     const updateSlot = async (updatedItem) => {
         try {
             console.log(`Updating slot with ID: ${updatedItem.id}`);
@@ -116,6 +132,7 @@ function Table() {
             console.error("Error updating document: ", error);
         }
     };
+
     const showNotificationMessage = (message) => {
         setNotification(message);
         setShowNotification(true);
@@ -123,25 +140,6 @@ function Table() {
             setShowNotification(false);
         }, 3000); // Hide notification after 3 seconds
     };
-
-    // useEffect hook to refresh data every 3 seconds
-    useEffect(() => {
-        fetchLicensePlates(); // Fetch data when the component first mounts
-
-        const interval = setInterval(() => {
-            fetchLicensePlates(); // Refresh data every 2 seconds
-        }, 2000);
-
-        // Cleanup the interval on component unmount
-        return () => clearInterval(interval);
-    }, []);
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 3000); // Show loader for 3 seconds
-
-        return () => clearTimeout(timer); // Cleanup timer on component unmount
-    }, []);
 
     const exportToExcel = () => {
         const workbook = XLSX.utils.book_new();
@@ -157,6 +155,26 @@ function Table() {
         });
         saveAs(blob, "LicensePlates.xlsx");
     };
+
+    useEffect(() => {
+        fetchLicensePlates(); // Fetch data when the component first mounts
+        fetchAvailableSlots(); // Fetch available slots when the component first mounts
+
+        const interval = setInterval(() => {
+            fetchLicensePlates(); // Refresh data every 2 seconds
+        }, 2000);
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000); // Show loader for 3 seconds
+
+        return () => clearTimeout(timer); // Cleanup timer on component unmount
+    }, []);
 
     return (
         <>
@@ -273,18 +291,18 @@ function Table() {
                                     <td>{item.timeIn}</td>
                                     <td>
                                         <button
+                                            className={cx("edit-button")}
+                                            onClick={() => setEditingItem(item)}
+                                        >
+                                            <FiEdit2 size={20} />
+                                        </button>
+                                        <button
                                             className={cx("delete-button")}
                                             onClick={() =>
                                                 deleteSlot(item.id, item.slotID)
                                             }
                                         >
                                             <FiTrash2 size={20} />
-                                        </button>
-                                        <button
-                                            className={cx("edit-button")}
-                                            onClick={() => setEditingItem(item)}
-                                        >
-                                            <FiEdit2 size={20} />
                                         </button>
                                     </td>
                                 </tr>
@@ -302,8 +320,7 @@ function Table() {
                             >
                                 <label>
                                     Slot ID:
-                                    <input
-                                        type="text"
+                                    <select
                                         value={editingItem.slotID}
                                         onChange={(e) =>
                                             setEditingItem({
@@ -311,7 +328,16 @@ function Table() {
                                                 slotID: e.target.value,
                                             })
                                         }
-                                    />
+                                    >
+                                        {availableSlots.map((slot) => (
+                                            <option
+                                                key={slot.id}
+                                                value={slot.id}
+                                            >
+                                                {slot.id}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </label>
                                 <label>
                                     License Plate:
@@ -380,4 +406,5 @@ function Table() {
         </>
     );
 }
+
 export default Table;

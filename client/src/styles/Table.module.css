@@ -355,3 +355,11 @@ td {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
+.edit-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
