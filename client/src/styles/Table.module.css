@@ -3,6 +3,7 @@
 }
 
 .table-container {
+    width: 100%;
     overflow-y: scroll;
     max-height: 41vh;
     border: 2px solid rgba(0, 0, 0, 0.125);
@@ -10,7 +11,7 @@
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
     position: relative;
-    z-index: 1;
+    box-sizing: border-box;
 }
 
 table {
@@ -25,9 +26,9 @@ table {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 8px 16px;
+    padding: 10px 16px;
     position: relative;
-    box-sizing: border-box;
+    box-sizing: absolute;
 }
 
 .records-number {
@@ -38,6 +39,7 @@ table {
 }
 
 .button-group {
+    margin-left: auto;
     display: flex;
     gap: 8px; /* Adds spacing between buttons */
 }
@@ -95,7 +97,7 @@ table {
     padding: 8px;
     height: 32px;
     font-size: 18px;
-    background-color: #01e056;
+    background-color: #007bff;
     border: none;
     border-radius: 50%;
     font-weight: bold;
@@ -143,8 +145,8 @@ td {
     padding-bottom: 12px;
 }
 .delete-button {
-    background-color: #ff4d4d;
-    color: white;
+    background-color: transparent;
+    color: #007bff;
     border: none;
     border-radius: 4px;
     padding: 5px 10px;
@@ -153,7 +155,66 @@ td {
 }
 
 .delete-button:hover {
-    background-color: #ff1a1a;
+    background-color: #aaa9a9;
+}
+.edit-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #aaa9a9;
+}
+
+.edit-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.edit-form h2 {
+    margin-top: 0;
+}
+
+.edit-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.edit-form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.edit-form button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.edit-form button[type="submit"] {
+    background: #007bff;
+    color: white;
+}
+
+.edit-form button[type="button"] {
+    background: #ccc;
+    color: black;
 }
 .download-button {
     position: relative;
@@ -199,7 +260,7 @@ td {
     z-index: 2; /* Ensure the download content is above the table */
     border-radius: 4px;
     transform: translateY(0%);
-    background-color: #01e056;
+    background-color: #007bff;
     border: solid 1px #01e0572d;
     transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
@@ -249,4 +310,48 @@ td {
         border-bottom: none;
         margin: auto;
     }
+}
+
+.update-button,
+.cancel-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.update-button:active,
+.cancel-button:active {
+    transform: scale(0.95);
+}
+
+.update-button {
+    background: #007bff;
+    color: white;
+}
+
+.cancel-button {
+    background: #ccc;
+    color: black;
+}
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #007bff;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+    z-index: 1000;
+}
+
+.notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }

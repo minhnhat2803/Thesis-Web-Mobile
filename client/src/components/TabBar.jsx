@@ -64,8 +64,20 @@ function TabBar() {
                                 : { color: "#82c4a0" }
                         }
                     >
-                        <FontAwesomeIcon size="2x" icon={tab.icon} />
-                        <p className={cx("tabCell-title")}>{tab.title}</p>
+                        <div
+                            className={cx(styles.icon, {
+                                active: activeTab === tab.path,
+                            })}
+                        >
+                            <FontAwesomeIcon size="2x" icon={tab.icon} />
+                        </div>
+                        <p
+                            className={cx(styles.title, {
+                                active: activeTab === tab.path,
+                            })}
+                        >
+                            {tab.title}
+                        </p>
                     </div>
                 ))}
             </div>

@@ -11,14 +11,16 @@ import {
 } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { FiRefreshCcw } from "react-icons/fi";
+import { FiRefreshCcw, FiTrash2, FiEdit2 } from "react-icons/fi";
 
 const cx = classNames.bind(styles);
 
 function Table() {
     const [data, setData] = useState([]);
-    // const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [editingItem, setEditingItem] = useState(null);
+    const [notification, setNotification] = useState("");
+    const [showNotification, setShowNotification] = useState(false);
 
     // Fetch data from Firebase Firestore and update the state
     const fetchLicensePlates = async () => {
@@ -54,10 +56,72 @@ function Table() {
             });
             console.log(`Updated slot with ID: ${slotID} to available`);
 
-            fetchLicensePlates(); // Refresh data after deletion
+            fetchLicensePlates();
+            showNotificationMessage("Delete Data Successfully");
         } catch (error) {
             console.error("Error deleting document: ", error);
         }
+    };
+    const updateSlot = async (updatedItem) => {
+        try {
+            console.log(`Updating slot with ID: ${updatedItem.id}`);
+
+            // Fetch the original slot ID before updating
+            const originalItem = data.find(
+                (item) => item.id === updatedItem.id
+            );
+            const originalSlotID = originalItem.slotID;
+
+            // Update the document in the license_plates collection
+            await updateDoc(doc(db, "license_plates", updatedItem.id), {
+                slot_id: updatedItem.slotID,
+                license_plate: updatedItem.licensePlate,
+                entry_time: updatedItem.timeIn,
+                image_url: updatedItem.imageUrl,
+            });
+            console.log(
+                `Updated document with ID: ${updatedItem.id} in license_plates`
+            );
+
+            // Update the original slot in the parking_slots collection
+            if (originalSlotID !== updatedItem.slotID) {
+                const originalSlotDoc = doc(
+                    db,
+                    "parking_slots",
+                    originalSlotID
+                );
+                await updateDoc(originalSlotDoc, {
+                    license_plate: null,
+                    status: "available",
+                });
+                console.log(
+                    `Updated original slot with ID: ${originalSlotID} to available`
+                );
+            }
+
+            // Update the new slot in the parking_slots collection
+            const newSlotDoc = doc(db, "parking_slots", updatedItem.slotID);
+            await updateDoc(newSlotDoc, {
+                license_plate: updatedItem.licensePlate,
+                status: "occupied",
+            });
+            console.log(
+                `Updated slot with ID: ${updatedItem.slotID} in parking_slots`
+            );
+
+            fetchLicensePlates(); // Refresh data after update
+            setEditingItem(null); // Close the edit form
+            showNotificationMessage("Update Data Successfully");
+        } catch (error) {
+            console.error("Error updating document: ", error);
+        }
+    };
+    const showNotificationMessage = (message) => {
+        setNotification(message);
+        setShowNotification(true);
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000); // Hide notification after 3 seconds
     };
 
     // useEffect hook to refresh data every 3 seconds
@@ -107,7 +171,7 @@ function Table() {
                     <table>
                         <thead>
                             <tr>
-                                <th colSpan="4">
+                                <th colSpan="5">
                                     <div className={cx("interact-row")}>
                                         <span className={cx("records-number")}>
                                             Records: {data.length}
@@ -214,13 +278,103 @@ function Table() {
                                                 deleteSlot(item.id, item.slotID)
                                             }
                                         >
-                                            Delete
+                                            <FiTrash2 size={20} />
+                                        </button>
+                                        <button
+                                            className={cx("edit-button")}
+                                            onClick={() => setEditingItem(item)}
+                                        >
+                                            <FiEdit2 size={20} />
                                         </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    {editingItem && (
+                        <div className={cx("edit-form")}>
+                            <h2>Edit Slot</h2>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    updateSlot(editingItem);
+                                }}
+                            >
+                                <label>
+                                    Slot ID:
+                                    <input
+                                        type="text"
+                                        value={editingItem.slotID}
+                                        onChange={(e) =>
+                                            setEditingItem({
+                                                ...editingItem,
+                                                slotID: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </label>
+                                <label>
+                                    License Plate:
+                                    <input
+                                        type="text"
+                                        value={editingItem.licensePlate}
+                                        onChange={(e) =>
+                                            setEditingItem({
+                                                ...editingItem,
+                                                licensePlate: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </label>
+                                <label>
+                                    Time In:
+                                    <input
+                                        type="text"
+                                        value={editingItem.timeIn}
+                                        onChange={(e) =>
+                                            setEditingItem({
+                                                ...editingItem,
+                                                timeIn: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </label>
+                                <label>
+                                    Image URL:
+                                    <input
+                                        type="text"
+                                        value={editingItem.imageUrl}
+                                        onChange={(e) =>
+                                            setEditingItem({
+                                                ...editingItem,
+                                                imageUrl: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </label>
+                                <button
+                                    type="submit"
+                                    className={cx("update-button")}
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    type="button"
+                                    className={cx("cancel-button")}
+                                    onClick={() => setEditingItem(null)}
+                                >
+                                    Cancel
+                                </button>
+                            </form>
+                        </div>
+                    )}
+                    <div
+                        className={`${cx("notification")} ${
+                            showNotification ? cx("show") : ""
+                        }`}
+                    >
+                        {notification}
+                    </div>
                 </div>
             )}
         </>

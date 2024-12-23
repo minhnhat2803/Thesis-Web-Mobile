@@ -23,6 +23,12 @@
     color: #6c757d;
     transition: color 0.3s, transform 0.2s;
 }
+.icon {
+    color: #007bff;
+}
+.title {
+    color: black;
+}
 
 .tabCell:active {
     transform: scale(1); /* Add a press effect */

@@ -12,16 +12,6 @@
     height: 100%;
 }
 
-.dashboard-title {
-    width: 120px;
-    height: 10%;
-    color: #517c64;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: bolder;
-}
-
 .function-cards-container {
     width: 100%;
     height: calc(90% + 16px);
@@ -52,7 +42,7 @@
 .dashboard-right {
     width: 50%;
     height: 100%;
-    background-color: #517c64;
+    background-color: #007bff;
     border-radius: 12px;
     position: relative;
     overflow: hidden;
@@ -135,7 +125,7 @@
     .dashboard-right {
         width: 90%;
         height: 300px;
-        background-color: #517c64;
+        background-color: #007bff;
         border-radius: 12px;
         position: relative;
         box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
@@ -175,7 +165,7 @@
     .dashboard-right {
         width: 90vw;
         height: 300px;
-        background-color: #517c64;
+        background-color: #007bff;
         border-radius: 12px;
         position: relative;
         box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
