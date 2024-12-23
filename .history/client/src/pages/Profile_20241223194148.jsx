@@ -70,7 +70,7 @@ function Profile() {
 
   const handleLogout = () => {
     setUserInfo(null);
-    logout(); 
+    logout(); // Xóa trạng thái đăng nhập từ AuthContext
     localStorage.removeItem("userInfo");
   };
 

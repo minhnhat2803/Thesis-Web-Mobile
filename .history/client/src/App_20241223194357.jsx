@@ -10,7 +10,7 @@ import Slots from "./pages/Slots";
 import Profile from "./pages/Profile";
 import Summarize from "./pages/Summarize";
 import ProtectedRoute from "../src/config/ProtectedRoute"; 
-import { AuthProvider } from "../src/config/AuthContext"; 
+import { AuthProvider } from "../src/config/AuthContext"; // Import AuthProvider
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

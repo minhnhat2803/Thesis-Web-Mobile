@@ -35,14 +35,19 @@ function Dashboard() {
     };
 
     const [cameraFeeds, setCameraFeeds] = useState([]);
+
+    // URLs của camera từ Raspberry Pi
     const cameraUrls = [
         "http://192.168.2.27:8081/?action=stream", 
-        "http://192.168.2.27:8082/?action=stream", 
+        "http://192.168.2.27:8082/?action=stream", // Camera feed từ Raspberry Pi 2
     ];
 
     useEffect(() => {
+        // Đặt URLs của camera
         setCameraFeeds(cameraUrls);
     }, []);
+
+    // Kiểm tra khoảng cách với sensor mỗi 20 giây
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
@@ -68,7 +73,7 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    
+    // Thay thế webcam bằng luồng từ Raspberry Pi
     const capture = async () => {
         try {
             const res = await scanImage(

@@ -84,7 +84,7 @@ function Dashboard() {
     return (
         <div className={cx("dashboard-container")}>
             <div className={cx("dashboard-right")}>
-                {/* Hiển thị luồng camera từ Raspberry Pi */}
+
                 {cameraFeeds.map((url, index) => (
                     <div key={index} className={cx("camera-container")}>
                         <img

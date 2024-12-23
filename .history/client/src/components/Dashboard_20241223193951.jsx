@@ -41,8 +41,11 @@ function Dashboard() {
     ];
 
     useEffect(() => {
+        
         setCameraFeeds(cameraUrls);
     }, []);
+
+    // Kiểm tra khoảng cách với sensor mỗi 20 giây
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
@@ -68,7 +71,7 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    
+    // Thay thế webcam bằng luồng từ Raspberry Pi
     const capture = async () => {
         try {
             const res = await scanImage(

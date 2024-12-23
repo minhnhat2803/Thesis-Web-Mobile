@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { useAuth } from "../config/AuthContext"; 
 
 function Profile() {
-  const { login, logout } = useAuth(); 
+  const { login, logout } = useAuth(); // Lấy các hàm login và logout từ AuthContext
   const [isLogin, setIsLogin] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
 
@@ -35,7 +35,7 @@ function Profile() {
         lastLogin: currentDateTime,
       };
 
-      login(loggedInUserInfo); 
+      login(loggedInUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
       setUserInfo(loggedInUserInfo);
     } catch (error) {
       alert("Login failed: " + error.message);
@@ -60,7 +60,7 @@ function Profile() {
         lastLogin: new Date().toLocaleString(),
       };
 
-      login(registeredUserInfo); 
+      login(registeredUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
       setUserInfo(registeredUserInfo);
       setIsLogin(true);
     } catch (error) {
@@ -70,7 +70,7 @@ function Profile() {
 
   const handleLogout = () => {
     setUserInfo(null);
-    logout(); 
+    logout(); // Xóa trạng thái đăng nhập từ AuthContext
     localStorage.removeItem("userInfo");
   };
 

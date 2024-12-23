@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 import { getFirestore } from "firebase/firestore";
-const firebaseConfig = {
+const firebaseConfig = { //Firebase của Nhật
     apiKey: "AIzaSyBL6smHyIPLYk8AsCLDpU_Xcr4zFFii8rM",
     authDomain: "iot-smart-parking-72f94.firebaseapp.com",
     projectId: "iot-smart-parking-72f94",

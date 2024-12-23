@@ -60,7 +60,7 @@ function Profile() {
         lastLogin: new Date().toLocaleString(),
       };
 
-      login(registeredUserInfo); 
+      login(registeredUserInfo); // Cập nhật trạng thái đăng nhập trong AuthContext
       setUserInfo(registeredUserInfo);
       setIsLogin(true);
     } catch (error) {
@@ -70,7 +70,7 @@ function Profile() {
 
   const handleLogout = () => {
     setUserInfo(null);
-    logout(); 
+    logout(); // Xóa trạng thái đăng nhập từ AuthContext
     localStorage.removeItem("userInfo");
   };
 

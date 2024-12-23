@@ -16,14 +16,14 @@
 .toggle-container {
   position: absolute;
   top: 10px;
-  right: -9px; 
+  right: -9px; /* Điều chỉnh lại khoảng cách để nút toggle nằm ngoài tab bar */
   cursor: pointer;
   z-index: 10;
   background-color: #517c64; 
   color: #fff; 
   padding: 10px;
   border-radius: 25%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng để dễ nhận diện */
 }
 
 .tabs {

@@ -62,7 +62,7 @@
     .dashboard-right {
         width: 90%;
         height: auto;
-        flex-direction: column; 
+        flex-direction: column; /* Chia camera theo chiều dọc */
         gap: 16px;
         background-color: #517c64;
         border-radius: 12px;

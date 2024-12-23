@@ -68,7 +68,7 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    
+    // Thay thế webcam bằng luồng từ Raspberry Pi
     const capture = async () => {
         try {
             const res = await scanImage(
