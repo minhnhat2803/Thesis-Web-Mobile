@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { db } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -11,7 +11,6 @@ function Summarize() {
     totalIn: 0,
     totalOut: 0,
     peakTime: "",
-    avgTimes: Array(24).fill(0), // Array for hourly avg times
   });
 
   const fetchData = async () => {
@@ -23,34 +22,32 @@ function Summarize() {
     let totalOut = 0;
     let peakTime = "";
     const timeCounts = {};
-    const hourCounts = Array(24).fill(0); // For tracking the number of vehicles per hour
 
     licenseData.forEach((data) => {
       if (data.timeIN && data.timeOut) {
         totalIn++;
         totalOut++;
       }
-
       if (data.timeIN) {
         const hour = new Date(data.timeIN).getHours();
-        hourCounts[hour]++; // Count the number of vehicles for each hour
+        timeCounts[hour] = (timeCounts[hour] || 0) + 1;
       }
-
       if (data.timeOut) {
         const hour = new Date(data.timeOut).getHours();
-        hourCounts[hour]++; // Count the number of vehicles for each hour
+        timeCounts[hour] = (timeCounts[hour] || 0) + 1;
       }
     });
 
     // Find the peak time
-    const peakHour = hourCounts.indexOf(Math.max(...hourCounts));
+    const peakHour = Object.keys(timeCounts).reduce((a, b) =>
+      timeCounts[a] > timeCounts[b] ? a : b
+    );
 
     setData({
       totalImages: licenseData.length,
       totalIn,
       totalOut,
       peakTime: peakHour,
-      avgTimes: hourCounts, // Store hourly vehicle counts
     });
   };
 
@@ -58,25 +55,14 @@ function Summarize() {
     fetchData();
   }, []);
 
-  const barChartData = {
-    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Hourly labels
+  const chartData = {
+    labels: ["Vehicles In", "Vehicles Out"],
     datasets: [
       {
-        label: "Vehicle Activity",
-        data: data.avgTimes, // Average vehicle counts per hour
-        backgroundColor: "rgba(75, 192, 192, 0.5)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
+        data: [data.totalIn, data.totalOut],
+        backgroundColor: ["#4CAF50", "#F44336"],
       },
     ],
-  };
-
-  const chartOptions = {
-    scales: {
-      y: {
-        display: false, // Hide the x-axis completely
-      },
-    },
   };
 
   return (
@@ -100,7 +86,7 @@ function Summarize() {
           <p>{data.peakTime}:00</p>
         </div>
         <div className={styles.chartContainer}>
-          <Bar data={barChartData} options={chartOptions} />
+          <Pie data={chartData} />
         </div>
       </div>
     </div>

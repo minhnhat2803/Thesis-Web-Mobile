@@ -65,7 +65,7 @@ h1 {
 }
 
 /* Chart container styles */
-.chartContainer {
+/* .chartContainer {
     flex: 2 1 40%; 
     display: flex;
     justify-content: center;
@@ -76,7 +76,7 @@ h1 {
     padding: 16px;
     margin-top: 16px;
     height: 100%; 
-}
+} */
 
 /* Responsive design for medium-sized screens */
 @media screen and (min-width: 740px) and (max-width: 1024px) {

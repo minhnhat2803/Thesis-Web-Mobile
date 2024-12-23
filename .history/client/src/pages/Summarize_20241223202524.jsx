@@ -58,6 +58,16 @@ function Summarize() {
     fetchData();
   }, []);
 
+  const chartData = {
+    labels: ["Vehicles In", "Vehicles Out"],
+    datasets: [
+      {
+        data: [data.totalIn, data.totalOut],
+        backgroundColor: ["#4CAF50", "#F44336"],
+      },
+    ],
+  };
+
   const barChartData = {
     labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Hourly labels
     datasets: [
@@ -69,14 +79,6 @@ function Summarize() {
         borderWidth: 1,
       },
     ],
-  };
-
-  const chartOptions = {
-    scales: {
-      y: {
-        display: false, // Hide the x-axis completely
-      },
-    },
   };
 
   return (
@@ -99,8 +101,11 @@ function Summarize() {
           <h2>Peak Vehicle Activity Hour</h2>
           <p>{data.peakTime}:00</p>
         </div>
+        {/* <div className={styles.chartContainer}>
+          <Pie data={chartData} />
+        </div>
         <div className={styles.chartContainer}>
-          <Bar data={barChartData} options={chartOptions} />
+          <Bar data={barChartData} /> */}
         </div>
       </div>
     </div>

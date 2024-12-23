@@ -73,7 +73,7 @@ function Summarize() {
 
   const chartOptions = {
     scales: {
-      y: {
+      x: {
         display: false, // Hide the x-axis completely
       },
     },

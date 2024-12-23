@@ -64,20 +64,6 @@ h1 {
     box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Chart container styles */
-.chartContainer {
-    flex: 2 1 40%; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    margin-top: 16px;
-    height: 100%; 
-}
-
 /* Responsive design for medium-sized screens */
 @media screen and (min-width: 740px) and (max-width: 1024px) {
     .statistics {
@@ -88,10 +74,6 @@ h1 {
     .statBox {
         width: 80%;
         margin-bottom: 16px;
-    }
-
-    .chartContainer {
-        width: 80%;
     }
 }
 
@@ -106,16 +88,6 @@ h1 {
         width: 90%;
         margin-bottom: 16px;
     }
-
-    .chartContainer {
-        width: 90%;
-    }
-}
-
-/* Hover effect for stat box */
-.statBox:hover {
-    box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
 }
 
 /* Improve font size and spacing on mobile */
@@ -130,10 +102,5 @@ h1 {
 
     .statBox p {
         font-size: 1rem;
-    }
-
-    .chartContainer {
-        margin-top: 12px;
-        padding: 12px;
     }
 }

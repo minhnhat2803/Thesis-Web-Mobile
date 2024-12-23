@@ -58,6 +58,16 @@ function Summarize() {
     fetchData();
   }, []);
 
+  const chartData = {
+    labels: ["Vehicles In", "Vehicles Out"],
+    datasets: [
+      {
+        data: [data.totalIn, data.totalOut],
+        backgroundColor: ["#4CAF50", "#F44336"],
+      },
+    ],
+  };
+
   const barChartData = {
     labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Hourly labels
     datasets: [
@@ -71,14 +81,6 @@ function Summarize() {
     ],
   };
 
-  const chartOptions = {
-    scales: {
-      y: {
-        display: false, // Hide the x-axis completely
-      },
-    },
-  };
-
   return (
     <div className={styles.summarizeContainer}>
       <h1>Summary Dashboard</h1>
@@ -87,20 +89,23 @@ function Summarize() {
           <h2>Total License Plate Images</h2>
           <p>{data.totalImages}</p>
         </div>
-        <div className={styles.statBox}>
+        {/* <div className={styles.statBox}>
           <h2>Total Vehicles In</h2>
           <p>{data.totalIn}</p>
         </div>
         <div className={styles.statBox}>
           <h2>Total Vehicles Out</h2>
           <p>{data.totalOut}</p>
-        </div>
+        </div> */}
         <div className={styles.statBox}>
           <h2>Peak Vehicle Activity Hour</h2>
           <p>{data.peakTime}:00</p>
         </div>
         <div className={styles.chartContainer}>
-          <Bar data={barChartData} options={chartOptions} />
+          <Pie data={chartData} />
+        </div>
+        <div className={styles.chartContainer}>
+          <Bar data={barChartData} />
         </div>
       </div>
     </div>
