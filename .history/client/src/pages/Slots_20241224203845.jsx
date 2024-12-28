@@ -12,7 +12,6 @@ import styles from "../styles/pages/Slots.module.css";
 const Slots = () => {
     const [slots, setSlots] = useState([]);
     const [newSlotID, setNewSlotID] = useState("");
-    const [selectedSlots, setSelectedSlots] = useState([]);
 
     const fetchData = async () => {
         try {
@@ -54,25 +53,14 @@ const Slots = () => {
         }
     };
 
-    const deleteSelectedSlots = async () => {
+    const deleteSlot = async (slotID) => {
         try {
-            for (const slotID of selectedSlots) {
-                const slotRef = doc(db, "parkingSlots", slotID);
-                await deleteDoc(slotRef);
-            }
-            setSelectedSlots([]);
+            const slotRef = doc(db, "parkingSlots", slotID);
+            await deleteDoc(slotRef);
             fetchData();
         } catch (error) {
-            console.error("Error deleting selected slots: ", error);
+            console.error("Error deleting slot: ", error);
         }
-    };
-
-    const handleSlotClick = (slotID) => {
-        setSelectedSlots((prevSelected) =>
-            prevSelected.includes(slotID)
-                ? prevSelected.filter((id) => id !== slotID)
-                : [...prevSelected, slotID]
-        );
     };
 
     useEffect(() => {
@@ -98,10 +86,13 @@ const Slots = () => {
                 </button>
                 <button
                     className={styles.deleteBtn}
-                    onClick={deleteSelectedSlots}
-                    disabled={selectedSlots.length === 0}
+                    onClick={() =>
+                        slots.length
+                            ? deleteSlot(slots[slots.length - 1].id)
+                            : null
+                    }
                 >
-                    Delete Selected Slots
+                    Delete Last Slot
                 </button>
             </div>
 
@@ -114,8 +105,7 @@ const Slots = () => {
                                 slot.status === "Unavailable"
                                     ? styles.unavailable
                                     : styles.available
-                            } ${selectedSlots.includes(slot.id) ? styles.selected : ""}`}
-                            onClick={() => handleSlotClick(slot.id)}
+                            }`}
                         >
                             <p>{slot.id}</p>
                             <span className={styles.status}>

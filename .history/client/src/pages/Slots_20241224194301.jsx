@@ -11,20 +11,30 @@ import styles from "../styles/pages/Slots.module.css";
 
 const Slots = () => {
     const [slots, setSlots] = useState([]);
-    const [newSlotID, setNewSlotID] = useState("");
-    const [selectedSlots, setSelectedSlots] = useState([]);
+    const [newSlotName, setNewSlotName] = useState("");
+    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [zoomedImageUrl, setZoomedImageUrl] = useState("");
 
     const fetchData = async () => {
         try {
             const slotSnapshot = await getDocs(collection(db, "parkingSlots"));
-            const licenseSnapshot = await getDocs(collection(db, "licensePlates"));
-
             const slotData = slotSnapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
 
-            const licenseData = licenseSnapshot.docs.map((doc) => doc.data());
+            const licenseCollection = collection(db, "licensePlates");
+            const licenseSnapshot = await getDocs(licenseCollection);
+            const licenseData = licenseSnapshot.docs.map((doc, index) => {
+                const data = doc.data();
+                return {
+                    index: index + 1,
+                    slotID: data.slotID || "N/A",
+                    licensePlate: data.licensePlate || "N/A",
+                    timeIN: data.timeIN || "N/A",
+                    imageUrl: data.imageUrl || "",
+                };
+            });
 
             const mergedData = slotData.map((slot) => {
                 const plateInfo = licenseData.find(
@@ -33,7 +43,7 @@ const Slots = () => {
                 return {
                     ...slot,
                     status: plateInfo ? "Unavailable" : "Available",
-                    licensePlate: plateInfo?.licensePlate || "N/A",
+                    plateInfo,
                 };
             });
 
@@ -43,65 +53,51 @@ const Slots = () => {
         }
     };
 
-    const addSlot = async () => {
-        if (!newSlotID.trim()) return;
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleAddSlot = async () => {
+        if (!newSlotName.trim()) {
+            alert("Slot name cannot be empty.");
+            return;
+        }
         try {
-            await addDoc(collection(db, "parkingSlots"), { id: newSlotID });
-            setNewSlotID("");
+            await addDoc(collection(db, "parkingSlots"), { name: newSlotName });
+            setNewSlotName("");
             fetchData();
         } catch (error) {
             console.error("Error adding slot: ", error);
         }
     };
 
-    const deleteSelectedSlots = async () => {
-        try {
-            for (const slotID of selectedSlots) {
-                const slotRef = doc(db, "parkingSlots", slotID);
-                await deleteDoc(slotRef);
+    const handleDeleteSlot = async (slotId) => {
+        if (window.confirm("Are you sure you want to delete this slot?")) {
+            try {
+                await deleteDoc(doc(db, "parkingSlots", slotId));
+                fetchData();
+            } catch (error) {
+                console.error("Error deleting slot: ", error);
             }
-            setSelectedSlots([]);
-            fetchData();
-        } catch (error) {
-            console.error("Error deleting selected slots: ", error);
         }
     };
-
-    const handleSlotClick = (slotID) => {
-        setSelectedSlots((prevSelected) =>
-            prevSelected.includes(slotID)
-                ? prevSelected.filter((id) => id !== slotID)
-                : [...prevSelected, slotID]
-        );
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Parking Slot Management</h1>
+                <h1>Parking Slots Management</h1>
             </header>
 
             <div className={styles.actions}>
                 <input
                     type="text"
-                    placeholder="Enter Slot ID"
+                    placeholder="New slot name"
+                    value={newSlotName}
+                    onChange={(e) => setNewSlotName(e.target.value)}
                     className={styles.input}
-                    value={newSlotID}
-                    onChange={(e) => setNewSlotID(e.target.value)}
                 />
-                <button className={styles.addBtn} onClick={addSlot}>
+                <button onClick={handleAddSlot} className={styles.addBtn}>
                     Add Slot
-                </button>
-                <button
-                    className={styles.deleteBtn}
-                    onClick={deleteSelectedSlots}
-                    disabled={selectedSlots.length === 0}
-                >
-                    Delete Selected Slots
                 </button>
             </div>
 
@@ -114,15 +110,15 @@ const Slots = () => {
                                 slot.status === "Unavailable"
                                     ? styles.unavailable
                                     : styles.available
-                            } ${selectedSlots.includes(slot.id) ? styles.selected : ""}`}
-                            onClick={() => handleSlotClick(slot.id)}
+                            }`}
                         >
                             <p>{slot.id}</p>
-                            <span className={styles.status}>
-                                {slot.status === "Unavailable"
-                                    ? `License Plate: ${slot.licensePlate}`
-                                    : "Available"}
-                            </span>
+                            <button
+                                onClick={() => handleDeleteSlot(slot.id)}
+                                className={styles.deleteBtn}
+                            >
+                                Delete
+                            </button>
                         </div>
                     ))}
                 </div>
