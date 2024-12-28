@@ -6,8 +6,8 @@ const cx = classNames.bind(styles);
 
 function Dashboard() {
     const [cameraFeeds, setCameraFeeds] = useState([
-        "http://192.168.1.5:8081/?action=stream",
-        "http://192.168.1.5:8082/?action=stream",
+        "http://192.168.2.16:8081/?action=stream",
+        "http://192.168.2.16:8082/?action=stream",
     ]);
 
     useEffect(() => {
