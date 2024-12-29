@@ -77,12 +77,15 @@ function Dashboard() {
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                 >
-                    <div
-                        className={cx("camera")}
-                        src={url}
-                        alt={`Camera Stream ${index + 1}`}
-                    />
-                    <div className={cx("camera-title")}>Camera {index + 1}</div>
+                    {url ? (
+                        <img
+                            className={cx("camera")}
+                            src={url}
+                            alt={`Camera Stream ${index + 1}`}
+                        />
+                    ) : (
+                        <div className={cx("loading-placeholder")}>Loading...</div>
+                    )}
                 </motion.div>
             ))}
         </motion.div>

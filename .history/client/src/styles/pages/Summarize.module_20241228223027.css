@@ -48,36 +48,20 @@ h1 {
     height: auto; /* Let the stat box height adjust based on content */
 }
 
-/* Titles inside stat boxes */
 .statBox h2 {
     font-size: 1.5rem;
     color: #4CAF50;
     margin-bottom: 12px;
 }
 
-/* Paragraphs inside stat boxes */
-.statBox p,
-.statBox ul {
+.statBox p {
     font-size: 1.25rem;
     color: #333;
-}
-
-/* Styling for list items inside stat box (Daily, Monthly, Yearly stats) */
-.statBox ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.statBox li {
-    margin-bottom: 8px;
-    font-size: 1.1rem;
 }
 
 /* Hover effect for stat box */
 .statBox:hover {
     box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
 }
 
 /* Chart container styles */
@@ -92,14 +76,6 @@ h1 {
     padding: 16px;
     margin-top: 16px;
     height: 100%; 
-}
-
-/* Loading spinner styles */
-.spinnerContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
 }
 
 /* Responsive design for medium-sized screens */

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bar } from "react-chartjs-2";
+import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { db } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -10,11 +10,9 @@ function Summarize() {
   const [data, setData] = useState({
     totalImages: 0,
     totalIn: 0,
+    totalOut: 0,
     peakTime: "",
     avgTimes: Array(24).fill(0), // Array for hourly avg times
-    dailyStats: {},
-    monthlyStats: {},
-    yearlyStats: {},
   });
   const [loading, setLoading] = useState(true); // State for loading
 
@@ -25,27 +23,25 @@ function Summarize() {
     const licenseData = licenseSnapshot.docs.map((doc) => doc.data());
 
     let totalIn = 0;
+    let totalOut = 0;
+    let peakTime = "";
+    const timeCounts = {};
     const hourCounts = Array(24).fill(0); // For tracking the number of vehicles per hour
-    const dailyCounts = {}; // For daily counts
-    const monthlyCounts = {}; // For monthly counts
-    const yearlyCounts = {}; // For yearly counts
 
     licenseData.forEach((data) => {
-      if (data.timeIN) {
+      if (data.timeIN && data.timeOut) {
         totalIn++;
+        totalOut++;
+      }
+
+      if (data.timeIN) {
         const hour = new Date(data.timeIN).getHours();
         hourCounts[hour]++; // Count the number of vehicles for each hour
+      }
 
-        // Date-related counts
-        const date = new Date(data.timeIN);
-        const day = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-        const month = `${date.getMonth() + 1}-${date.getFullYear()}`;
-        const year = `${date.getFullYear()}`;
-
-        // Update daily, monthly, and yearly counts
-        dailyCounts[day] = (dailyCounts[day] || 0) + 1;
-        monthlyCounts[month] = (monthlyCounts[month] || 0) + 1;
-        yearlyCounts[year] = (yearlyCounts[year] || 0) + 1;
+      if (data.timeOut) {
+        const hour = new Date(data.timeOut).getHours();
+        hourCounts[hour]++; // Count the number of vehicles for each hour
       }
     });
 
@@ -55,11 +51,9 @@ function Summarize() {
     setData({
       totalImages: licenseData.length,
       totalIn,
+      totalOut,
       peakTime: peakHour,
       avgTimes: hourCounts, // Store hourly vehicle counts
-      dailyStats: dailyCounts,
-      monthlyStats: monthlyCounts,
-      yearlyStats: yearlyCounts,
     });
     setLoading(false); // Stop loading after data is processed
   };
@@ -105,43 +99,13 @@ function Summarize() {
             <p>{data.totalIn}</p>
           </div>
           <div className={styles.statBox}>
+            <h2>Total Vehicles Out</h2>
+            <p>{data.totalOut}</p>
+          </div>
+          <div className={styles.statBox}>
             <h2>Peak Vehicle Activity Hour</h2>
             <p>{data.peakTime}:00</p>
           </div>
-
-          <div className={styles.statBox}>
-            <h2>Daily Vehicle Counts</h2>
-            <ul>
-              {Object.keys(data.dailyStats).map((day) => (
-                <li key={day}>
-                  {day}: {data.dailyStats[day]}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.statBox}>
-            <h2>Monthly Vehicle Counts</h2>
-            <ul>
-              {Object.keys(data.monthlyStats).map((month) => (
-                <li key={month}>
-                  {month}: {data.monthlyStats[month]}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.statBox}>
-            <h2>Yearly Vehicle Counts</h2>
-            <ul>
-              {Object.keys(data.yearlyStats).map((year) => (
-                <li key={year}>
-                  {year}: {data.yearlyStats[year]}
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <div className={styles.chartContainer}>
             <Bar data={barChartData} options={chartOptions} />
           </div>

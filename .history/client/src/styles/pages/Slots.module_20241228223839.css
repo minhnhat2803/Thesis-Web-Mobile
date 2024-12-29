@@ -1,0 +1,165 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #dc3545;
+    --background-color-light: #f0f2f5;
+    --background-color-dark: #1a1a1a;
+    --status-available: #28a745;
+    --status-unavailable: #ff4d4d;
+    --highlight-color: #ffc107;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --transition-time: 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color-light);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: var(--background-color-dark);
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.input {
+    padding: 12px;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    font-size: 16px;
+    width: 250px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.addBtn, .deleteBtn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-time);
+    color: white;
+    box-shadow: 0px 6px 15px var(--shadow-color);
+}
+
+.addBtn {
+    background-color: var(--primary-color);
+}
+
+.addBtn:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.deleteBtn {
+    background-color: var(--secondary-color);
+}
+
+.deleteBtn:hover {
+    background-color: #c82333;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.parkingLot {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.parkingLotGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.slot {
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0px 6px 15px var(--shadow-color);
+    transition: transform var(--transition-time), box-shadow var(--transition-time);
+    cursor: pointer;
+}
+
+.slot:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.available {
+    background-color: var(--status-available);
+}
+
+.unavailable {
+    background-color: var(--status-unavailable);
+}
+
+.status {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+.selected {
+    background-color: var(--highlight-color);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.darkModeBtn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0px 6px 15px var(--shadow-color);
+    transition: background-color 0.3s;
+}
+
+.darkModeBtn:hover {
+    background-color: #0056b3;
+}

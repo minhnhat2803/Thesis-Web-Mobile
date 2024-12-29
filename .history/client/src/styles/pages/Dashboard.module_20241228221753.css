@@ -1,6 +1,6 @@
 .dashboard-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Hai camera mỗi hàng */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
     background: linear-gradient(135deg, #f3f4f6, #ffffff);
@@ -10,8 +10,6 @@
 
 .camera-container {
     position: relative;
-    width: 100%;
-    height: 40vh; /* Tăng chiều cao cho camera */
     overflow: hidden;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
@@ -42,22 +40,12 @@
     font-size: 14px;
 }
 
-@media screen and (max-width: 1024px) {
-    .dashboard-container {
-        grid-template-columns: 1fr; /* Một camera mỗi hàng */
-    }
-
-    .camera-container {
-        height: 50vh; /* Tăng chiều cao cho thiết bị nhỏ hơn */
-    }
-}
-
 @media screen and (max-width: 768px) {
     .dashboard-container {
-        grid-template-columns: 1fr; /* Một camera mỗi hàng */
+        grid-template-columns: 1fr;
     }
 
     .camera-container {
-        height: 60vh; /* Camera full chiều cao hơn cho màn hình nhỏ */
+        height: 250px;
     }
 }

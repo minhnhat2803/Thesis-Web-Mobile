@@ -15,20 +15,19 @@ function Table() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const fetchLicensePlates = async () => {
-    const licenseCollection = collection(db, "licensePlates");
-    const licenseSnapshot = await getDocs(licenseCollection);
-    const licenseData = licenseSnapshot.docs.map((doc, index) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        index: index + 1,
-        slotID: data.slotID || "N/A",
-        licensePlate: data.licensePlate || "N/A",
-        timeIN: data.timeIN || "N/A",
-        imageUrl: data.imageUrl || "",
-      };
-    });
-    setData(licenseData);
+    // Thêm dữ liệu giả để test scroll
+    const dummyData = [];
+    for (let i = 1; i <= 50; i++) {
+      dummyData.push({
+        id: i.toString(),
+        index: i,
+        slotID: `Slot ${i}`,
+        licensePlate: `ABC-${i}`,
+        timeIN: `2024-12-28 12:00:${i}`,
+        imageUrl: `https://via.placeholder.com/60?text=Image+${i}`,
+      });
+    }
+    setData(dummyData);
   };
 
   useEffect(() => {
