@@ -107,12 +107,8 @@ const Slots = () => {
 
             <div className={styles.parkingLot}>
                 <div className={styles.entryExit}>
-                    <div className={styles.exit}>
-                        <span className={styles.arrow}>↑</span> Exit
-                    </div>
-                    <div className={styles.entry}>
-                        Entry <span className={styles.arrow}>↓</span>
-                    </div>
+                    <div className={styles.entry}>Entry</div>
+                    <div className={styles.exit}>Exit</div>
                 </div>
                 <div className={styles.parkingLotGrid}>
                     {slots.map((slot) => (
@@ -133,10 +129,6 @@ const Slots = () => {
                             </span>
                         </div>
                     ))}
-                </div>
-                <div className={styles.cameras}>
-                    <div className={styles.camera}>Camera 1</div>
-                    <div className={styles.camera}>Camera 2</div>
                 </div>
             </div>
         </div>

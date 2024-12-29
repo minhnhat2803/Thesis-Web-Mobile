@@ -120,6 +120,21 @@ h1 {
     margin: 0 10px;
 }
 
+.raspberryPi {
+    text-align: center;
+}
+
+.raspberryPi img {
+    width: 50px;
+    height: auto;
+}
+
+.raspberryPi p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--neutral-dark);
+}
+
 .parkingLotGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 cột */
@@ -171,21 +186,4 @@ h1 {
 .selected:hover {
     transform: translateY(-5px);
     box-shadow: var(--hover-shadow);
-}
-
-.cameras {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.camera {
-    padding: 10px 20px;
-    border: 2px solid var(--neutral-dark);
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--neutral-dark);
-    background-color: var(--neutral-light);
-    text-align: center;
 }

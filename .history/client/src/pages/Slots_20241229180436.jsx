@@ -135,8 +135,8 @@ const Slots = () => {
                     ))}
                 </div>
                 <div className={styles.cameras}>
-                    <div className={styles.camera}>Camera 1</div>
                     <div className={styles.camera}>Camera 2</div>
+                    <div className={styles.camera}>Camera 1</div>
                 </div>
             </div>
         </div>

@@ -108,10 +108,14 @@ const Slots = () => {
             <div className={styles.parkingLot}>
                 <div className={styles.entryExit}>
                     <div className={styles.exit}>
-                        <span className={styles.arrow}>↑</span> Exit
+                        <span className={styles.arrow}>←</span> Exit
+                    </div>
+                    <div className={styles.raspberryPi}>
+                        <img src="/raspberry-pi.png" alt="Raspberry Pi 4" />
+                        <p>Raspberry Pi 4</p>
                     </div>
                     <div className={styles.entry}>
-                        Entry <span className={styles.arrow}>↓</span>
+                        Entry <span className={styles.arrow}>→</span>
                     </div>
                 </div>
                 <div className={styles.parkingLotGrid}>
@@ -133,10 +137,6 @@ const Slots = () => {
                             </span>
                         </div>
                     ))}
-                </div>
-                <div className={styles.cameras}>
-                    <div className={styles.camera}>Camera 1</div>
-                    <div className={styles.camera}>Camera 2</div>
                 </div>
             </div>
         </div>

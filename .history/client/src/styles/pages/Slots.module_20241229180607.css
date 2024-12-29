@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #dc3545;
+    --primary-color: #6a11cb;
+    --secondary-color: #ff4d4d;
     --neutral-light: #f8f9fa;
     --neutral-dark: #343a40;
     --neutral-border: #dee2e6;
@@ -9,6 +9,8 @@
     --transition-time: 0.3s ease;
     --status-available: #28a745;
     --status-unavailable: #ff4d4d;
+    --gradient-primary: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    --gradient-secondary: linear-gradient(135deg, #ff4d4d 0%, #f9d423 100%);
 }
 
 .container {
@@ -27,9 +29,12 @@
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     color: var(--neutral-dark);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .actions {
@@ -69,20 +74,20 @@ h1 {
 }
 
 .addBtn {
-    background-color: var(--primary-color);
+    background: var(--gradient-primary);
 }
 
 .addBtn:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
     box-shadow: var(--hover-shadow);
 }
 
 .deleteBtn {
-    background-color: var(--secondary-color);
+    background: var(--gradient-secondary);
 }
 
 .deleteBtn:hover {
-    background-color: #c82333;
+    transform: translateY(-2px);
     box-shadow: var(--hover-shadow);
 }
 
@@ -113,6 +118,8 @@ h1 {
     text-align: center;
     display: flex;
     align-items: center;
+    background: var(--gradient-primary);
+    color: white;
 }
 
 .arrow {
@@ -140,6 +147,7 @@ h1 {
     transition: transform var(--transition-time), box-shadow var(--transition-time);
     position: relative;
     cursor: pointer;
+    background: var(--gradient-primary);
 }
 
 .slot:hover {
@@ -148,11 +156,11 @@ h1 {
 }
 
 .available {
-    background-color: var(--status-available);
+    background: var(--gradient-primary);
 }
 
 .unavailable {
-    background-color: var(--status-unavailable);
+    background: var(--gradient-secondary);
 }
 
 .status {
@@ -188,4 +196,6 @@ h1 {
     color: var(--neutral-dark);
     background-color: var(--neutral-light);
     text-align: center;
+    background: var(--gradient-primary);
+    color: white;
 }
