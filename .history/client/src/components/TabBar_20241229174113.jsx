@@ -11,7 +11,6 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { motion } from "framer-motion";
 
 const cx = classNames.bind(styles);
 
@@ -66,35 +65,28 @@ function TabBar() {
 
   return (
     <div className={cx("tabBar-container", { collapsed: isCollapsed })}>
-      <motion.div
-        className={cx("toggle-container")}
-        onClick={toggleTabBar}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-      >
+      <div className={cx("toggle-container")} onClick={toggleTabBar}>
         <FontAwesomeIcon
           icon={isCollapsed ? faChevronRight : faChevronLeft}
           size="lg"
         />
-      </motion.div>
+      </div>
 
       <div className={cx("tabs")}>
         {tabs.map((tab, index) => (
-          <motion.div
+          <div
             key={index}
             onClick={() => handleTabClick(index, tab.path)}
-            className={cx("tabCell-container", { active: click === index })}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            style={{
-              height: `calc(100% / ${tabs.length})`,
-            }}
+            className={cx("tabCell-container")}
+            style={
+              click === index
+                ? { color: "#517c64", height: `calc(100% / ${tabs.length})` }
+                : { color: "#82c4a0", height: `calc(100% / ${tabs.length})` }
+            }
           >
             <FontAwesomeIcon size="2x" icon={tab.icon} />
-            {!isCollapsed && (
-              <p className={cx("tabCell-title")}>{tab.title}</p>
-            )}
-          </motion.div>
+            {!isCollapsed && <p className={cx("tabCell-title")}>{tab.title}</p>}
+          </div>
         ))}
       </div>
     </div>

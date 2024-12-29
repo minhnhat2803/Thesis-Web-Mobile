@@ -87,7 +87,7 @@ function TabBar() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             style={{
-              height: `calc(100% / ${tabs.length})`,
+              height: calc(100% / ${tabs.length}),
             }}
           >
             <FontAwesomeIcon size="2x" icon={tab.icon} />
