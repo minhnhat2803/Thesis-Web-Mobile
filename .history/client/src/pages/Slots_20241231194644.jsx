@@ -3,7 +3,7 @@ import { db } from "../config/firebase";
 import {
     collection,
     getDocs,
-    setDoc,
+    addDoc,
     deleteDoc,
     doc,
 } from "firebase/firestore";
@@ -46,10 +46,7 @@ const Slots = () => {
     const addSlot = async () => {
         if (!newSlotID.trim()) return;
         try {
-            await setDoc(doc(db, "parkingSlots", newSlotID), {
-                activity: "available", 
-                licensePlate: null, 
-            });
+            await addDoc(collection(db, "parkingSlots"), { id: newSlotID });
             setNewSlotID("");
             fetchData();
         } catch (error) {

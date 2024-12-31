@@ -3,7 +3,7 @@ import { db } from "../config/firebase";
 import {
     collection,
     getDocs,
-    setDoc,
+    addDoc,
     deleteDoc,
     doc,
 } from "firebase/firestore";
@@ -46,9 +46,10 @@ const Slots = () => {
     const addSlot = async () => {
         if (!newSlotID.trim()) return;
         try {
-            await setDoc(doc(db, "parkingSlots", newSlotID), {
-                activity: "available", 
-                licensePlate: null, 
+            await addDoc(collection(db, "parkingSlots"), {
+                id: newSlotID,
+                activity: "available", // Thêm trường activity với giá trị mặc định
+                licensePlate: null, // Thêm trường licensePlate với giá trị mặc định
             });
             setNewSlotID("");
             fetchData();
@@ -134,6 +135,7 @@ const Slots = () => {
                                     ? `License Plate: ${slot.licensePlate}`
                                     : "Available"}
                             </span>
+                            <span className={styles.activity}>Activity: {slot.activity}</span> {/* Hiển thị trạng thái activity */}
                         </div>
                     ))}
                 </div>

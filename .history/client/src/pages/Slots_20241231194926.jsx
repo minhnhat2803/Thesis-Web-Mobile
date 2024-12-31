@@ -48,7 +48,7 @@ const Slots = () => {
         try {
             await setDoc(doc(db, "parkingSlots", newSlotID), {
                 activity: "available", 
-                licensePlate: null, 
+                licensePlate: null, // Thêm trường licensePlate với giá trị mặc định
             });
             setNewSlotID("");
             fetchData();
