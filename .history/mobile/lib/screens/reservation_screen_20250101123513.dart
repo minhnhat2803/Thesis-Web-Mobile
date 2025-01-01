@@ -95,47 +95,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       setState(() {
         userReservations.add(selectedSlot!);
-        availableSlots.remove(selectedSlot);
         selectedSlot = null;
       });
 
       await EasyLoading.dismiss();
       await EasyLoading.showSuccess('Reservation successful');
-    } catch (e) {
-      await EasyLoading.showError('An error occurred: ${e.toString()}');
-    }
-  }
-
-  void cancelReservation() async {
-    try {
-      if (userReservations.isEmpty) {
-        await EasyLoading.showError('No reservation to cancel');
-        return;
-      }
-
-      await EasyLoading.show(
-          status: 'Cancelling reservation...', maskType: EasyLoadingMaskType.black);
-
-      QuerySnapshot userReservationSnapshot = await firestore
-          .collection('reservations')
-          .where('email', isEqualTo: widget.userData['email'])
-          .get();
-
-      if (userReservationSnapshot.docs.isNotEmpty) {
-        String reservationID = userReservationSnapshot.docs.first.id;
-        await firestore.collection('reservations').doc(reservationID).delete();
-
-        setState(() {
-          String cancelledSlot = userReservations.first;
-          userReservations.clear();
-          availableSlots.add(cancelledSlot);
-        });
-
-        await EasyLoading.dismiss();
-        await EasyLoading.showSuccess('Reservation cancelled successfully');
-      } else {
-        await EasyLoading.showError('No reservation found to cancel');
-      }
     } catch (e) {
       await EasyLoading.showError('An error occurred: ${e.toString()}');
     }
@@ -237,46 +201,18 @@ class _ReservationScreenState extends State<ReservationScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    ),
-                    onPressed: confirmReservation,
-                    child: const Text(
-                      'Confirm Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
-                      ),
-                    ),
-                  ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              ),
+              onPressed: confirmReservation,
+              child: const Center(
+                child: Text(
+                  'Confirm Reservation',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    ),
-                    onPressed: userReservations.isNotEmpty ? cancelReservation : null,
-                    child: const Text(
-                      'Cancel Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),

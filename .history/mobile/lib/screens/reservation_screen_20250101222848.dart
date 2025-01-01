@@ -246,13 +246,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     ),
                     onPressed: confirmReservation,
-                    child: const Text(
-                      'Confirm Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
+                    child: const Center(
+                      child: Text(
+                        'Confirm Reservation',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -265,13 +262,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     ),
                     onPressed: userReservations.isNotEmpty ? cancelReservation : null,
-                    child: const Text(
-                      'Cancel Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
+                    child: const Center(
+                      child: Text(
+                        'Cancel Reservation',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
