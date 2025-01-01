@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (reservationSnapshot.docs.isNotEmpty) {
         var reservationData = reservationSnapshot.docs.first.data() as Map<String, dynamic>;
         Timestamp reservedAt = reservationData['reservedAt'] as Timestamp;
-        String formattedTime = "${reservedAt.toDate().toLocal()}".split('.')[0]; 
+        String formattedTime = "${reservedAt.toDate().toLocal()}".split('.')[0]; // Định dạng ngày/giờ/phút/giây
 
         setState(() {
           userBill['slot'] = reservationData['slot'];

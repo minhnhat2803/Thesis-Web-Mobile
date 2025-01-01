@@ -136,8 +136,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
         await EasyLoading.dismiss();
         await EasyLoading.showSuccess('Reservation cancelled successfully');
-
-        
         Navigator.pop(context, true);
       } else {
         await EasyLoading.showError('No reservation found to cancel');

@@ -58,17 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (reservationSnapshot.docs.isNotEmpty) {
         var reservationData = reservationSnapshot.docs.first.data() as Map<String, dynamic>;
-        Timestamp reservedAt = reservationData['reservedAt'] as Timestamp;
-        String formattedTime = "${reservedAt.toDate().toLocal()}".split('.')[0]; 
-
         setState(() {
           userBill['slot'] = reservationData['slot'];
-          userBill['timeIn'] = formattedTime;
-        });
-      } else {
-        setState(() {
-          userBill['slot'] = 'INACTIVE';
-          userBill['timeIn'] = 'None';
+          userBill['timeIn'] = reservationData['reservedAt'].toString();
         });
       }
     } catch (e) {

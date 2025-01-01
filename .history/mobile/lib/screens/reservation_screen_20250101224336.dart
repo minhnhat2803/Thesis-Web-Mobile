@@ -137,7 +137,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
         await EasyLoading.dismiss();
         await EasyLoading.showSuccess('Reservation cancelled successfully');
 
-        
+        // Thông báo cho HomeScreen để cập nhật dữ liệu
         Navigator.pop(context, true);
       } else {
         await EasyLoading.showError('No reservation found to cancel');

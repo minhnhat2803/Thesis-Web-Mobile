@@ -101,9 +101,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       await EasyLoading.dismiss();
       await EasyLoading.showSuccess('Reservation successful');
-
-      // Thông báo cho HomeScreen để cập nhật dữ liệu
-      Navigator.pop(context, true);
     } catch (e) {
       await EasyLoading.showError('An error occurred: ${e.toString()}');
     }
@@ -136,9 +133,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
         await EasyLoading.dismiss();
         await EasyLoading.showSuccess('Reservation cancelled successfully');
-
-        
-        Navigator.pop(context, true);
       } else {
         await EasyLoading.showError('No reservation found to cancel');
       }
@@ -254,11 +248,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     onPressed: confirmReservation,
                     child: const Text(
                       'Confirm Reservation',
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.center, // Căn giữa chữ
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.white, // Màu chữ trắng
                       ),
                     ),
                   ),
@@ -273,11 +267,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     onPressed: userReservations.isNotEmpty ? cancelReservation : null,
                     child: const Text(
                       'Cancel Reservation',
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.center, // Căn giữa chữ
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.white, // Màu chữ trắng
                       ),
                     ),
                   ),

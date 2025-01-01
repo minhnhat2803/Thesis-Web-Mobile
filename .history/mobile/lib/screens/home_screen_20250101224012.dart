@@ -3,7 +3,6 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:mobile/screens/profile_screen.dart';
 import 'package:mobile/screens/reservation_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
@@ -32,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       'timeIn': 'None',
     };
     updateState();
-    loadReservationData();
   }
 
   void updateState() async {
@@ -46,33 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       print('Error fetching data: $e');
-    }
-  }
-
-  void loadReservationData() async {
-    try {
-      QuerySnapshot reservationSnapshot = await FirebaseFirestore.instance
-          .collection('reservations')
-          .where('email', isEqualTo: widget.userData['email'])
-          .get();
-
-      if (reservationSnapshot.docs.isNotEmpty) {
-        var reservationData = reservationSnapshot.docs.first.data() as Map<String, dynamic>;
-        Timestamp reservedAt = reservationData['reservedAt'] as Timestamp;
-        String formattedTime = "${reservedAt.toDate().toLocal()}".split('.')[0]; 
-
-        setState(() {
-          userBill['slot'] = reservationData['slot'];
-          userBill['timeIn'] = formattedTime;
-        });
-      } else {
-        setState(() {
-          userBill['slot'] = 'INACTIVE';
-          userBill['timeIn'] = 'None';
-        });
-      }
-    } catch (e) {
-      print('Error loading reservation data: $e');
     }
   }
 
@@ -104,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // Bỏ nút back
         actions: [
           IconButton(
             icon: const Icon(Icons.person, size: 30, color: Colors.white),
@@ -123,10 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
-        onPressed: () {
-          updateState();
-          loadReservationData();
-        },
+        onPressed: updateState,
         child: const Icon(Icons.refresh),
       ),
       body: Container(
@@ -144,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    // User Info Section
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -199,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    // Parking Info Section
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -253,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    // Reserve Slot Button
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -271,16 +242,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
+                          backgroundColor: Colors.transparent, // Nền trong suốt
+                          shadowColor: Colors.transparent, // Bỏ shadow mặc định
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 20),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () async {
-                          bool? result = await Navigator.push(
+                        onPressed: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ReservationScreen(
@@ -288,16 +259,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           );
-
-                          if (result == true) {
-                            loadReservationData();
-                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.local_parking, color: Colors.white),
-                            SizedBox(width: 8),
+                            Icon(Icons.local_parking, color: Colors.white), // Icon
+                            SizedBox(width: 8), // Khoảng cách giữa icon và text
                             Text(
                               'Reserve a Slot',
                               style: TextStyle(
