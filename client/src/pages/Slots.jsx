@@ -155,108 +155,109 @@ const Slots = () => {
                 </div>
             ) : (
                 <>
-                    <h1>Parking Slots</h1>
-                    <div className={styles.boothContainer}>
-                        <div className={styles.booth}>
-                            <p>Booth - Entry/Exit</p>
+                    <h1 className={styles.header}>Parking Slots</h1>
+                    <div className={styles.content}>
+                        <div className={styles.slotsGrid}>
+                            {slots.map((slot) => (
+                                <div
+                                    key={slot.id}
+                                    className={`${styles.slot} ${
+                                        slot.status === "available"
+                                            ? styles.available
+                                            : styles.occupied
+                                    } ${
+                                        selectedSlot &&
+                                        selectedSlot.id === slot.id
+                                            ? styles.selected
+                                            : ""
+                                    }`}
+                                    onClick={() => handleSlotClick(slot)}
+                                >
+                                    {slot.id}
+                                </div>
+                            ))}
                         </div>
-                    </div>
-                    <div className={styles.slotsGrid}>
-                        {slots.map((slot) => (
-                            <div
-                                key={slot.id}
-                                className={`${styles.slot} ${
-                                    slot.status === "available"
-                                        ? styles.available
-                                        : styles.occupied
-                                } ${
-                                    selectedSlot && selectedSlot.id === slot.id
-                                        ? styles.selected
-                                        : ""
-                                }`}
-                                onClick={() => handleSlotClick(slot)}
-                            >
-                                {slot.id}
+                        {selectedSlot && (
+                            <div className={styles.slotDetails}>
+                                <h2>Slot Details</h2>
+                                <p>ID: {selectedSlot.id}</p>
+                                <p>Status: {selectedSlot.status}</p>
+                                {selectedSlot.license_plate && (
+                                    <p>
+                                        License Plate:{" "}
+                                        {selectedSlot.license_plate}
+                                    </p>
+                                )}
+                                {selectedSlot.image_url && (
+                                    <img
+                                        src={selectedSlot.image_url}
+                                        alt="Vehicle"
+                                    />
+                                )}
                             </div>
-                        ))}
-                    </div>
-                    {selectedSlot && (
-                        <div className={styles.slotDetails}>
-                            <h2>Slot Details</h2>
-                            <p>ID: {selectedSlot.id}</p>
-                            <p>Status: {selectedSlot.status}</p>
-                            {selectedSlot.license_plate && (
-                                <p>
-                                    License Plate: {selectedSlot.license_plate}
-                                </p>
-                            )}
-                            {selectedSlot.image_url && (
-                                <img
-                                    src={selectedSlot.image_url}
-                                    alt="Vehicle"
+                        )}
+                        {showSearchBar && (
+                            <div className={styles.searchBar}>
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
+                                    placeholder="Enter license plate"
                                 />
-                            )}
-                        </div>
-                    )}
-                    {showSearchBar && (
-                        <div className={styles.searchBar}>
+                                <button
+                                    onClick={handleSearch}
+                                    disabled={isSearchLoading}
+                                >
+                                    {isSearchLoading ? (
+                                        <div className={styles.searchLoader}>
+                                            <span className={styles.bar}></span>
+                                            <span className={styles.bar}></span>
+                                            <span className={styles.bar}></span>
+                                        </div>
+                                    ) : (
+                                        "Search"
+                                    )}
+                                </button>
+                            </div>
+                        )}
+                        <button
+                            className={styles.searchIcon}
+                            onClick={() => setShowSearchBar(!showSearchBar)}
+                        >
+                            <FiSearch size={24} />
+                        </button>
+                        <div
+                            className={`${styles.searchBar} ${
+                                showSearchBar ? styles.show : ""
+                            }`}
+                        >
                             <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Enter license plate"
+                                onKeyPress={handleKeyPress}
+                                placeholder="Enter license plate..."
                             />
-                            <button
-                                onClick={handleSearch}
-                                disabled={isSearchLoading}
-                            >
-                                {isSearchLoading ? (
-                                    <div className={styles.searchLoader}>
-                                        <span className={styles.bar}></span>
-                                        <span className={styles.bar}></span>
-                                        <span className={styles.bar}></span>
-                                    </div>
-                                ) : (
-                                    "Search"
-                                )}
-                            </button>
+                            {isSearchLoading && (
+                                <div className={styles.searchSpinner} />
+                            )}
                         </div>
-                    )}
-                    <button
-                        className={styles.searchIcon}
-                        onClick={() => setShowSearchBar(!showSearchBar)}
-                    >
-                        <FiSearch size={24} />
-                    </button>
-                    <div
-                        className={`${styles.searchBar} ${
-                            showSearchBar ? styles.show : ""
-                        }`}
-                    >
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Enter license plate..."
-                        />
-                        {isSearchLoading && (
-                            <div className={styles.searchSpinner} />
-                        )}
-                    </div>
-                    <div
-                        className={`${styles.notification} ${
-                            showNotification ? styles.show : ""
-                        }`}
-                    >
-                        {searchResult ? (
-                            <p>
-                                License plate: {searchQuery} is located in{" "}
-                                {searchResult.slotId}
-                            </p>
-                        ) : (
-                            <p>License plate: {searchQuery} not found</p>
-                        )}
+                        <div
+                            className={`${styles.notification} ${
+                                showNotification ? styles.show : ""
+                            }`}
+                        >
+                            {searchResult ? (
+                                <p>
+                                    License plate: {searchQuery} is located in{" "}
+                                    {searchResult.slotId}
+                                </p>
+                            ) : (
+                                <p>License plate: {searchQuery} not found</p>
+                            )}
+                        </div>
                     </div>
                 </>
             )}

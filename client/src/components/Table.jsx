@@ -42,6 +42,7 @@ function Table() {
             };
         });
         setData(licenseData);
+        // setLoading(false);
     };
 
     // Fetch available slots from Firebase Firestore
@@ -72,6 +73,7 @@ function Table() {
             console.log(`Updated slot with ID: ${slotID} to available`);
 
             fetchLicensePlates(); // Refresh data after deletion
+            fetchAvailableSlots(); // Refresh available slots after deletion
             showNotificationMessage("Delete Successfully");
         } catch (error) {
             console.error("Error deleting document: ", error);
@@ -126,6 +128,7 @@ function Table() {
             );
 
             fetchLicensePlates(); // Refresh data after update
+            fetchAvailableSlots(); // Refresh available slots after update
             setEditingItem(null); // Close the edit form
             showNotificationMessage("Update Data Successfully");
         } catch (error) {
@@ -256,7 +259,10 @@ function Table() {
                                             </button>
                                             <button
                                                 className={cx("refresh-btn")}
-                                                onClick={fetchLicensePlates} // Manual refresh button
+                                                onClick={() => {
+                                                    fetchLicensePlates();
+                                                    fetchAvailableSlots();
+                                                }} // Manual refresh button
                                             >
                                                 <FiRefreshCcw />
                                             </button>
@@ -292,7 +298,13 @@ function Table() {
                                     <td>
                                         <button
                                             className={cx("edit-button")}
-                                            onClick={() => setEditingItem(item)}
+                                            onClick={() => {
+                                                console.log(
+                                                    "Editing item:",
+                                                    item
+                                                );
+                                                setEditingItem(item);
+                                            }}
                                         >
                                             <FiEdit2 size={20} />
                                         </button>

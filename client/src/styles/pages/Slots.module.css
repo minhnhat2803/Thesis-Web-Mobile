@@ -4,14 +4,25 @@
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    width: 100%;
+}
+.header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.content {
+    display: flex;
+    flex-direction: row; /* Arrange children in a row */
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    /* max-width: 1200px; */
 }
 
 .slotsGrid {
     display: grid;
-    grid-template-columns: repeat(
-        5,
-        1fr
-    ); /* Adjust the number of columns as needed */
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     width: 100%;
     max-width: 800px;
@@ -115,25 +126,30 @@
 @media (max-width: 1200px) {
     .slotsGrid {
         grid-template-columns: repeat(
+            5,
+            1fr
+        ); /* Adjust the number of columns for medium screens */
+    }
+    .slot {
+        height: 90px; /* Adjust slot height for medium screens */
+    }
+}
+@media (max-width: 1024px) {
+    .slotsGrid {
+        grid-template-columns: repeat(
             4,
             1fr
         ); /* Adjust the number of columns for medium screens */
     }
-}
-
-@media (max-width: 992px) {
-    .slotsGrid {
-        grid-template-columns: repeat(
-            3,
-            1fr
-        ); /* Adjust the number of columns for small screens */
+    .slot {
+        height: 90px; /* Adjust slot height for medium screens */
     }
 }
 
 @media (max-width: 768px) {
     .slotsGrid {
         grid-template-columns: repeat(
-            2,
+            3,
             1fr
         ); /* Adjust the number of columns for extra small screens */
     }
@@ -158,6 +174,29 @@
 
     .slotDetails img {
         max-height: 300px; /* Adjust the max-height of the image for very small screens */
+    }
+}
+@media (max-width: 480px) {
+    .slotsGrid {
+        grid-template-columns: repeat(
+            2,
+            1fr
+        ); /* 2 columns for very small screens */
+    }
+    .slot {
+        height: 80px; /* Adjust slot height for very small screens */
+    }
+    .slotDetails {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-left: 2px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        z-index: 10;
     }
 }
 /* From Uiverse.io by mobinkakei */
@@ -308,7 +347,7 @@
     position: fixed;
     left: -100%;
     top: 20px;
-    background: white;
+    background: rgb(184, 197, 233);
     padding: 16px 24px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
