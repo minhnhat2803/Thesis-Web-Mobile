@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { db } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { ClipLoader } from "react-spinners"; // For loading spinner
+import { ClipLoader } from "react-spinners"; 
 import styles from "../styles/pages/Summarize.module.css";
 
 function Summarize() {
@@ -11,12 +11,12 @@ function Summarize() {
     totalImages: 0,
     totalIn: 0,
     peakTime: "",
-    avgTimes: Array(24).fill(0), // Array for hourly avg times
+    avgTimes: Array(24).fill(0), 
     dailyStats: {},
     monthlyStats: {},
     yearlyStats: {},
   });
-  const [loading, setLoading] = useState(true); // State for loading
+  const [loading, setLoading] = useState(true); 
 
   const fetchData = async () => {
     setLoading(true);
@@ -25,43 +25,43 @@ function Summarize() {
     const licenseData = licenseSnapshot.docs.map((doc) => doc.data());
 
     let totalIn = 0;
-    const hourCounts = Array(24).fill(0); // For tracking the number of vehicles per hour
-    const dailyCounts = {}; // For daily counts
-    const monthlyCounts = {}; // For monthly counts
-    const yearlyCounts = {}; // For yearly counts
+    const hourCounts = Array(24).fill(0); 
+    const dailyCounts = {}; 
+    const monthlyCounts = {}; 
+    const yearlyCounts = {}; 
 
     licenseData.forEach((data) => {
       if (data.timeIN) {
         totalIn++;
         const hour = new Date(data.timeIN).getHours();
-        hourCounts[hour]++; // Count the number of vehicles for each hour
+        hourCounts[hour]++; 
 
-        // Date-related counts
+        
         const date = new Date(data.timeIN);
         const day = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
         const month = `${date.getMonth() + 1}-${date.getFullYear()}`;
         const year = `${date.getFullYear()}`;
 
-        // Update daily, monthly, and yearly counts
+        
         dailyCounts[day] = (dailyCounts[day] || 0) + 1;
         monthlyCounts[month] = (monthlyCounts[month] || 0) + 1;
         yearlyCounts[year] = (yearlyCounts[year] || 0) + 1;
       }
     });
 
-    // Find the peak time
+   
     const peakHour = hourCounts.indexOf(Math.max(...hourCounts));
 
     setData({
       totalImages: licenseData.length,
       totalIn,
       peakTime: peakHour,
-      avgTimes: hourCounts, // Store hourly vehicle counts
+      avgTimes: hourCounts, 
       dailyStats: dailyCounts,
       monthlyStats: monthlyCounts,
       yearlyStats: yearlyCounts,
     });
-    setLoading(false); // Stop loading after data is processed
+    setLoading(false); 
   };
 
   useEffect(() => {
@@ -69,11 +69,11 @@ function Summarize() {
   }, []);
 
   const barChartData = {
-    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Hourly labels
+    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), 
     datasets: [
       {
         label: "Vehicle Activity",
-        data: data.avgTimes, // Average vehicle counts per hour
+        data: data.avgTimes, 
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -84,7 +84,7 @@ function Summarize() {
   const chartOptions = {
     scales: {
       y: {
-        display: false, // Hide the y-axis completely
+        display: false, 
       },
     },
   };
