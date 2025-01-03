@@ -1,12 +1,13 @@
 .dashboard-container {
     width: 100%;
-    height: auto;
+    height: 100vh;
     background-color: #f4f6f8;
     display: flex;
 }
 
 .main-content {
     width: 100%;
+    height
     margin-left: 80px;
     margin-right: 100px;
 }

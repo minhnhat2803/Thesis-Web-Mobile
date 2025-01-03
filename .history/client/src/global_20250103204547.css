@@ -10,7 +10,6 @@ body {
   background-color: #f4f6f8;
   font-family: "Oxygen", sans-serif;
   min-width: 100vh;
-  overflow: auto;
 }
 
 @media screen and (min-width: 740px) and (max-width: 1024px) {
@@ -18,7 +17,6 @@ body {
     background-color: #cae8d9;
     font-family: "Oxygen", sans-serif;
     min-width: 740px;
-    overflow: auto;
   }
 }
 
@@ -27,6 +25,5 @@ body {
     background-color: #cae8d9;
     font-family: "Oxygen", sans-serif;
     min-width: 740px;
-    overflow: auto;
   }
 }

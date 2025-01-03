@@ -1,6 +1,6 @@
 .dashboard-container {
     width: 100%;
-    height: auto;
+    height: 100vh;
     background-color: #f4f6f8;
     display: flex;
 }
@@ -23,6 +23,7 @@
 
     .main-content {
         width: 100vw;
+        height: auto;
         margin-left: 0px;
         margin-right: 0px;
     }
