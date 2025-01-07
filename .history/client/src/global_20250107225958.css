@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f4f6f8;
+  font-family: "Oxygen", sans-serif;
+  min-width: 100vh;
+  overflow: 100%;
+}
+
+@media screen and (min-width: 740px) and (max-width: 1024px) {
+  body {
+    background-color: #cae8d9;
+    font-family: "Oxygen", sans-serif;
+    min-width: 740px;
+    overflow: auto;
+  }
+}
+
+@media (max-width: 739px) {
+  body {
+    background-color: #cae8d9;
+    font-family: "Oxygen", sans-serif;
+    min-width: 740px;
+    overflow: auto;
+  }
+}
