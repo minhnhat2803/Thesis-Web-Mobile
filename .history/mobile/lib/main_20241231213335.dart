@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:mobile/screens/login_screen.dart'; 
+import 'package:mobile/screens/login_screen.dart';  // Đảm bảo đường dẫn đúng
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
