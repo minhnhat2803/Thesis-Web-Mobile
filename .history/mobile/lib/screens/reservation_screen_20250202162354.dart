@@ -13,16 +13,7 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   String? selectedSlot;
-  final List<String> availableSlots = [
-    'A1',
-    'A2',
-    'B1',
-    'B2',
-    'C1',
-    'C2',
-    'D1',
-    'D2',
-  ];
+  List<String> availableSlots = [];
   List<String> userReservations = [];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -30,6 +21,15 @@ class _ReservationScreenState extends State<ReservationScreen> {
   void initState() {
     super.initState();
     loadUserReservations();
+    _listenToSlots();
+  }
+
+  void _listenToSlots() {
+    firestore.collection('parkingSlots').snapshots().listen((snapshot) {
+      setState(() {
+        availableSlots = snapshot.docs.map((doc) => doc.id).toList();
+      });
+    });
   }
 
   void loadUserReservations() async {
@@ -137,7 +137,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
         await EasyLoading.dismiss();
         await EasyLoading.showSuccess('Reservation cancelled successfully');
 
-        // Thông báo cho HomeScreen để cập nhật dữ liệu
+        
         Navigator.pop(context, true);
       } else {
         await EasyLoading.showError('No reservation found to cancel');

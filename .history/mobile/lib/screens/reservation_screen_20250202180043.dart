@@ -13,16 +13,7 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   String? selectedSlot;
-  final List<String> availableSlots = [
-    'A1',
-    'A2',
-    'B1',
-    'B2',
-    'C1',
-    'C2',
-    'D1',
-    'D2',
-  ];
+  List<String> availableSlots = [];
   List<String> userReservations = [];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -30,6 +21,18 @@ class _ReservationScreenState extends State<ReservationScreen> {
   void initState() {
     super.initState();
     loadUserReservations();
+    _listenToSlots();
+  }
+
+  void _listenToSlots() {
+    firestore.collection('parkingSlots').snapshots().listen((snapshot) {
+      setState(() {
+        availableSlots = snapshot.docs
+            .where((doc) => doc['activity'] == 'available')
+            .map((doc) => doc.id)
+            .toList();
+      });
+    });
   }
 
   void loadUserReservations() async {
@@ -40,6 +43,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
           .where('email', isEqualTo: widget.userData['email'])
           .get();
 
+      QuerySnapshot unavailableSlots = await firestore
+          .collection('parkingSlots')
+          .where('activity', isEqualTo: 'unavailable')
+          .get();
+
       setState(() {
         userReservations = userReservationsSnapshot.docs
             .map((doc) => doc['slot'] as String)
@@ -47,6 +55,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
         for (var doc in allReservations.docs) {
           availableSlots.remove(doc['slot']);
+        }
+        for (var doc in unavailableSlots.docs) {
+          availableSlots.remove(doc.id);
         }
       });
     } catch (e) {
@@ -81,6 +92,16 @@ class _ReservationScreenState extends State<ReservationScreen> {
         return;
       }
 
+      DocumentSnapshot slotSnapshot = await firestore
+          .collection('parkingSlots')
+          .doc(selectedSlot)
+          .get();
+
+      if (slotSnapshot['activity'] != 'available') {
+        await EasyLoading.showError('This slot is no longer available');
+        return;
+      }
+
       await EasyLoading.show(
           status: 'Reserving slot...', maskType: EasyLoadingMaskType.black);
 
@@ -101,6 +122,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       await EasyLoading.dismiss();
       await EasyLoading.showSuccess('Reservation successful');
+
+      Navigator.pop(context, true);
     } catch (e) {
       await EasyLoading.showError('An error occurred: ${e.toString()}');
     }
@@ -125,14 +148,20 @@ class _ReservationScreenState extends State<ReservationScreen> {
         String reservationID = userReservationSnapshot.docs.first.id;
         await firestore.collection('reservations').doc(reservationID).delete();
 
+        String cancelledSlot = userReservations.first;
+        await firestore.collection('parkingSlots').doc(cancelledSlot).update({
+          'activity': 'available',
+        });
+
         setState(() {
-          String cancelledSlot = userReservations.first;
           userReservations.clear();
           availableSlots.add(cancelledSlot);
         });
 
         await EasyLoading.dismiss();
         await EasyLoading.showSuccess('Reservation cancelled successfully');
+
+        Navigator.pop(context, true);
       } else {
         await EasyLoading.showError('No reservation found to cancel');
       }
@@ -248,11 +277,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     onPressed: confirmReservation,
                     child: const Text(
                       'Confirm Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -267,11 +296,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     onPressed: userReservations.isNotEmpty ? cancelReservation : null,
                     child: const Text(
                       'Cancel Reservation',
-                      textAlign: TextAlign.center, // Căn giữa chữ
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // Màu chữ trắng
+                        color: Colors.white,
                       ),
                     ),
                   ),
