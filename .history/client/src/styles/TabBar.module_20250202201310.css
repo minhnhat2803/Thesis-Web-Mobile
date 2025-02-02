@@ -1,18 +1,15 @@
 .tabBar-container {
   width: 120px;
-  height: 100vh;
+  /* height: 100vh; */
   background: linear-gradient(135deg, #1f4037, #99f2c8);
+  border-right: none;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  position: relative;
   overflow: hidden;
-  z-index: 1000;
 }
 
 .tabBar-container.collapsed {
@@ -42,8 +39,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: 20px;
+  justify-content: space-around;
+  padding-top: 60px;
 }
 
 .tabCell-container {
@@ -58,10 +55,11 @@
   border-radius: 10px;
   margin: 10px 0;
   color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, transparent, transparent);
 }
 
 .tabCell-container:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   transform: scale(1.1);
 }
 
@@ -81,13 +79,10 @@
 @media (max-width: 739px) {
   .tabBar-container {
     width: 100vw;
-    height: 10vh;
+    height: 100vh;
     flex-direction: row;
     align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    background: linear-gradient(135deg, #99f2c8, #1f4037);
   }
   .tabs {
     flex-direction: row;

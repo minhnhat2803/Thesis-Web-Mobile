@@ -16,14 +16,34 @@ import { motion } from "framer-motion";
 const cx = classNames.bind(styles);
 
 const tabs = [
-  { index: 0, title: "Dashboard", icon: faTableList, path: "/dashboard" },
-  { index: 1, title: "Profile", icon: faUser, path: "/profile" },
-  { index: 2, title: "Summarize", icon: faChartPie, path: "/summarize" },
-  { index: 3, title: "Slots", icon: faParking, path: "/slots" },
+  {
+    index: 0,
+    title: "Dashboard",
+    icon: faTableList,
+    path: "/dashboard",
+  },
+  {
+    index: 1,
+    title: "Profile",
+    icon: faUser,
+    path: "/profile",
+  },
+  {
+    index: 2,
+    title: "Summarize",
+    icon: faChartPie,
+    path: "/summarize",
+  },
+  {
+    index: 3,
+    title: "Slots",
+    icon: faParking,
+    path: "/slots",
+  },
 ];
 
 function TabBar() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [click, setClick] = useState(0);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,12 +51,12 @@ function TabBar() {
   useEffect(() => {
     const currentTab = tabs.findIndex((tab) => tab.path === location.pathname);
     if (currentTab !== -1) {
-      setActiveTab(currentTab);
+      setClick(currentTab);
     }
   }, [location.pathname]);
 
   const handleTabClick = (index, path) => {
-    setActiveTab(index);
+    setClick(index);
     navigate(path);
   };
 
@@ -63,10 +83,15 @@ function TabBar() {
           <motion.div
             key={index}
             onClick={() => handleTabClick(index, tab.path)}
-            className={cx("tabCell-container", { active: activeTab === index })}
-            whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+            className={cx("tabCell-container", { active: click === index })}
+            whileHover={{
+              scale: 1.1,
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+            }}
             whileTap={{ scale: 0.95 }}
-            style={{ height: `calc(100% / ${tabs.length})` }}
+            style={{
+              height: `calc(100% / ${tabs.length})`,
+            }}
           >
             <FontAwesomeIcon size="2x" icon={tab.icon} />
             {!isCollapsed && (

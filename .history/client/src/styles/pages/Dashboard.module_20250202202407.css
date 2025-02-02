@@ -1,0 +1,90 @@
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f3f4f6, #ffffff);
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.camera-container {
+    position: relative;
+    width: 100%;
+    height: 40vh; 
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camera-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.camera-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.tab-bar {
+    width: 100%;
+    height: 40vh; /* Chiều cao tương tự như camera-container */
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tab-bar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tab-bar .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.tab-bar .tab:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 1fr; 
+    }
+
+    .camera-container {
+        height: 50vh; 
+    }
+
+    .tab-bar {
+        height: 50vh; /* Chiều cao tương tự như camera-container */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr; 
+    }
+
+    .camera-container {
+        height: 60vh; 
+    }
+
+    .tab-bar {
+        height: 60vh; /* Chiều cao tương tự như camera-container */
+    }
+}
