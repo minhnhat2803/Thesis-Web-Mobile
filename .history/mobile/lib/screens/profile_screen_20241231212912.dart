@@ -122,9 +122,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
   void _logout(BuildContext context) {
     _auth.signOut();
-    Navigator.pushReplacementNamed(context, '/login'); 
+    Navigator.pushReplacementNamed(context, '/login');
   }
 }

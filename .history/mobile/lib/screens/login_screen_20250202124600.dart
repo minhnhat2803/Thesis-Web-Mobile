@@ -16,7 +16,6 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-
   void login(String email, String pass, BuildContext context) async {
     try {
       if (email.isEmpty || pass.isEmpty) {
@@ -32,6 +31,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
       var loginData = jsonDecode(loginResponse.body);
 
+      
       if (loginResponse.statusCode == 200 && loginData['statusCode'] == '200') {
         var userData = loginData['data'];
         String billUrl = 'http://10.0.2.2:8000/bills/${userData['userID']}';
@@ -76,7 +76,6 @@ class _LogInScreenState extends State<LogInScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        automaticallyImplyLeading: false, // Đảm bảo không hiển thị nút back
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
