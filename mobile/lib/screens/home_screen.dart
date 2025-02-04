@@ -235,19 +235,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: const TextStyle(fontSize: 18),
                               ),
                             ),
-                            const Divider(),
-                            ListTile(
-                              leading: const Icon(Icons.money, color: Colors.green),
-                              title: const Text(
-                                'Parking Fee',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              subtitle: Text(
-                                '${userBill['fee']} VND',
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                            ),
+                            // const Divider(),
+                            // ListTile(
+                            //   leading: const Icon(Icons.money, color: Colors.green),
+                            //   title: const Text(
+                            //     'Parking Fee',
+                            //     style: TextStyle(
+                            //         fontWeight: FontWeight.bold, fontSize: 20),
+                            //   ),
+                            //   subtitle: Text(
+                            //     '${userBill['fee']} VND',
+                            //     style: const TextStyle(fontSize: 18),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

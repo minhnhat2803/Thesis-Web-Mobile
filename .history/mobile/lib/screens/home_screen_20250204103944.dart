@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:mobile/screens/profile_screen.dart';
 import 'package:mobile/screens/reservation_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Thêm Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic userData;
@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late dynamic userBill;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance; // Firestore instance
 
   @override
   void initState() {
@@ -33,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'timeIn': 'None',
     };
     updateState();
-    loadReservationData(); // Tải dữ liệu đặt chỗ từ Firestore
+    loadReservationData();
   }
 
   void updateState() async {
@@ -50,19 +49,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Tải dữ liệu đặt chỗ từ Firestore
   void loadReservationData() async {
     try {
-      QuerySnapshot reservationSnapshot = await firestore
+      QuerySnapshot reservationSnapshot = await FirebaseFirestore.instance
           .collection('reservations')
           .where('email', isEqualTo: widget.userData['email'])
           .get();
 
       if (reservationSnapshot.docs.isNotEmpty) {
         var reservationData = reservationSnapshot.docs.first.data() as Map<String, dynamic>;
+        Timestamp reservedAt = reservationData['reservedAt'] as Timestamp;
+        String formattedTime = "${reservedAt.toDate().toLocal()}".split('.')[0]; 
+
         setState(() {
-          userBill['slot'] = reservationData['slot']; // Cập nhật slot
-          userBill['timeIn'] = reservationData['reservedAt'].toString(); // Cập nhật thời gian
+          userBill['slot'] = reservationData['slot'];
+          userBill['timeIn'] = formattedTime;
+        });
+      } else {
+        setState(() {
+          userBill['slot'] = 'INACTIVE';
+          userBill['timeIn'] = 'None';
         });
       }
     } catch (e) {
@@ -98,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        automaticallyImplyLeading: false, // Bỏ nút back
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.person, size: 30, color: Colors.white),
@@ -119,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.green,
         onPressed: () {
           updateState();
-          loadReservationData(); // Tải lại dữ liệu khi nhấn nút refresh
+          loadReservationData();
         },
         child: const Icon(Icons.refresh),
       ),
@@ -138,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    // User Info Section
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -194,7 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Parking Info Section
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -231,25 +235,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: const TextStyle(fontSize: 18),
                               ),
                             ),
-                            const Divider(),
-                            ListTile(
-                              leading: const Icon(Icons.money, color: Colors.green),
-                              title: const Text(
-                                'Parking Fee',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              subtitle: Text(
-                                '${userBill['fee']} VND',
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                            ),
+                            // const Divider(),
+                            // ListTile(
+                            //   leading: const Icon(Icons.money, color: Colors.green),
+                            //   title: const Text(
+                            //     'Parking Fee',
+                            //     style: TextStyle(
+                            //         fontWeight: FontWeight.bold, fontSize: 20),
+                            //   ),
+                            //   subtitle: Text(
+                            //     '${userBill['fee']} VND',
+                            //     style: const TextStyle(fontSize: 18),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Reserve Slot Button
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -268,16 +271,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent, // Nền trong suốt
-                          shadowColor: Colors.transparent, // Bỏ shadow mặc định
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 20),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          bool? result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ReservationScreen(
@@ -285,12 +288,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           );
+
+                          if (result == true) {
+                            loadReservationData();
+                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.local_parking, color: Colors.white), // Icon
-                            SizedBox(width: 8), // Khoảng cách giữa icon và text
+                            Icon(Icons.local_parking, color: Colors.white),
+                            SizedBox(width: 8),
                             Text(
                               'Reserve a Slot',
                               style: TextStyle(
