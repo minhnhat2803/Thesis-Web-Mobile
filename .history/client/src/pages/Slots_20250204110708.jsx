@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../config/firebase";
 import {
   collection,
+  getDocs,
   setDoc,
   deleteDoc,
   doc,
@@ -15,12 +16,35 @@ const Slots = () => {
   const [selectedSlots, setSelectedSlots] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "parkingSlots"), (snapshot) => {
-      const slotData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setSlots(slotData);
+    const fetchData = async () => {
+      try {
+        const slotSnapshot = await getDocs(collection(db, "parkingSlots"));
+        const licenseSnapshot = await getDocs(collection(db, "licensePlates"));
+
+        const slotData = slotSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const licenseData = licenseSnapshot.docs.map((doc) => doc.data());
+
+        const mergedData = slotData.map((slot) => {
+          const plateInfo = licenseData.find((plate) => plate.slotID === slot.id);
+          return {
+            ...slot,
+            status: plateInfo ? "Unavailable" : "Available",
+            licensePlate: plateInfo?.licensePlate || "N/A",
+          };
+        });
+
+        setSlots(mergedData);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    const unsubscribe = onSnapshot(collection(db, "parkingSlots"), () => {
+      fetchData();
     });
 
     return () => unsubscribe();
@@ -99,7 +123,7 @@ const Slots = () => {
             <div
               key={slot.id}
               className={`${styles.slot} ${
-                slot.activity === "unavailable"
+                slot.status === "Unavailable"
                   ? styles.unavailable
                   : styles.available
               } ${selectedSlots.includes(slot.id) ? styles.selected : ""}`}
@@ -107,8 +131,8 @@ const Slots = () => {
             >
               <p>{slot.id}</p>
               <span className={styles.status}>
-                {slot.activity === "unavailable"
-                  ? `License Plate: ${slot.licensePlate || "N/A"}`
+                {slot.status === "Unavailable"
+                  ? `License Plate: ${slot.licensePlate}`
                   : "Available"}
               </span>
             </div>

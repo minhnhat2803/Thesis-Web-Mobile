@@ -42,10 +42,19 @@ class _ReservationScreenState extends State<ReservationScreen> {
           .where('email', isEqualTo: widget.userData['email'])
           .get();
 
+      QuerySnapshot unavailableSlots = await firestore
+          .collection('parkingSlots')
+          .where('activity', isEqualTo: 'unavailable')
+          .get();
+
       setState(() {
         userReservations = userReservationsSnapshot.docs
             .map((doc) => doc['slot'] as String)
             .toList();
+
+        availableSlots.removeWhere((slot) =>
+            userReservations.contains(slot) ||
+            unavailableSlots.docs.any((doc) => doc.id == slot));
       });
     } catch (e) {
       await EasyLoading.showError('Failed to load reservations: ${e.toString()}');
@@ -66,16 +75,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       if (existingReservation.docs.isNotEmpty) {
         await EasyLoading.showError('You have already reserved a slot');
-        return;
-      }
-
-      QuerySnapshot slotCheck = await firestore
-          .collection('reservations')
-          .where('slot', isEqualTo: selectedSlot)
-          .get();
-
-      if (slotCheck.docs.isNotEmpty) {
-        await EasyLoading.showError('This slot has already been reserved');
         return;
       }
 
@@ -103,7 +102,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       await firestore.collection('parkingSlots').doc(selectedSlot).update({
         'activity': 'unavailable',
-        'reservedBy': widget.userData['email'],
       });
 
       setState(() {
@@ -138,13 +136,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       if (userReservationSnapshot.docs.isNotEmpty) {
         String reservationID = userReservationSnapshot.docs.first.id;
-        String cancelledSlot = userReservationSnapshot.docs.first['slot'];
+        String cancelledSlot = userReservations.first;
 
         await firestore.collection('reservations').doc(reservationID).delete();
-
         await firestore.collection('parkingSlots').doc(cancelledSlot).update({
           'activity': 'available',
-          'reservedBy': null,
         });
 
         setState(() {
@@ -168,10 +164,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Reservation',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Reservation', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.green,
         centerTitle: true,
       ),
@@ -180,49 +173,13 @@ class _ReservationScreenState extends State<ReservationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Your Reservations:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
+            const Text('Your Reservations:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            if (userReservations.isNotEmpty)
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: userReservations.length,
-                itemBuilder: (context, index) {
-                  String slot = userReservations[index];
-                  return ListTile(
-                    title: Text(
-                      'Slot $slot',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    leading: const Icon(Icons.local_parking, color: Colors.blue),
-                  );
-                },
-              )
-            else
-              const Text(
-                'You have no reservations yet.',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
+            userReservations.isNotEmpty
+                ? Column(children: userReservations.map((slot) => ListTile(title: Text('Slot $slot'))).toList())
+                : const Text('You have no reservations yet.', style: TextStyle(fontSize: 16)),
             const SizedBox(height: 16),
-            const Text(
-              'Available Slots:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
+            const Text('Available Slots:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
@@ -230,31 +187,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 itemBuilder: (context, index) {
                   String slot = availableSlots[index];
                   return ListTile(
-                    title: Text(
-                      'Slot $slot',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: userReservations.contains(slot)
-                            ? Colors.grey
-                            : (selectedSlot == slot ? Colors.green : Colors.black87),
-                      ),
-                    ),
-                    trailing: userReservations.contains(slot)
-                        ? const Icon(Icons.block, color: Colors.red)
-                        : (selectedSlot == slot
-                            ? const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
-                            : null),
-                    onTap: userReservations.contains(slot)
-                        ? null
-                        : () {
-                            setState(() {
-                              selectedSlot = slot;
-                            });
-                          },
+                    title: Text('Slot $slot', style: TextStyle(fontSize: 18)),
+                    onTap: () {
+                      setState(() {
+                        selectedSlot = slot;
+                      });
+                    },
                   );
                 },
               ),
@@ -262,43 +200,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    ),
-                    onPressed: confirmReservation,
-                    child: const Text(
-                      'Confirm Reservation',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: ElevatedButton(onPressed: confirmReservation, child: const Text('Confirm'))),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    ),
-                    onPressed: userReservations.isNotEmpty ? cancelReservation : null,
-                    child: const Text(
-                      'Cancel Reservation',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: ElevatedButton(onPressed: userReservations.isNotEmpty ? cancelReservation : null, child: const Text('Cancel'))),
               ],
             ),
           ],

@@ -37,15 +37,28 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
   void loadUserReservations() async {
     try {
+      QuerySnapshot allReservations = await firestore.collection('reservations').get();
       QuerySnapshot userReservationsSnapshot = await firestore
           .collection('reservations')
           .where('email', isEqualTo: widget.userData['email'])
+          .get();
+
+      QuerySnapshot unavailableSlots = await firestore
+          .collection('parkingSlots')
+          .where('activity', isEqualTo: 'unavailable')
           .get();
 
       setState(() {
         userReservations = userReservationsSnapshot.docs
             .map((doc) => doc['slot'] as String)
             .toList();
+
+        for (var doc in allReservations.docs) {
+          availableSlots.remove(doc['slot']);
+        }
+        for (var doc in unavailableSlots.docs) {
+          availableSlots.remove(doc.id);
+        }
       });
     } catch (e) {
       await EasyLoading.showError('Failed to load reservations: ${e.toString()}');
@@ -103,7 +116,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       await firestore.collection('parkingSlots').doc(selectedSlot).update({
         'activity': 'unavailable',
-        'reservedBy': widget.userData['email'],
       });
 
       setState(() {
@@ -138,13 +150,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       if (userReservationSnapshot.docs.isNotEmpty) {
         String reservationID = userReservationSnapshot.docs.first.id;
-        String cancelledSlot = userReservationSnapshot.docs.first['slot'];
-
         await firestore.collection('reservations').doc(reservationID).delete();
 
+        String cancelledSlot = userReservations.first;
         await firestore.collection('parkingSlots').doc(cancelledSlot).update({
           'activity': 'available',
-          'reservedBy': null,
         });
 
         setState(() {

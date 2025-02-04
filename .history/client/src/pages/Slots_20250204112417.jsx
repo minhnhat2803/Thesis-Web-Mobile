@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../config/firebase";
 import {
   collection,
+  getDocs,
   setDoc,
   deleteDoc,
   doc,
@@ -15,12 +16,36 @@ const Slots = () => {
   const [selectedSlots, setSelectedSlots] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "parkingSlots"), (snapshot) => {
-      const slotData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setSlots(slotData);
+    const fetchData = async () => {
+      try {
+        const slotSnapshot = await getDocs(collection(db, "parkingSlots"));
+        const licenseSnapshot = await getDocs(collection(db, "licensePlates"));
+
+        const slotData = slotSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const licenseData = licenseSnapshot.docs.map((doc) => doc.data());
+
+        const mergedData = slotData.map((slot) => {
+          const plateInfo = licenseData.find((plate) => plate.slotID === slot.id);
+          return {
+            ...slot,
+            status: plateInfo ? "Unavailable" : "Available",
+            licensePlate: plateInfo?.licensePlate || "N/A",
+            email: plateInfo?.email || "N/A",
+          };
+        });
+
+        setSlots(mergedData);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    const unsubscribe = onSnapshot(collection(db, "parkingSlots"), () => {
+      fetchData();
     });
 
     return () => unsubscribe();
@@ -64,7 +89,6 @@ const Slots = () => {
       <header className={styles.header}>
         <h1>Parking Slot Management</h1>
       </header>
-
       <div className={styles.actions}>
         <input
           type="text"
@@ -73,9 +97,7 @@ const Slots = () => {
           value={newSlotID}
           onChange={(e) => setNewSlotID(e.target.value)}
         />
-        <button className={styles.addBtn} onClick={addSlot}>
-          Add Slot
-        </button>
+        <button className={styles.addBtn} onClick={addSlot}>Add Slot</button>
         <button
           className={styles.deleteBtn}
           onClick={deleteSelectedSlots}
@@ -84,33 +106,30 @@ const Slots = () => {
           Delete Selected Slots
         </button>
       </div>
-
       <div className={styles.parkingLot}>
         <div className={styles.entryExit}>
-          <div className={styles.exit}>
-            <span className={styles.arrow}>↑</span> Exit
-          </div>
-          <div className={styles.entry}>
-            Entry <span className={styles.arrow}>↓</span>
-          </div>
+          <div className={styles.exit}><span className={styles.arrow}>↑</span> Exit</div>
+          <div className={styles.entry}>Entry <span className={styles.arrow}>↓</span></div>
         </div>
         <div className={styles.parkingLotGrid}>
           {slots.map((slot) => (
             <div
               key={slot.id}
               className={`${styles.slot} ${
-                slot.activity === "unavailable"
-                  ? styles.unavailable
-                  : styles.available
+                slot.status === "Unavailable" ? styles.unavailable : styles.available
               } ${selectedSlots.includes(slot.id) ? styles.selected : ""}`}
               onClick={() => handleSlotClick(slot.id)}
             >
               <p>{slot.id}</p>
-              <span className={styles.status}>
-                {slot.activity === "unavailable"
-                  ? `License Plate: ${slot.licensePlate || "N/A"}`
-                  : "Available"}
-              </span>
+              {slot.status === "Unavailable" ? (
+                <div className={styles.info}>
+                  <span>License Plate: {slot.licensePlate}</span>
+                  <br />
+                  <span>Email: {slot.email}</span>
+                </div>
+              ) : (
+                <span className={styles.status}>Available</span>
+              )}
             </div>
           ))}
         </div>

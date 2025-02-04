@@ -123,4 +123,4 @@ const Slots = () => {
   );
 };
 
-export default Slots;
+export default Slots; 
