@@ -108,9 +108,7 @@ const Slots = () => {
               <p>{slot.id}</p>
               <span className={styles.status}>
                 {slot.activity === "unavailable"
-                  ? slot.reservedBy
-                    ? `Reserved By: ${slot.reservedBy}`
-                    : `License Plate: ${slot.licensePlate || "N/A"}`
+                  ? `Reserved By: ${slot.reservedBy || "N/A"}`
                   : "Available"}
               </span>
             </div>

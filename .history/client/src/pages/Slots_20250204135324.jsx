@@ -31,7 +31,7 @@ const Slots = () => {
     try {
       await setDoc(doc(db, "parkingSlots", newSlotID), {
         activity: "available",
-        reservedBy: null,
+        licensePlate: null,
       });
       setNewSlotID("");
     } catch (error) {
@@ -108,9 +108,7 @@ const Slots = () => {
               <p>{slot.id}</p>
               <span className={styles.status}>
                 {slot.activity === "unavailable"
-                  ? slot.reservedBy
-                    ? `Reserved By: ${slot.reservedBy}`
-                    : `License Plate: ${slot.licensePlate || "N/A"}`
+                  ? `License Plate: ${slot.licensePlate || || "N/A"}`
                   : "Available"}
               </span>
             </div>
