@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
-import 'package:mobile/global_variables.dart';
 import 'package:mobile/resuable_widgets/resuable_widgets.dart';
 import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/register_screen.dart';
@@ -25,7 +24,9 @@ class _LogInScreenState extends State<LogInScreen> {
         return;
       }
 
-      String loginUrl = 'http://' + ipAddr + ':8000/auth/login';
+      String loginUrl = 'http://
+      
+      :8000/auth/login';
       Response loginResponse = await post(Uri.parse(loginUrl), body: {
         'email': email,
         'password': pass,
@@ -35,7 +36,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
       if (loginResponse.statusCode == 200 && loginData['statusCode'] == '200') {
         var userData = loginData['data'];
-        String billUrl = 'http://' + ipAddr + ':8000/bills/${userData['userID']}';
+        String billUrl = 'http://10.0.2.2:8000/bills/${userData['userID']}';
         Response billResponse = await get(Uri.parse(billUrl));
         var userBill = jsonDecode(billResponse.body);
         if (userBill.isEmpty) {

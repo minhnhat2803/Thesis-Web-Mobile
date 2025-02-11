@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       await EasyLoading.show(status: 'Registering...', maskType: EasyLoadingMaskType.black);
 
-      String url = 'http://' + ipAddr + ':8000/auth/register';
+      String url = 'http://10.0.2.2:8000/auth/register';
       Map<String, dynamic> body = {
         'email': email,
         'password': pass,
