@@ -11,8 +11,8 @@ const cx = classNames.bind(styles);
 function Dashboard() {
     const [cameraFeeds, setCameraFeeds] = useState([]);
     const cameraUrls = [
-        "http://192.168.2.27:8081/?action=stream",
-        "http://192.168.2.27:8082/?action=stream",
+        "http://192.168.252.237:8081/?action=stream",
+        "http://192.168.252.27:8082/?action=stream",
     ];
 
     const showToastInfo = (data) => {
@@ -33,8 +33,7 @@ function Dashboard() {
 
     const capture = async () => {
         try {
-            const res = await scanImage("http://192.168.2.27:8081/?action=stream");
-            const res = await scanImage("http://192.168.2.27:8081/?action=stream");
+            const res = await scanImage("http://192.168.1.5:8080/?action=stream");
             console.log(res.data);
             return res.data;
         } catch (err) {

@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function Dashboard() {
     const [cameraFeeds, setCameraFeeds] = useState([]);
     const cameraUrls = [
-        "http://192.168.2.27:8081/?action=stream",
+        "http://192.168.252.27:8081/?action=stream",
         "http://192.168.2.27:8082/?action=stream",
     ];
 

@@ -31,15 +31,15 @@ function Dashboard() {
         });
     };
 
-    const capture = async () => {
-        try {
-            const res = await scanImage("http://192.168.1.5:8080/?action=stream");
-            console.log(res.data);
-            return res.data;
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    // const capture = async () => {
+    //     try {
+    //         const res = await scanImage("http://192.168.1.5:8080/?action=stream");
+    //         console.log(res.data);
+    //         return res.data;
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
     useEffect(() => {
         setCameraFeeds(cameraUrls);
