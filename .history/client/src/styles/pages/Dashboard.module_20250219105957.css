@@ -24,11 +24,12 @@
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
-.camera-container img {
+.camera-container video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Đảm bảo video phủ kín khung mà không bị méo */
     border-radius: 15px;
+    background: #000; /* Màu nền trong khi video đang tải */
 }
 
 .camera-title {
@@ -40,9 +41,10 @@
     padding: 5px 10px;
     border-radius: 10px;
     font-size: 14px;
-    z-index: 1;
+    z-index: 1; /* Đảm bảo tiêu đề hiển thị trên video */
 }
 
+/* Responsive Design */
 @media screen and (max-width: 1024px) {
     .dashboard-container {
         grid-template-columns: 1fr; 
